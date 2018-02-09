@@ -1,0 +1,98 @@
+{% use "bootstrap_4_horizontal_layout.html.twig" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="Marcos Regis <marcos.regis@address.com.br>">
+    <title>{% block title '' %}</title>
+    <link rel="shortcut icon" href="{{ asset('imagens/favicon.png') }}" type="image/x-icon"/>
+    {% block my_CSS %}
+        <!-- Bootstrap Core CSS -->
+        <link href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"
+              type="text/css">
+        <!-- MetisMenu CSS -->
+        <link href="{{ asset('bower_components/metisMenu/dist/metisMenu.min.css') }}" rel="stylesheet">
+        <!-- Custom CSS by SB-Admin-2 -->
+        <link href="{{ asset('bower_components/startbootstrap-sb-admin-2/dist/css/sb-admin-2.min.css') }}"
+              rel="stylesheet" type="text/css">
+        <!-- Custom Fonts -->
+        <link href="{{ asset('bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"
+              type="text/css">
+    {% endblock my_CSS %}
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Application CSS -->
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css"/>
+
+    {% if app.environment == 'prod' %}
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    {% endif %}
+</head>
+<body>
+{% block menu %}
+    {% if nomenu is not defined or nomenu == false %}
+        {% include 'menu.html.twig' %}
+    {% endif %}
+{% endblock menu %}
+
+{% block content %}
+    {% block messages %}
+        {% if app.request.hasPreviousSession %}
+            <div class="container">
+                {% for alert in [ 'info', 'success', 'warning', 'danger'] %}
+                    {% for message in app.flashes(alert) %}
+                        <div class="alert alert-{{ alert }} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% block user_content %}{% endblock %}
+{% endblock %}
+{% if nofooter is not defined or nofooter == false %}
+    {% include 'footer.html.twig' %}
+{% endif %}
+
+
+{% block my_JS %}
+    <!-- jQuery -->
+    <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{{ asset('bower_components/metisMenu/dist/metisMenu.min.js') }}"></script>
+    <!-- Custom Theme JavaScript by SB-Admin-2-->
+    <script src="{{ asset('bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.min.js') }}"></script>
+{% endblock my_JS %}
+<!-- App main JS -->
+<script src="{{ asset('js/main.js') }}"></script>
+<script>
+    {% block js_loaders %}{% endblock %}
+</script>
+
+</body>
+</html>
