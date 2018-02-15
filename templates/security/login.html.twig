@@ -1,7 +1,9 @@
+{% use "bootstrap_4_horizontal_layout.html.twig" %}
+{% extends 'layout.html.twig' %}
+{% block user_content %}
 {% if error %}
     <div>{{ error.message }}</div>
 {% endif %}
-
 <form action="{{ path('login') }}" method="post">
     <label for="username">Nome de usuario:</label>
     <input type="text" id="username" name="_username" value="{{ last_username }}" />
@@ -14,3 +16,4 @@
 
     <input type="submit" name="login" />
 </form>
+{% endblock %}

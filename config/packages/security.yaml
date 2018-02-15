@@ -20,8 +20,6 @@ security:
 
 #            form_login: ~
             # https://symfony.com/doc/current/security/form_login_setup.html
-            form_login:
-                provider: our_db_provider
 #                csrf_provider: security.csrf.token_manager
             form_login:
                 provider: our_db_provider
@@ -35,6 +33,7 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path:     /
                 always_remember_me: true
+            logout_on_user_change: true
 #        secured_area:
 #            # ...
 #            logout:
