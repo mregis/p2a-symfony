@@ -3,32 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{{ description }}">
     <meta name="author" content="Marcos Regis <marcos.regis@address.com.br>">
     <title>{% block title '' %}</title>
-    <link rel="shortcut icon" href="{{ asset('imagens/favicon.png') }}" type="image/x-icon"/>
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="{{ asset('resources/app.css') }}">
+    <!-- Application Icon -->
+    <link rel="shortcut icon" href="{{ asset('resources/favicon.png') }}" type="image/x-icon"/>
     {% block my_CSS %}
-        <!-- Bootstrap Core CSS -->
-        <link href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"
-              type="text/css">
-        <!-- MetisMenu CSS -->
-        <link href="{{ asset('bower_components/metisMenu/dist/metisMenu.min.css') }}" rel="stylesheet">
-        <!-- Custom CSS by SB-Admin-2 -->
-        <link href="{{ asset('bower_components/startbootstrap-sb-admin-2/dist/css/sb-admin-2.min.css') }}"
-              rel="stylesheet" type="text/css">
-        <!-- Custom Fonts -->
-        <link href="{{ asset('bower_components/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"
-              type="text/css">
+
     {% endblock my_CSS %}
 
+{#
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-    <!-- Application CSS -->
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css"/>
+#}
 
     {% if app.environment == 'prod' %}
         <script type="text/javascript">
@@ -47,13 +39,12 @@
         </script>
     {% endif %}
 </head>
-<body>
+<body class="fixed-nav site-footer" id="page-top">
 {% block menu %}
-    {% if nomenu is not defined or nomenu == false %}
-        {% include 'menu.html.twig' %}
-    {% endif %}
+    {% include 'menu.html.twig' %}
 {% endblock menu %}
 
+    <div class="container-fluid">
 {% block content %}
     {% block messages %}
         {% if app.request.hasPreviousSession %}
@@ -70,28 +61,47 @@
             </div>
         {% endif %}
     {% endblock %}
-    {% block user_content %}{% endblock %}
+    {% block user_content %}
+        <div class="container">
+        </div>
+    {% endblock %}
 {% endblock %}
-{% if nofooter is not defined or nofooter == false %}
+    </div>
+    <!-- /.container-fluid-->
+
+{% block footer %}
     {% include 'footer.html.twig' %}
-{% endif %}
+{% endblock footer %}
 
 
+{% block my_modals %}
+    {% if error is defined and error %}
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h4 class="modal-title" id="MyModalLabel">{{ 'Error'|trans }}</h4>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ error.message|trans }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock my_modals %}
 {% block my_JS %}
-    <!-- jQuery -->
-    <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="{{ asset('bower_components/metisMenu/dist/metisMenu.min.js') }}"></script>
-    <!-- Custom Theme JavaScript by SB-Admin-2-->
-    <script src="{{ asset('bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.min.js') }}"></script>
+
 {% endblock my_JS %}
 <!-- App main JS -->
-<script src="{{ asset('js/main.js') }}"></script>
+<script src="{{ asset('resources/app.js') }}"></script>
 <script>
     {% block js_loaders %}{% endblock %}
 </script>
-
+</div>
+<!-- /.content-wrapper-->
 </body>
 </html>

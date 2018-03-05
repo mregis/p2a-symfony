@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% set active = 'my-account' %}
+
+{% block content %}
+    {% block messages %}{{ parent() }}{% endblock %}
+    <div class="central-container">
+        <div class="container">
+            <h1>{{ 'My Account'|trans }}</h1>
+            {{ form(form, { attr: { novalidate: true } }) }}
+        </div>
+    </div>
+{% endblock %}

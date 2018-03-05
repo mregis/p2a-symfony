@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block my_CSS %}
+<link rel="stylesheet" href="{{ asset('resources/httperrors.css') }}">
+{% endblock my_CSS %}
+
+{% block menu %}{# NoMenu Block #}{% endblock menu %}
+
+{% block content %}
+    <div class="central-container">
+        <div class="container">
+            <div class="notfound">
+                <div class="wrapper">
+                    <div class="big">OPA! VOCÊ NÃO QUER ESTAR AQUI.</div>
+                    <div>Parece que é hora de abortar a missão e voltar para
+                        <a href="{{ url('home') }}">casa</a>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{# NoFooter Block #}{% endblock footer %}

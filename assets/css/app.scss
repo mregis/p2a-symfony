@@ -1,0 +1,13 @@
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+$icon-font-path: "~font-awesome/fonts/";
+
+// set if you're also including font-awesome
+$fa-font-path: "~font-awesome/fonts";
+
+$brand-primary: darken(#428bca, 20%);
+
+// the ~ allows you to reference things in node_modules
+// @import '~font-awesome/scss/font-awesome.scss';
+@import '~startbootstrap-sb-admin/vendor/font-awesome/scss/font-awesome.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~startbootstrap-sb-admin/scss/sb-admin.scss';

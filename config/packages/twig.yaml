@@ -3,12 +3,13 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes:
-        - 'bootstrap_=4_horizontal_layout.html.twig'
-#        - 'form/fields.html.twig'
+        - 'bootstrap_4_horizontal_layout.html.twig'
+        - 'form/sb-admin-form-fields.html.twig'
     globals:
-        version: '%app.version%'
-        title: '%app.title%'
-        name: '%app.name%'
+        appversion: '%app.version%'
+        apptitle: '%app.title%'
+        appname: '%app.name%'
         description: '%app.description%'
         footer: '%app.footer%'
         author: '%app.author%'
+        appmailsender: '%mail.address%'

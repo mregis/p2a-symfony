@@ -1,0 +1,33 @@
+{% extends 'layout.html.twig' %}
+
+{% block title 'Verificação de Código de Acesso' %}
+
+{% block user_content %}
+
+<div class="card card-login mx-auto mt-5">
+    <div class="card-header">
+        <div class="card-body-icon text-muted o-hidden ">
+            <i class="fa fa-fw fa-key"></i>
+        </div>
+        Verificação de Código de Acesso
+    </div>
+    <div class="card-body">
+        <div class="text-center mt-4 mb-5">
+            <h4>Recebeu um código para acesso?</h4>
+            <p>Entre com o código de acesso que recebeu.</p>
+        </div>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        {{ form_row(form.code) }}
+        {{ form_rest(form) }}
+            <button type="submit" class="btn btn-primary btn-block">Verificar Código</button>
+        </form>
+        <div class="text-center">
+            <a href="{{ path('login') }}" class="d-block small mt-3">Página de autenticação</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

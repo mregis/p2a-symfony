@@ -1,0 +1,52 @@
+Bad credentials.: Credenciais inválidas.
+This field is required: Este campo é obrigatório
+general_form_error: Verifique as informações do formulário e tente novamente
+Error: 'Erro'
+resetting:
+    check_email: |
+            Um email foi enviado. Ele contem um link que deve ser acessado para redefinir sua palavra-passe.
+            Nota: Você apenas poderá requisitar uma nova senha dentro de %tokenLifetime% horas.
+
+            Se você não receber a mensagem, cheque sua pasta de spam ou tente novamente.
+    request:
+        username: 'Usuário ou email'
+        submit: 'Recuperar senha'
+    reset:
+        submit: 'Alterar senha'
+    flash:
+        success: 'A senha foi redefinida com sucesso.'
+        error: 'Não foi possível iniciar o processo de recuperação. Verifique as informações.'
+    email:
+        subject: 'Recuperação de acesso'
+        message: |
+            Olá, %username%!
+            Você requisitou a recuperação de acesso no Sistema de Controle de Compensação - Address S.A.,
+            por isso estamos lhe enviando esta mensagem.
+
+            Para redefinir seu acesso use o código: %code%
+
+            Se este processo foi iniciado por você diretamente do Portal de Serviços Address S.A. basta
+            copiar o código acima e colar no campo do formulário.
+            Caso o processo tenha sido iniciado pelo nosso suporte siga os passos abaixo:
+            	Vá até o Portal de Serviços Address S.A.
+            	Ao ser exibido o formulário de acesso, clique em "Usar Código de Acesso"
+            	Preencha o campo Código com a informação fornecida.
+            	Clique em "Verificar Código" e pronto.
+
+            Atenciosamente,
+            seus amigos da Address S.A.
+change-password:
+    flash:
+        success: Agora você já pode alterar sua senha
+verify-code:
+    code-field-label: Código
+    code-field-placeholder: Código recebido
+    flash:
+        error: O código utilizado é inválido!
+forgot-password:
+    e-mail-field-label: E-mail
+    e-mail-field-placeholder: Entre com seu endereço de e-mail
+    flash:
+        success: Se o endereço de e-mail informado estiver correto uma mensagem será enviada com as instruções.
+                 Consulte sua caixa de mensagens. Se a mensagem não chegar em até 10 minutos verifique sua caixa de
+                 SPAM ou tente novamente.

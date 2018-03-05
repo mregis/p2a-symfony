@@ -19,19 +19,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements AdvancedUserInterface, \Serializable
 {
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="guid", columnDefinition="DEFAULT gen_random_uuid()", options={"comment"="Identificador do registro"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(name="username", type="string", length=25, unique=true)
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(name="senha", type="string", length=100)
      */
     private $password;
 
@@ -41,10 +41,29 @@ class User implements AdvancedUserInterface, \Serializable
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(name="nome", type="string", length=180)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(name="chave_confirmacao", type="string", length=180, nullable=true)
+     */
+    private $confirmationToken;
+
+    /**
+     * @ORM\Column(name="senha_requisitada_em", type="datetime", nullable=true)
+     */
+    private $passwordRequestedAt;
+
+    /**
+     * @ORM\Column(name="estado", type="boolean")
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(name="ultimo_login", type="datetime", nullable=true)
+     */
+    private $lastLogin;
 
     public function __construct()
     {
@@ -74,6 +93,24 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return array('ROLE_USER');
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param mixed $lastLogin
+     * @return User
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+    }
+
 
     public function eraseCredentials()
     {
@@ -124,5 +161,6 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->isActive;
     }
+
 
 }

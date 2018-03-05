@@ -1,0 +1,13 @@
+{% block subject %}
+    {%- autoescape false -%}
+        {{ 'add-user.email.subject'|trans }}
+    {%- endautoescape -%}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'add-user.email.message'|trans({'%username%': user.username, '%code%': code}) }}
+    {% endautoescape %}
+{% endblock %}
+{% block body_html %}
+{% endblock %}

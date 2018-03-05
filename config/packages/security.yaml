@@ -2,7 +2,7 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
 #        in_memory: { memory: ~ }
-        our_db_provider:
+        my_db_provider:
             entity:
                 class: App\Entity\User
 
@@ -11,20 +11,18 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: ~
-
+            #anonymous: ~
             # activate different ways to authenticate
-
             # http_basic: ~
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
 #            form_login: ~
             # https://symfony.com/doc/current/security/form_login_setup.html
 #                csrf_provider: security.csrf.token_manager
             form_login:
-                provider: our_db_provider
+                provider: my_db_provider
                 login_path: login
                 check_path: login
+                csrf_token_generator: security.csrf.token_manager
 
             logout:       true
             anonymous:    true
@@ -35,6 +33,7 @@ security:
                 always_remember_me: true
             logout_on_user_change: true
 #        secured_area:
+#            csrf_token_generator: security.csrf.token_manager
 #            # ...
 #            logout:
 #                path:   /logout
@@ -45,8 +44,9 @@ security:
 #        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: ROLE_ADMIN }
+        - { path: ^/entrar, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/autenticar-via-codigo, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/esqueci-senha, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     encoders:
         Symfony\Component\Security\Core\User\User:

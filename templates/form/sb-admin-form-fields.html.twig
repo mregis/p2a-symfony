@@ -1,0 +1,55 @@
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- else -%}
+            {% set asterisc = '<span class="required" title="' ~ 'This field is required'|trans ~ '">*</span>' %}
+            {% set label = (translation_domain is same as(false) ? asterisc ~ label : asterisc ~ label|trans({}, translation_domain)) %}
+        {%- endif -%}
+
+        <{{ element|default('label') }}
+            {% if label_attr %}
+                {% with { attr: label_attr } %}
+                    {{ block('attributes') }}
+                {% endwith %}
+            {% endif %}>
+            {{ label|raw }}
+
+        </{{ element|default('label') }}>
+    {%- endif -%}
+{% endblock form_label %}
+
+
+{% block form_errors -%}
+    {% if errors|length > 0 %}
+    {% if form.parent %}<span class="help-block">{% else %}<div class="alert alert-danger">{% endif %}
+    <ul class="list-unstyled alert alert-danger">
+        {%- for error in errors -%}
+            <li><span class="fa fa-exclamation"></span> {{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+    {% if form.parent %}</span>{% else %}</div>{% endif %}
+    {%- endif %}
+{%- endblock form_errors %}
+
+{% block form_row %}
+    <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
+        {{ form_errors(form) }}
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endblock form_row %}

@@ -1,0 +1,51 @@
+/* Página de erro 404 */
+body {
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #555;
+  background-color: #fff;
+  margin: 0;
+  font-family: Verdana;
+}
+/* Página de erro 404 */
+div.notfound body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  background: #222;
+  margin: 0;
+}
+.notfound {
+  background-image: url("../images/astronauta.jpg"), url("../images/Stars404.png");
+  background-position: right top, center center;
+  background-repeat: no-repeat, repeat;
+  background-size: 100%;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 98%;
+  height: 98%;
+}
+.notfound .wrapper .big {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 66px;
+  margin-bottom: 20px;
+}
+.notfound .wrapper {
+  position: absolute;
+  top: 55%;
+  right: 2%;
+  color: #fff;
+  width: 635px;
+  font-size: 19px;
+  line-height: 29px;
+  -webkit-font-smoothing: antialiased;
+  padding: 20px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+.notfound .wrapper a {
+  color: #ffcc00;
+  text-decoration: none;
+  font-weight: 700;
+}
