@@ -10,12 +10,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Provider\UserProvider;
+use App\Util\TokenGenerator;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,27 +61,30 @@ class SecurityController extends Controller
                 $data = $form->getData();
                 $repository = $this->getDoctrine()->getRepository(User::class);
                 $user = $repository->findOneBy(['email' => $data['username'], 'isActive' => true]);
-                if($user) {
-                    $userToken = new UserProvider($this->container->getParameter('maxtokenlength'));
-                    $userToken->setUser($user);
-                    $em->persist($userToken);
-
-                    $code = $this->get('UserProvider')->generateConfirmationToken($user->getUsername(),
-                        $this->getParameter('maxtokenlength'));
+                $minlastlogin = '-' . $this->container->getParameter('minlastlogin') . ' min';
+                if($user &&
+                    $user->getPasswordRequestedAt() < (new \DateTime($minlastlogin))
+                ) {
+                    $tokenGenerator = new TokenGenerator($this->container->getParameter('mintokenlength'),
+                        $this->container->getParameter('maxtokenlength'), true);
+                    $user->setConfirmationToken($tokenGenerator->generateToken());
+                    $user->setPasswordRequestedAt(new \DateTime());
+                    $objManager = $this->getDoctrine()->getManager();
+                    $objManager->persist($user);
+                    $objManager->flush();
+                    $code = $user->getConfirmationToken();
                     if ($code) {
-                        $message = \Swift_Message::newInstance()
-                            ->setSubject($this->translator->trans('resetting.email.subject'))
+                        $message = (new \Swift_Message($this->get('translator')->trans('resetting.email.subject')))
                             ->setFrom(array($this->getParameter('mail.address')))
-                            ->setTo(array($user['email']))
-                            ->setBody($this->render('mailing/forgot-password.txt.twig', array(
+                            ->setTo(array($user->getEmail()))
+                            ->setBody($this->renderView('mailing/forgot-password.txt.twig', array(
                                 'user' => $user,
                                 'code' => $code
                             )), 'text/plain')
-                            ->addPart($this->render('mailing/forgot-password.html.twig',
+                            ->addPart($this->renderView('mailing/forgot-password.html.twig',
                                 array('user' => $user, 'code' => $code)), 'text/html');
 
                         $this->get('mailer')->send($message);
-
                     }
                 }
                 // Show Success Message whenever occours
@@ -95,7 +100,7 @@ class SecurityController extends Controller
     /**
      * @Route("/autenticar-via-codigo", name="login-by-code")
      */
-    public function loginByCode(Request $request, Connection $conn)
+    public function loginByCode(Request $request, TokenStorageInterface $tokenStorage)
     {
         $error = null;
         $form = $this->createFormBuilder()
@@ -119,13 +124,14 @@ class SecurityController extends Controller
                     ->getRepository(User::class)
                     ->findOneBy(array('confirmationToken' => $data['code']));
                 if ($user && $user->isEnabled()) {
+
                     $token = new UsernamePasswordToken(
                         $user,
                         $user->getPassword(),
                         'main',
                         $user->getRoles()
                     );
-                    $this->getParameter('token_storage')->setToken($token);
+                    $tokenStorage->setToken($token);
                     $request->getSession()->getFlashBag()->add('success', 'change-password.flash.success');
                     if ($user->getLastLogin()) {
                         return $this->redirect($this->generateUrl('redefine_password'), 301);

@@ -20,9 +20,6 @@ Encore
         resolveUrlLoader: false
     })
 
-    // Enable Another Loader
-    // .addLoader({ test: /\.(png|jpg|jpeg|gif|ico|svg)$/, loader: 'file-loader',  })
-
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()
 

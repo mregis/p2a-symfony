@@ -98,6 +98,7 @@ class TokenGenerator implements TokenGeneratorInterface
     }
 
     /**
+     * Generates a string to be used as a token
      * {@inheritdoc}
      */
     public function generateToken()

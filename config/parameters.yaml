@@ -6,6 +6,7 @@ parameters:
     app.footer: '®Address S.A. - 2013 ~ 2018 - Reservado os direitos'
     app.author: 'Marcos Regis <marcos.regis@address.com.br>'
     mail.name: 'Suporte Técnico'
-    mail.address: 'suporte@address.com.br'
+    mail.address: 'suporte.tecnico@address.com.br'
     maxtokenlength: 10
     mintokenlength: 5
+    minlastlogin: 10

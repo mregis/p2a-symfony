@@ -47,6 +47,7 @@ security:
         - { path: ^/entrar, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/autenticar-via-codigo, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/esqueci-senha, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_ADMIN }
 
     encoders:
         Symfony\Component\Security\Core\User\User:
