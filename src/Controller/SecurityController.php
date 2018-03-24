@@ -15,10 +15,14 @@ use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,7 +56,7 @@ class SecurityController extends Controller
         $form = $this->createFormBuilder()
             ->add('username', EmailType::class, array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Email()),
-                'attr' => array('placeholder' => 'forgot-password.e-mail-field-placeholder', 'class' => 'form-control'),
+                'attr' => array('placeholder' => 'forgot-password.e-mail-field-placeholder'),
                 'label' => 'forgot-password.e-mail-field-label',
             ))
             ->getForm();
@@ -104,6 +108,12 @@ class SecurityController extends Controller
     {
         $error = null;
         $form = $this->createFormBuilder()
+            ->add('username', EmailType::class, array(
+                'constraints' => array(new Assert\NotBlank(), new Assert\Email()),
+                'attr' => array('placeholder' => 'forgot-password.e-mail-field-placeholder'),
+                'label' => 'forgot-password.e-mail-field-label',
+            ))
+
             ->add('code', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank(),
                     new Assert\Length(
@@ -124,7 +134,6 @@ class SecurityController extends Controller
                     ->getRepository(User::class)
                     ->findOneBy(array('confirmationToken' => $data['code']));
                 if ($user && $user->isEnabled()) {
-
                     $token = new UsernamePasswordToken(
                         $user,
                         $user->getPassword(),
@@ -132,12 +141,14 @@ class SecurityController extends Controller
                         $user->getRoles()
                     );
                     $tokenStorage->setToken($token);
-                    $request->getSession()->getFlashBag()->add('success', 'change-password.flash.success');
+
                     if ($user->getLastLogin()) {
-                        return $this->redirect($this->generateUrl('redefine_password'), 301);
+                        $request->getSession()->getFlashBag()->add('success', 'change-password.flash.success');
+                        return $this->redirect($this->generateUrl('redefine-password'), 301);
                     } else {
+                        $request->getSession()->getFlashBag()->add('success', 'users.first-login');
                         // First login
-                        return $this->redirect($this->generateUrl('complete_register'), 301);
+                        return $this->redirect($this->generateUrl('complete-register'), 301);
                     }
                 } else {
                     $form->get('code')->addError(new FormError(
@@ -156,4 +167,105 @@ class SecurityController extends Controller
         ));
     }
 
+
+    /**
+     * @Route("/redefinir-senha", name="redefine-password")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function redefinePassword(Request $request)
+    {
+        $error = null;
+        $form = $this->createFormBuilder()
+            ->add('password_repeated', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'invalid_message' => 'Passwords must match.',
+                'options' => array('required' => true),
+                'first_options' => array('label' => 'New Password'),
+                'second_options' => array('label' => 'Retype the New Password'),
+            ))
+            ->add('submit', SubmitType::class, array(
+                'attr' => array('class' => 'btn-info col-sm-4'),
+                'label' => 'resetting.reset.submit'))
+            ->getForm();
+
+        return $this->render('security/redefine-pass.html.twig', array(
+            'form' => $form->createView(),
+            'error' => $error,
+        ));
+    }
+
+    /**
+     * @Route("/completar-cadastro", name="complete-register")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function completeRegister(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $error = null;
+        $user = $this->getUser();
+        $form = $this->createFormBuilder()
+            ->add('email', EmailType::class, array(
+                'data' => $user->getEmail(),
+                'label' => 'users.email',
+                'attr' => array('readonly' => true),
+            ))
+            ->add('username', TextType::class, array(
+                'data' => $user->getUsername(),
+                'label' => 'users.username',
+                'attr' => array('readonly' => true),
+            ))
+            ->add('roles', TextType::class, array(
+                'constraints' => array(new Assert\NotBlank()),
+                'data' => $this->get('translator')->trans('users.roles.' . $user->getRoles()[0]),
+                'label' => 'users.profile',
+                'attr' => array('readonly' => true),
+            ))
+            ->add('name', TextType::class, array(
+                'constraints' => array(new Assert\NotBlank()),
+                'data' => $user->getName(),
+                'label' => 'users.name'
+            ))
+
+            ->add('password_repeated', RepeatedType::class, array(
+                'invalid_message' => 'invalid_repeated_message',
+                'required' => true,
+                'type' => PasswordType::class,
+                'options' => array('required' => true),
+                'first_options' => array(
+                    'label' => 'users.new-password-field',
+                    'attr' => array('placeholder' => 'users.new-password-field')
+                ),
+                'second_options' => array(
+                    'label' => 'users.re-password-label',
+                    'attr' => array('placeholder' => 'users.re-password-field')
+                ),
+            ))
+            ->add('submit', SubmitType::class, array(
+                'label' => 'users.register-submit',
+                'attr' => array('class' => 'btn-primary')
+            ))
+            ->getForm();
+
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $password = $encoder->encodePassword($user, $data['password_repeated']);
+                /* @var $user User */
+                $user->setPassword($password)
+                    ->setName($data['name'])
+                    ->setLastLogin(new \DateTime());
+
+                $objManager = $this->getDoctrine()->getManager();
+                $objManager->persist($user);
+                $objManager->flush();
+                $request->getSession()->getFlashBag()->add('success', 'users.complete-register.success');
+                return $this->redirect($this->generateUrl('home'), 301);
+            }
+        }
+        return $this->render('security/complete-register.html.twig', array(
+            'form' => $form->createView(),
+            'error' => $error,
+        ));
+    }
 }

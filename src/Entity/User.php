@@ -245,5 +245,13 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-
+    /**
+     * @param String $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
 }

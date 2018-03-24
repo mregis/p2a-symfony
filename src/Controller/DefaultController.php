@@ -18,18 +18,28 @@ class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="home")
+     * @return Response
      */
     public function index()
     {
-        return new Response("Index");
+        return $this->render('home.html.twig', array());
     }
 
     /**
-     * @Route("/404test", name="page-not-found")
+     * @Route("/404dev", name="page-not-found")
      */
     public function PageNotFound()
     {
         throw $this->createNotFoundException('Teste de pagina 404');
+    }
+
+    /**
+     * @Route("/404test", name="error-404-page")
+     * @return Response
+     */
+    public function Page404test()
+    {
+        return $this->render('error404.html.twig', array());
     }
 
 }

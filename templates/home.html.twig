@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+{% block user_content %}
+{{ parent() }}
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">/Principal</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>Seu espaço</h1>
+                    <p>Abaixo estão as aplicações disponíveis. As que estão vivamente coloridas são as que você pode
+                    acessar. As demais esmaecidas não estão disponíveis para o seu perfil.</p>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid-->
+    </div>
+{% endblock %}

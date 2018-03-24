@@ -2,6 +2,9 @@ Bad credentials.: Credenciais inválidas.
 This field is required: Este campo é obrigatório
 general_form_error: Verifique as informações do formulário e tente novamente
 Error: 'Erro'
+search-field:
+    placeholder: 'Buscar por...'
+logout: 'Sair'
 resetting:
     check_email: |
             Um email foi enviado. Ele contem um link que deve ser acessado para redefinir sua palavra-passe.
@@ -50,3 +53,31 @@ forgot-password:
         success: Se o endereço de e-mail informado estiver correto uma mensagem será enviada com as instruções.
                  Consulte sua caixa de mensagens. Se a mensagem não chegar em até 10 minutos verifique sua caixa de
                  SPAM ou tente novamente.
+users:
+  name: Nome
+  email: E-mail
+  status: Estado
+  username: Nome de Utilizador
+  date_created: Data Criação
+  profile: Perfil
+  active: Ativo
+  inactive: Inativo
+  add: Novo Utilizador
+  create: Inserir
+  complete-register:
+      title: Conclua seu cadastro
+      success: Obrigado! Suas informações estão completas.
+  finished-register: Cadastro concluido com sucesso!
+  new-password-field: Nova Senha
+  re-password-label: Repita a Nova Senha
+  re-password-field: Redigite a Nova Senha
+  register-submit: Atualizar informações
+  first-login: Bem-vindo! Por gentileza complete suas informações no formulário abaixo
+  add-info: |
+      Para criar um novo acesso, preencha os campos abaixo e clique no botão Inserir.
+      Uma mensagem de boas vindas será enviada para o endereço do cadastro com as
+      instruções para o primeiro acesso.
+  roles:
+    ROLE_ADMIN: Administrador
+    ROLE_USER: Usuário Comum
+    ROLE_MASTER: Usuário Master
