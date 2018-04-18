@@ -2,6 +2,12 @@
 
 {% block title 'Verificação de Código de Acesso' %}
 
+{% block my_CSS %}
+    <style>
+        #no-menu-footer footer.sticky-footer { width: 100%; }
+    </style>
+{% endblock my_CSS %}
+
 {% block user_content %}
 
 <div class="card card-login mx-auto mt-5">
@@ -31,3 +37,9 @@
 </div>
 
 {% endblock %}
+
+{% block footer %}
+    <div id="no-menu-footer">
+        {{ parent() }}
+    </div>
+{% endblock footer %}

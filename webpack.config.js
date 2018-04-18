@@ -11,9 +11,21 @@ Encore
     // uncomment to create hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
 
-    // uncomment to define the assets of the project
+    //assets of the project
+    .createSharedEntry('vendor', [
+        'jquery',
+        'bootstrap',
+        'fontawesome',
+        'startbootstrap-sb-admin/js/sb-admin',
+        'jquery.easing',
+        'datatables.net',
+        'datatables.net-bs4',
+        './assets/scss/app.scss'
+    ])
     .addEntry('app', './assets/js/app.js')
     .addEntry('httperrors', './assets/js/http-errors.js')
+//    .addEntry('list-users', './assets/js/list-users.js')
+
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(sassOptions) {}, {
@@ -22,6 +34,11 @@ Encore
 
     // uncomment for legacy applications that require $/jQuery as a global variable
     .autoProvidejQuery()
+    .autoProvideVariables({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+    })
 
 ;
 

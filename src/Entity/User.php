@@ -10,7 +10,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="usuario")
@@ -18,12 +18,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements AdvancedUserInterface, \Serializable
 {
+
     /**
-     * @ORM\Column(type="guid", columnDefinition="DEFAULT gen_random_uuid()", options={"comment"="Identificador do registro"})
+     * @var string
+     * @ORM\Column(type="guid", options={"comment"="Identificador do registro"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="UserApplication", mappedBy="user", cascade={"persist"})
+     */
+    private $userApplication;
 
     /**
      * @var string
@@ -73,10 +80,24 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $lastLogin;
 
+    /**
+     * @var Profile
+     * @ORM\ManyToOne(targetEntity="Profile")
+     * @ORM\JoinColumn(name="perfil_id", referencedColumnName="id", nullable=false)
+     */
+    private $profile;
+
+    /**
+     * @var datetime
+     * @ORM\Column(name="criado_em", type="datetime", nullable=false, options={"default" : "2018-04-01"})
+     */
+    private $created_at;
 
     public function __construct()
     {
         $this->isActive = true;
+        $this->created_at = new \DateTime('now');
+        $this->applications = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -99,11 +120,17 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->username;
     }
 
+    /**
+     * @return null
+     */
     public function getSalt()
     {
         // you *may* need a real salt depending on your encoder
@@ -111,14 +138,20 @@ class User implements AdvancedUserInterface, \Serializable
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return array((string) $this->profile);
     }
 
     /**
@@ -152,6 +185,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->username,
             $this->password,
             $this->isActive,
+            $this->profile,
             // see section on salt below
             // $this->salt,
         ));
@@ -165,6 +199,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->username,
             $this->password,
             $this->isActive,
+            $this->profile,
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -254,4 +289,89 @@ class User implements AdvancedUserInterface, \Serializable
         $this->password = $password;
         return $this;
     }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param DateTime $created_at
+     * @return User
+     */
+    public function setCreatedAt(\DateTime $created_at)
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param boolean $isActive
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     * @return User
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    /**
+     * @param Profile $profile
+     * @return User
+     */
+    public function setProfile($profile)
+    {
+        $this->profile = $profile;
+        return $this;
+    }
+
+    /**
+     * @return Profile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
+
+
+
 }

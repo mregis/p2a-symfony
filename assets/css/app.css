@@ -29,3 +29,5 @@ label span.required {
     margin-right: 2px;
     margin-left: 2px;
 }
+
+#no-menu-footer footer.sticky-footer { width: 100%; }

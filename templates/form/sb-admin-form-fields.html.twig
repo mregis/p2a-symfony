@@ -1,11 +1,13 @@
 
 {%- block form_label -%}
     {% if label is not same as(false) -%}
+        {% set asterisc = '' %}
         {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {%- endif -%}
         {% if required -%}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+            {% set asterisc = '<span class="required">*</span>' %}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim, 'title':'This field is required'}) %}
         {%- endif -%}
         {% if label is empty -%}
             {%- if label_format is not empty -%}
@@ -17,7 +19,6 @@
                 {% set label = name|humanize %}
             {%- endif -%}
         {%- else -%}
-            {% set asterisc = '<span class="required" title="' ~ 'This field is required'|trans ~ '">*</span>' %}
             {% set label = (translation_domain is same as(false) ? asterisc ~ label : asterisc ~ label|trans({}, translation_domain)) %}
         {%- endif -%}
 

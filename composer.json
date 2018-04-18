@@ -4,7 +4,10 @@
     "require": {
         "php": "^7.0.8",
         "ext-iconv": "*",
+        "friendsofsymfony/rest-bundle": "^2.3",
+        "jms/serializer-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.1",
+        "sensio/generator-bundle": "^3.1",
         "sensiolabs/security-checker": "^4.1",
         "symfony/asset": "^3.4",
         "symfony/console": "^3.4",
@@ -14,11 +17,10 @@
         "symfony/form": "^3.4",
         "symfony/framework-bundle": "^3.4",
         "symfony/lts": "^3",
-        "symfony/maker-bundle": "^1.1",
         "symfony/monolog-bundle": "^3.1",
+        "symfony/options-resolver": "^3.4",
         "symfony/orm-pack": "^1.0",
         "symfony/process": "^3.4",
-        "symfony/requirements-checker": "^1.0",
         "symfony/security-bundle": "^3.4",
         "symfony/security-csrf": "^3.4",
         "symfony/serializer-pack": "*",
@@ -30,9 +32,11 @@
         "symfony/yaml": "^3.4"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
         "symfony/browser-kit": "^3.4",
         "symfony/css-selector": "^3.4",
         "symfony/dotenv": "^3.4",
+        "symfony/maker-bundle": "^1.2",
         "symfony/phpunit-bridge": "^3.4",
         "symfony/profiler-pack": "*"
     },
@@ -61,8 +65,7 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-            "security-checker security:check": "script",
-            "requirements-checker": "script"
+            "security-checker security:check": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"

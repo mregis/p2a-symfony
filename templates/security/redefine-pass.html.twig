@@ -1,52 +1,28 @@
 {% extends 'layout.html.twig' %}
-
-{% set active = 'change-my-pass' %}
-{% set nomenu = true %}
-{% form_theme form 'form/fields.html.twig' %}
-
-    {% block user_content %}
-        <div class="central-container">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">{{ 'reset-password.title'| trans }}</h3>
-                            </div>
-                            <div class="panel-body">
-                                <p class="text-info well well-sm">
-                                    {{ 'reset-password.message' |trans }}
-                                </p>
-
-                                {{ form_start(form) }}
-                                {{ form_errors(form) }}
-
-                                <div class="row col-lg-12">
-                                    <div class="form-group col-lg-12{% if form.password_repeated.vars.valid==false %} has-error{% endif %}">
-                                        {{ form_label(form.password_repeated.first, null, {'label_attr': {'class': ''}}) }}
-                                        {{ form_errors(form.password_repeated.first) }}
-                                        {{ form_widget(form.password_repeated.first) }}
-                                    </div>
-                                </div>
-                                <div class="row col-lg-12">
-                                    <div class="form-group col-lg-12{% if form.password_repeated.vars.valid==false %} has-error{% endif %}">
-                                        {{ form_label(form.password_repeated.second, null, {'label_attr': {'class': ''}}) }}
-                                        {{ form_errors(form.password_repeated.second) }}
-                                        {{ form_widget(form.password_repeated.second) }}
-                                    </div>
-                                </div>
-                                <div class="row col-lg-12">
-
-                                    <div class="form-group col-lg-12">
-                                        {{ form_widget(form.submit) }}
-                                    </div>
-                                </div>
-                                {{ form_end(form) }}
-
-                            </div>
-                        </div>
-                    </div>
+{% block title 'reset-password.title' | trans %}
+{% block menu %}{% endblock menu %}
+{% block user_content %}
+        <div class="card card-login mx-auto mt-5">
+            <div class="card-header">
+                <div class="card-body-icon text-muted o-hidden ">
+                    <i class="fa fa-fw fa-user-circle-o"></i>
                 </div>
+                {{ 'reset-password.title'| trans }}
+            </div>
+            <div class="card-body">
+                <div class="text-center mt-4 mb-5">
+                    <p>{{ 'reset-password.message' |trans }}</p>
+                </div>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
             </div>
         </div>
-    {% endblock %}
+
+{% endblock %}
+
+{% block footer %}
+    <div id="no-menu-footer">
+        {{ parent() }}
+    </div>
+{% endblock footer %}

@@ -2,19 +2,19 @@
  * Created by Marcos Regis on 15/02/2018.
  */
 
-require('../css/app.scss');
+// var $ = require('jquery');
 
-var $ = require('jquery');
+global.$ = global.jQuery = $;
 
-require('fontawesome');
-// JS is equivalent to the normal "bootstrap" package
-// no need to set this to a variable, just require it
-require('bootstrap');
-require('startbootstrap-sb-admin/js/sb-admin');
-// require('startbootstrap-sb-admin');
-require('jquery.easing');
+const dataTableTranslation = require('../localisation/dataTables.pt_BR.json');
 
 $(document).ready(function () {
     $("#myModal").modal("show");
-    });
+    $(".dataTable").DataTable(
+        {
+            "language": dataTableTranslation
+        }
+    );
+});
+
 

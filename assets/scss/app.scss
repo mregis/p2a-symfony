@@ -1,0 +1,50 @@
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+$icon-font-path: "~font-awesome/fonts/";
+
+// set if you're also including font-awesome
+$fa-font-path: "~font-awesome/fonts";
+
+$enable-gradients: true;
+
+$blue-100: #f8f9ff;
+$blue-200: #e9ecff;
+$blue-300: #dee2ff;
+$blue-400: #ced4ff;
+$blue-500: #adb5ff;
+$blue-600: #868eff;
+$blue-700: #4950ff;
+$blue-800: #373aff;
+$blue-900: #2125ff;
+$blue-999: #171ca8;
+
+$dark: $blue-900 !default;
+
+/*
+$nav-link-disabled-color:           $blue-100;
+$navbar-dark-color:                 rgba($blue-100, .5);
+$navbar-dark-hover-color:           rgba($blue-100, .75);
+$navbar-dark-active-color:          $blue-200;
+$navbar-dark-disabled-color:        rgba($blue-100, .25);
+
+$navbar-dark-color:                 rgba($blue-300, .5);
+$navbar-dark-hover-color:           rgba($blue-300, .75);
+$navbar-dark-active-color:          $blue-300;
+$navbar-dark-disabled-color:        rgba($blue-300, .25);
+$navbar-dark-toggler-border-color:  rgba($blue-300, .1);
+$nav-link-disabled-color:           $blue-600;
+$nav-tabs-border-color:             $blue-300;
+$nav-tabs-link-hover-border-color:  $blue-200 $blue-200 $nav-tabs-border-color !default;
+$nav-tabs-link-active-color:        $blue-700;
+$nav-tabs-link-active-border-color: $blue-300 $blue-300 $blue-300;
+*/
+
+
+// @import '../scss/_variables.scss';
+
+
+// the ~ allows you to reference things in node_modules
+// @import '~font-awesome/scss/font-awesome.scss';
+@import '~startbootstrap-sb-admin/vendor/font-awesome/scss/font-awesome.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~startbootstrap-sb-admin/scss/sb-admin.scss';
+

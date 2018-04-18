@@ -9,10 +9,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Provider\UserProvider;
 use App\Util\TokenGenerator;
-use Doctrine\DBAL\Connection;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -20,9 +17,11 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,8 +55,8 @@ class SecurityController extends Controller
         $form = $this->createFormBuilder()
             ->add('username', EmailType::class, array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Email()),
-                'attr' => array('placeholder' => 'forgot-password.e-mail-field-placeholder'),
-                'label' => 'forgot-password.e-mail-field-label',
+                'attr' => array('placeholder' => 'forgot-password.e-mail-field.placeholder'),
+                'label' => 'forgot-password.e-mail-field.label',
             ))
             ->getForm();
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -92,7 +91,7 @@ class SecurityController extends Controller
                     }
                 }
                 // Show Success Message whenever occours
-                $request->getSession()->getFlashBag()->add('success', 'forgot-password.flash.success');
+                $this->addFlash('success', 'forgot-password.flash.success');
                 return $this->redirect($this->generateUrl('login-by-code'), 301);
             } else {
                 $form->addError(new FormError('general_form_error'));
@@ -110,8 +109,8 @@ class SecurityController extends Controller
         $form = $this->createFormBuilder()
             ->add('username', EmailType::class, array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Email()),
-                'attr' => array('placeholder' => 'forgot-password.e-mail-field-placeholder'),
-                'label' => 'forgot-password.e-mail-field-label',
+                'attr' => array('placeholder' => 'forgot-password.e-mail-field.placeholder'),
+                'label' => 'forgot-password.e-mail-field.label',
             ))
 
             ->add('code', TextType::class, array(
@@ -143,10 +142,10 @@ class SecurityController extends Controller
                     $tokenStorage->setToken($token);
 
                     if ($user->getLastLogin()) {
-                        $request->getSession()->getFlashBag()->add('success', 'change-password.flash.success');
+                        $this->addFlash('success', 'change-password.flash.success');
                         return $this->redirect($this->generateUrl('redefine-password'), 301);
                     } else {
-                        $request->getSession()->getFlashBag()->add('success', 'users.first-login');
+                        $this->addFlash('success', 'users.first-login');
                         // First login
                         return $this->redirect($this->generateUrl('complete-register'), 301);
                     }
@@ -173,22 +172,40 @@ class SecurityController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function redefinePassword(Request $request)
+    public function redefinePassword(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $error = null;
         $form = $this->createFormBuilder()
             ->add('password_repeated', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'invalid_message' => 'Passwords must match.',
+//                'invalid_message' => 'invalid_repeated_message',
                 'options' => array('required' => true),
                 'first_options' => array('label' => 'New Password'),
                 'second_options' => array('label' => 'Retype the New Password'),
             ))
             ->add('submit', SubmitType::class, array(
-                'attr' => array('class' => 'btn-info col-sm-4'),
-                'label' => 'resetting.reset.submit'))
+                'attr' => array('class' => 'btn-info btn-block'),
+                'label' => 'forgot-password.submit'
+            ))
             ->getForm();
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $user = $this->getUser();
+                $password = $encoder->encodePassword($user, $data['password_repeated']);
+                /* @var $user User */
+                $user->setPassword($password);
 
+                $objManager = $this->getDoctrine()->getManager();
+                $objManager->persist($user);
+                $objManager->flush();
+                $this->addFlash('success', 'forgot-password.flash.success');
+                return $this->redirect($this->generateUrl('home'), 301);
+            }
+            // Form valido mas não redirecionou, algo de errado tem...
+            $error = new FormError('general_form_error');
+
+        }
         return $this->render('security/redefine-pass.html.twig', array(
             'form' => $form->createView(),
             'error' => $error,
@@ -217,7 +234,7 @@ class SecurityController extends Controller
             ))
             ->add('roles', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank()),
-                'data' => $this->get('translator')->trans('users.roles.' . $user->getRoles()[0]),
+                'data' => $this->get('translator')->trans('roles.names.' . $user->getRoles()[0]),
                 'label' => 'users.profile',
                 'attr' => array('readonly' => true),
             ))
@@ -259,11 +276,64 @@ class SecurityController extends Controller
                 $objManager = $this->getDoctrine()->getManager();
                 $objManager->persist($user);
                 $objManager->flush();
-                $request->getSession()->getFlashBag()->add('success', 'users.complete-register.success');
+                $this->addFlash('success', 'users.complete-register.success');
                 return $this->redirect($this->generateUrl('home'), 301);
             }
+        } else {
+            $error = new FormError('general_form_error');
         }
         return $this->render('security/complete-register.html.twig', array(
+            'form' => $form->createView(),
+            'error' => $error,
+        ));
+    }
+
+    /**
+     * @Route("/alterar-senha", name="change-password")
+     * @param Request $request
+     * @return Response
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $error = null;
+        $form = $this->createFormBuilder()
+            ->add('old-password', PasswordType::class, array(
+//                'attr' => array('class' => 'btn-info btn-block'),
+                'required' => true,
+                'constraints' => array(new UserPassword()),
+                'label' => 'forgot-password.old-password.label'
+            ))
+            ->add('password_repeated', RepeatedType::class, array(
+                'type' => PasswordType::class,
+//                'invalid_message' => 'invalid_repeated_message',
+                'options' => array('required' => true),
+                'first_options' => array('label' => 'forgot-password.new-password.label'),
+                'second_options' => array('label' => 'forgot-password.re-password.label'),
+            ))
+            ->add('submit', SubmitType::class, array(
+                'attr' => array('class' => 'btn-info btn-block'),
+                'label' => 'forgot-password.submit'
+            ))
+            ->getForm();
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $user = $this->getUser();
+                $password = $encoder->encodePassword($user, $data['password_repeated']);
+                /* @var $user User */
+                $user->setPassword($password);
+
+                $objManager = $this->getDoctrine()->getManager();
+                $objManager->persist($user);
+                $objManager->flush();
+                $this->addFlash('success', 'reset-password.flash.success');
+                return $this->redirect($this->generateUrl('home'), 301);
+            }
+            // Form valido mas não redirecionou, algo de errado tem...
+            $error = new FormError('general_form_error');
+
+        }
+        return $this->render('security/redefine-pass.html.twig', array(
             'form' => $form->createView(),
             'error' => $error,
         ));

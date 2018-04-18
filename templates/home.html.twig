@@ -1,8 +1,10 @@
 {% extends 'layout.html.twig' %}
+
 {% block user_content %}
-{{ parent() }}
     <div class="content-wrapper">
-        <div class="container-fluid">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item active">/Principal</li>
@@ -10,11 +12,59 @@
             <div class="row">
                 <div class="col-12">
                     <h1>Seu espaço</h1>
+
                     <p>Abaixo estão as aplicações disponíveis. As que estão vivamente coloridas são as que você pode
-                    acessar. As demais esmaecidas não estão disponíveis para o seu perfil.</p>
+                        acessar. As demais esmaecidas não estão disponíveis para o seu perfil.</p>
+
+{#  ROLE_SUPERADMIN permission #}
+
+                    {% if is_granted('ROLE_SUPERADMIN') %}
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-warning o-hidden h-100">
+                                <a class="text-white" href="{{ path('list-apps') }}">
+                                    <div class="card-body">
+                                        <div class="card-body-icon">
+                                            <i class="fa fa-fw fa-code-fork"></i>
+                                        </div>
+                                        <div class="mr-5 text-center">{{ 'application.list-title'|trans }}</div>
+                                    </div></a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+
+{#  ROLE_ADMIN permission #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <div class="card text-white bg-info o-hidden h-100">
+                                <a class="text-white" href="{{ path('list-users') }}">
+                                    <div class="card-body">
+                                        <div class="card-body-icon">
+                                            <i class="fa fa-fw fa-group"></i>
+                                        </div>
+                                        <div class="mr-5 text-center">Gerenciar Usuários</div>
+                                    </div></a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-light o-hidden h-100">
+                            <a class="text-secondary" href="{{ path('change-password') }}">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <i class="fa fa-fw fa-lock"></i>
+                                </div>
+                                <div class="mr-5 text-center">Alterar Senha</div>
+                            </div></a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid-->
+
     </div>
-{% endblock %}
+{% endblock user_content %}
+

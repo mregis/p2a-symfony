@@ -189,8 +189,8 @@
                 </form>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('logout') }}">
-                    <i class="fa fa-fw fa-sign-out"></i>{{ 'logout'|trans }}</a>
+                <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fa fa-fw fa-sign-out"></i>{{ 'logout.btns.logout'|trans }}</a>
             </li>
         </ul>
         {% endif %}

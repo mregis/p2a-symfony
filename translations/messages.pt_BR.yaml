@@ -2,9 +2,27 @@ Bad credentials.: Credenciais inválidas.
 This field is required: Este campo é obrigatório
 general_form_error: Verifique as informações do formulário e tente novamente
 Error: 'Erro'
+home: 'Início'
+empty-result: 'Não há informações a serem exibdas'
+oops-error: 'Oops. Algo saiu errado!'
+basic-error: Com certeza você não deveria estar vendo essa mensagem.
+             Se a estiver vendo muitas vezes entre em contato com o administrador do sistema.
+created-at: 'Criado em'
+actions: 'Ações'
+new: 'Novo'
+active: 'Ativo'
+inactive: 'Inativo'
+edit: 'Editar'
+add: 'Inserir'
+not-found-error: 'Dados inválidos'
+options: 'Opções'
+save: 'Salvar'
+submit: 'Enviar'
+
 search-field:
     placeholder: 'Buscar por...'
-logout: 'Sair'
+choice-field:
+    placeholder: 'Selecione...'
 resetting:
     check_email: |
             Um email foi enviado. Ele contem um link que deve ser acessado para redefinir sua palavra-passe.
@@ -16,11 +34,10 @@ resetting:
         submit: 'Recuperar senha'
     reset:
         submit: 'Alterar senha'
-    flash:
-        success: 'A senha foi redefinida com sucesso.'
-        error: 'Não foi possível iniciar o processo de recuperação. Verifique as informações.'
+    many-tries: 'Já há uma requisição recente. Aguarde %time% minutos para realizar nova tentativa'
     email:
         subject: 'Recuperação de acesso'
+        sent-success: 'Mensagem enviada para %email%'
         message: |
             Olá, %username%!
             Você requisitou a recuperação de acesso no Sistema de Controle de Compensação - Address S.A.,
@@ -47,23 +64,39 @@ verify-code:
     flash:
         error: O código utilizado é inválido!
 forgot-password:
-    e-mail-field-label: E-mail
-    e-mail-field-placeholder: Entre com seu endereço de e-mail
+    e-mail-field:
+        label: 'E-mail'
+        placeholder: 'Entre com seu endereço de e-mail'
+    re-password:
+        label: 'Redigite a Nova Senha'
+    new-password:
+        label: 'Nova Senha'
+    old-password:
+        label: 'Senha atual'
+    title: 'Redefinição de Senha'
+    message_1: Esqueceu a senha?
+    message_2: Entre com seu endereço de email e enviaremos as instruções de como redefinir sua senha.
+    submit: Alterar Senha
     flash:
         success: Se o endereço de e-mail informado estiver correto uma mensagem será enviada com as instruções.
                  Consulte sua caixa de mensagens. Se a mensagem não chegar em até 10 minutos verifique sua caixa de
                  SPAM ou tente novamente.
 users:
-  name: Nome
-  email: E-mail
-  status: Estado
-  username: Nome de Utilizador
-  date_created: Data Criação
-  profile: Perfil
-  active: Ativo
-  inactive: Inativo
-  add: Novo Utilizador
-  create: Inserir
+  name: 'Nome'
+  email: 'E-mail'
+  status: 'Estado'
+  username: 'Nome de Utilizador'
+  profile: 'Perfil'
+  add: 'Novo Utilizador'
+  list: 'Usuários'
+  list-title: 'Lista de usuários cadastrados'
+  apps: 'Aplicativos'
+  created-at-title: 'Data da criação do cadastro'
+  edit-flash:
+      success: 'Dados atualizados'
+  create: 'Inserir'
+  new-flash:
+      success: 'Cadastrao criado com sucesso'
   complete-register:
       title: Conclua seu cadastro
       success: Obrigado! Suas informações estão completas.
@@ -77,7 +110,79 @@ users:
       Para criar um novo acesso, preencha os campos abaixo e clique no botão Inserir.
       Uma mensagem de boas vindas será enviada para o endereço do cadastro com as
       instruções para o primeiro acesso.
-  roles:
-    ROLE_ADMIN: Administrador
-    ROLE_USER: Usuário Comum
-    ROLE_MASTER: Usuário Master
+
+
+reset-password:
+    title: 'Alterar Senha de Acesso'
+    message: 'Preencha o formulário abaixo para alterar a sua senha'
+    flash:
+        success: 'A senha foi redefinida com sucesso.'
+        error: 'Não foi possível iniciar o processo de recuperação. Verifique as informações.'
+
+logout:
+    message: Selecione "Sair" abaixo se você estiver pronto para finalizar a sessão atual.
+    title: Pronto para sair?
+    btns:
+        close: Fechar
+        cancel: Cancelar
+        logout: Sair
+
+roles:
+    descriptions:
+        ROLE_ADMIN: Administrador - Usuário capaz de gerenciar um conjunto limitado de configurações e criar
+            ou modificar qualquer usuário que não seja Administrador ou SuperAdministrador
+        ROLE_USER: Usuário básico - Permissão apenas de consultas a seu próprio perfil
+        ROLE_MASTER: Usuário Master - Usuario Capaz de modificar e criar outros usuários com perfil de
+            Usuário Básico dentro de seu Grupo de Usuários
+        ROLE_SUPERADMIN: Administrador Geral do Sistema - Possui todas as permissões existentes no sistema
+    names:
+        ROLE_ADMIN: Administrador
+        ROLE_USER: Usuário
+        ROLE_MASTER: Master
+        ROLE_SUPERADMIN: Super Administrador
+
+application:
+    list-name: 'Aplicativos'
+    list-title: 'Gerenciar Aplicativos'
+    list-description: 'Aplicativos Cadastrados'
+    name: 'Nome'
+    alias: 'Codinome'
+    options-name: 'Opções e Configurações'
+    options-title: 'Visualizar todas as configurações da aplicação %name%'
+    status: 'Estado'
+    new-title: 'Cadastrar novo Aplicativo'
+    new-form-title: 'Informações do novo Aplicativo'
+    options:
+        url: 'URL'
+        interno: 'Interno'
+    new-flash:
+        success: 'Aplicativo cadastrado com sucesso'
+    edit-flash:
+        success: 'Informações atualizadas'
+        
+option-attribute:
+    new-title: 'Cadastrar nova Opção'
+    new-form-title: 'Informações da nova Opção'
+    name: 'Nome Atributo'
+    defaultvalue: 'Valor padrão por omissão'
+    required: 'Forçar preenchimento'
+    type: 'Tipo Atributo'
+    labels:
+        TextType: 'Texto (1 linha)'
+        TextareaType: 'Text (multilinha)'
+        EmailType: 'E-mail'
+        IntegerType: 'Numero Inteiro'
+        MoneyType: 'Moeda'
+        NumberType: 'Numero'
+        UrlType: 'URL'
+        TelType: 'Telefone'
+        DateType: 'Data'
+        DateTimeType: 'Data e Hora'
+        TimeType: 'Hora'
+        PercentType: 'Porcentagem'
+        SearchType: 'Busca'
+        ColorType: 'Cor'
+        ChoiceType: 'Escolha'
+        BirthdayType: 'Data Nascimento'
+        CheckboxType: 'Booleano'
+        FileType: 'Arquivo'

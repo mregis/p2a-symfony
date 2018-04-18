@@ -10,3 +10,10 @@ parameters:
     maxtokenlength: 10
     mintokenlength: 5
     minlastlogin: 10
+    app.roles:
+        - 'ROLE_ADMIN'
+        - 'ROLE_USER'
+        - 'ROLE_MASTER'
+        - 'ROLE_INTERNAL'
+        - 'ROLE_EXTERNAL'
+        - 'ROLE_SUPERADMIN'

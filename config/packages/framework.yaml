@@ -30,4 +30,4 @@ framework:
         #app: cache.adapter.apcu
 
     assets:
-        json_manifest_path: '%kernel.root_dir%/../public/build/manifest.json'
+        json_manifest_path: '%kernel.root_dir%/../public/resources/manifest.json'

@@ -1,0 +1,100 @@
+{% extends 'layout.html.twig' %}
+{% block my_CSS %}
+    <style type="text/css">
+        #application fieldset {
+            border: 1px solid #aeb3b3;
+            padding: 6px;
+            border-radius: 0.25rem;
+        }
+        #application fieldset label {
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+    </style>
+{% endblock my_CSS %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-apps') }}">{{ 'application.list-name'|trans }}</a>
+                </li>
+                <li class="breadcrumb-item">{{ 'new'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'application.new-title'|trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i> {{ 'application.new-form-title'|trans }}</em></strong>
+                        </div>
+                        <div class="card-body">
+                            {{ form(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block my_postload_JSes %}
+    <script type="application/javascript">
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            var newForm = prototype;
+            // You need this only if you didn't set 'label' => false in your tags field in TaskType
+            // Replace '__name__label__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            // newForm = newForm.replace(/__name__label__/g, index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            newForm = newForm.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<fieldset></fieldset>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus">{{ 'option-attribute.new-title'|trans }}</a>');
+        var $newLinkLi = $('#application_options').prepend($addTagLink);
+
+        jQuery(document).ready(function () {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('#application_options');
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function (e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+
+    </script>
+{% endblock %}

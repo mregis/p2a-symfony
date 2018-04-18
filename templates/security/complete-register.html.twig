@@ -1,7 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% block menu %}{% endblock menu %}
 {% block user_content %}
-    {{ parent() }}
     <div class="container">
         <div class="card card-register mx-auto mt-5">
             <div class="card-header">
@@ -29,3 +28,9 @@
         </div>
     </div>
 {% endblock %}
+
+{% block footer %}
+    <div id="no-menu-footer">
+        {{ parent() }}
+    </div>
+{% endblock footer %}
