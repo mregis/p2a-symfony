@@ -73,7 +73,7 @@
 
         // setup an "add a tag" link
         var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus">{{ 'option-attribute.new-title'|trans }}</a>');
-        var $newLinkLi = $('#application_options').prepend($addTagLink);
+        var $newLinkLi = $('#application_options').append($addTagLink);
 
         jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags

@@ -13,12 +13,13 @@ use PHPUnit\Framework\Exception;
 
 /**
  * @ORM\Table(name="sistema")
- * @ORM\Entity(repositoryClass="App\Repository\ApplicationRepository")
+ * @ORM\Entity
  */
 class Application
 {
 
     /**
+     * @var ArrayCollection|UserApplication[]
      * @ORM\OneToMany(targetEntity="App\Entity\UserApplication", mappedBy="application", cascade={"persist"})
      */
     private $userApplication;
@@ -56,8 +57,8 @@ class Application
     private $options;
 
     public function __construct() {
-        $this->users = new ArrayCollection();
-        $this->options = new ArrayCollection();
+        $this->userApplication = new ArrayCollection();
+        $this->options = array();
     }
 
     /**
@@ -165,8 +166,27 @@ class Application
      */
     public function addOption(OptionAttribute $option)
     {
-        $this->options[] = $option->serialize();
+        $this->options[]= ($option->serialize());
         return $this;
     }
+
+    /**
+     * @return ArrayCollection|UserApplication[]
+     */
+    public function getUserApplication()
+    {
+        return $this->userApplication;
+    }
+
+    /**
+     * @param mixed $userApplication
+     * @return Application
+     */
+    public function setUserApplication(UserApplication $userApplication)
+    {
+        $this->userApplication = $userApplication;
+        return $this;
+    }
+
 
 }

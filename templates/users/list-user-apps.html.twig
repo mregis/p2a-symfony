@@ -8,72 +8,56 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item active">Usuários</li>
+                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
+                <li class="breadcrumb-item">{{ 'application.list-name'|trans }}</li>
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>Editar Usuário</h1>
+                    <h1>{{ 'user-application.list-title' | trans({'%name%': e_user.name})|raw }}</span></h1>
 
                     <div class="card mb-3">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    <i class="fa fa-table"></i> {{ 'users.list-title'|trans }}
+                                    <i class="fa fa-table"></i> {{ 'application.list-name'|trans }}
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     <a class="btn btn-sm btn-success fa fa-plus-circle"
-                                       href="{{ path('new-user') }}">{{ 'new'|trans }}</a>
+                                       href="{{ path('new-user-app', {'id' : e_user.id}) }}">{{ 'new'|trans }}</a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
 
-                            {% if user_list|length > 0 %}
+                            {% if app_list|length > 0 %}
                                 <div class="table-responsive">
                                     <table class="table table-bordered dataTable table-striped" width="100%"
                                            cellspacing="0">
                                         <thead class="bg-dark text-white">
                                         <tr>
                                             <th>#</th>
-                                            <th>{{ 'users.name'|trans }}</th>
-                                            <th>{{ 'users.username'|trans }}</th>
-                                            <th>{{ 'users.email'|trans }}</th>
-                                            <th>{{ 'users.profile'|trans }}</th>
-                                            <th title="{{ 'users.created-at-title' }}">{{ 'created-at'|trans }}</th>
-                                            <th title="Aplicativos Permitidos">{{ 'users.apps'|trans }}</th>
-                                            <th>{{ 'users.status'|trans }}</th>
+                                            <th>{{ 'application.name'|trans }}</th>
+                                            <th>{{ 'application.options-name'|trans }}</th>
                                             <th>{{ 'actions'|trans }}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for user in user_list %}
+                                        {% for app in app_list %}
                                             <tr>
                                                 <td>{{ loop.index }}</td>
-                                                <td>{{ user.name }}</td>
-                                                <td>{{ user.username }}</td>
-                                                <td>{{ user.email }}</td>
-                                                <td>{{ 'roles.names.%s'|format(user.profile)|trans }}</td>
-                                                <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
-                                                <td>{% if ((user.userApplication|length) > 0) %} }}
-                                                        {% for userapp in user.userApplication %}
-                                                        {{ userapp.application.name }}<br />
+                                                <td>{{ app.name }}</td>
+                                                <td>{% if ((app.options|length) > 0) %} }}
+                                                        {% for option in app.options %}
+                                                        {{ option.name }}: {{ option.value }}<br />
                                                         {% endfor %}
                                                     {% else %}
-                                                        Nenhum aplicativo vinculado
-                                                        {% endif %}
+                                                        Nenhuma opção de configuração
+                                                    {% endif %}
                                                 </td>
-                                                <td>{{ (user.isActive==true ? 'active':'inactive')|trans }}</td>
-                                                <td>
+                                                <td class="text-nowrap">
                                                     <a class="btn btn-info btn-sm fa fa-edit"
-                                                       href="{{ path('edit-user', {'id' : user.id}) }}"
+                                                       href="{{ path('edit-user-app', {'id' : app.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
-                                                    <span class="btn bg-gradient-warning btn-sm fa fa-envelope"
-                                                          data-target="{{ user.id }}" role="button"
-                                                          title="{{ 'forgot-password.title'|trans }}"></span>
-                                                    <a class="btn btn-sm bg-gradient-success fa fa-tasks"
-                                                       href="{{ path('list-user-apps', {'id' : user.id}) }}"
-                                                       title="{{ 'edit'|trans }}"></a>
-
                                                 </td>
                                             </tr>
                                         {% endfor %}

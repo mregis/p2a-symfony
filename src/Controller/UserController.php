@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,6 +50,8 @@ class UserController extends Controller
                 $objManager->flush();
                 $this->addFlash('success', 'users.edit-flash.success');
                 return $this->redirect($this->generateUrl('list-users'), 301);
+            } else {
+                $error = new FormError('general_form_error');
             }
         }
 

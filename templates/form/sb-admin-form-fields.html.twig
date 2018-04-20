@@ -1,3 +1,21 @@
+{% block _application_row_col_entry_widget %}
+    <fieldset>
+        <div class="form-group row form-control-sm">
+        {% for key, field in form.children %}
+            <div class="col">
+                {{ form_widget(field) }}
+            </div>
+        {% endfor %}
+        </div>
+    </fieldset>
+{% endblock %}
+
+
+{% block _application_row_col_entry_row_col_widget %}
+    {{ form_errors(form) }}
+    {{ form_label(form) }}
+    {{ form_widget(form) }}
+{% endblock %}
 
 {%- block form_label -%}
     {% if label is not same as(false) -%}
@@ -54,3 +72,13 @@
         {{ form_widget(form) }}
     </div>
 {% endblock form_row %}
+
+{# #}
+{% block submit_row -%}
+    <div class="form-group row">
+        {{- form_widget(form, {'attr': {'class': attr.class|default('btn btn-primary') ~ ' btn-block btn-inline'}}) -}}
+    </div>
+{%- endblock submit_row %}
+
+
+{# #}

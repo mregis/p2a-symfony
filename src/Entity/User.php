@@ -28,6 +28,7 @@ class User implements AdvancedUserInterface, \Serializable
     private $id;
 
     /**
+     * @var ArrayCollection|UserApplication[]
      * @ORM\OneToMany(targetEntity="UserApplication", mappedBy="user", cascade={"persist"})
      */
     private $userApplication;
@@ -97,7 +98,7 @@ class User implements AdvancedUserInterface, \Serializable
     {
         $this->isActive = true;
         $this->created_at = new \DateTime('now');
-        $this->applications = new ArrayCollection();
+        $this->userApplication = new ArrayCollection();
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
     }
@@ -370,6 +371,24 @@ class User implements AdvancedUserInterface, \Serializable
     public function getProfile()
     {
         return $this->profile;
+    }
+
+    /**
+     * @return ArrayCollection|UserApplication[]
+     */
+    public function getUserApplication()
+    {
+        return $this->userApplication;
+    }
+
+    /**
+     * @param mixed $userApplication
+     * @return User
+     */
+    public function setUserApplication(UserApplication $userApplication)
+    {
+        $this->userApplication = $userApplication;
+        return $this;
     }
 
 

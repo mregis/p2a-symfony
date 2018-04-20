@@ -9,6 +9,7 @@
 namespace App\Form;
 
 use App\Entity\OptionAttribute;
+use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Component\Form\AbstractType;
 use App\Entity\Application;
 use App\Entity\User;
@@ -29,19 +30,31 @@ class OptionAttributeType extends AbstractType
 {
 
     /**
+     * @var boolean
+     */
+    private $isSubForm;
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->isSubForm = $options['isSubForm'];
+
+        $block_name = $this->isSubForm ? 'row_col' : null;
         $builder
             ->add('name', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank()),
-                'label' => 'option-attribute.name'
+                'label' => 'option-attribute.name',
+                'required' => true,
+                'block_name' => $block_name,
             ))
             ->add('type', ChoiceType::class, array(
                 'constraints' => array(new Assert\NotBlank()),
                 'label' => 'option-attribute.type',
+                'required' => true,
+                'block_name' => $block_name,
                 'choices' => array(
                     'ChoiceType',
                     'TextType',
@@ -69,13 +82,18 @@ class OptionAttributeType extends AbstractType
             ))
             ->add('defaultvalue', TextType::class, array(
                 'label' => 'option-attribute.defaultvalue',
-                'required' => false
+                'required' => false,
+                'block_name' => $block_name,
             ))
             ->add('required', CheckboxType::class, array(
                 'label' => 'option-attribute.required',
-
+                'required' => false,
+                'block_name' => $block_name,
             ))
-//            ->add('submit', SubmitType::class, array('label' => 'add'))
+            ->add('delete', Types\ButtonType::class, array(
+                'label' => 'option-attribute.delete-btn',
+                'attr' => array('class' => 'delete-option-btn' . ($this->isSubForm ? ' btn-sm' : '')),
+            ))
         ;
     }
 
@@ -87,6 +105,8 @@ class OptionAttributeType extends AbstractType
         $resolver
             ->setDefaults([
                 'data_class' => OptionAttribute::class,
+                'isSubForm' => false,
             ]);
+        $resolver->setAllowedTypes('isSubForm', 'boolean'); // Validates the type(s) of option(s) passed.
     }
 }

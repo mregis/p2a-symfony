@@ -20,19 +20,20 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('list-apps') }}">{{ 'application.list-name'|trans }}</a></li>
-                <li class="breadcrumb-item">{{ 'edit'|trans }}</li>
+                <li class="breadcrumb-item">{{ 'new'|trans }}</li>
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>Editando as informações de <span class="text-success">{{ myapp.name }}</span></h1>
+                    <h1>{{ 'user-application.new-title'|trans }}</h1>
 
                     <div class="card mb-3">
                         <div class="card-header">
-                            <i class="fa fa-2x fa-pencil"></i> Dados cadastrais de <strong><em>{{ myapp.name }}</em></strong>
+                            <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i> {{ 'user-application.new-form-title'|trans }}</em></strong>
                         </div>
                         <div class="card-body">
-                          {{ form(form) }}
+                            {{ form(form) }}
                         </div>
                     </div>
                 </div>
@@ -40,19 +41,13 @@
         </div>
     </div>
 {% endblock %}
+
 {% block my_postload_JSes %}
     <script type="application/javascript">
-
-        var $collectionHolder;
-
-        // setup an "add a tag" link
-        var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus-circle">{{ 'option-attribute.new-title' | trans }}</a>');
-        var $newLinkLi = $('#application_options').append($addTagLink);
-
         function addTagForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
-            var allStyles = $collectionHolder.attr('class');
+
             // get the new index
             var index = $collectionHolder.data('index');
 
@@ -69,11 +64,16 @@
             // increase the index with one for the next item
             $collectionHolder.data('index', index + 1);
 
-            $(newForm).attr('class', allStyles);
-            // Display the form in the page in an fieldset, after the "New" btn
+            // Display the form in the page in an li, before the "Add a tag" link li
             var $newFormLi = $('<fieldset></fieldset>').append(newForm);
             $newLinkLi.before($newFormLi);
         }
+
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus">{{ 'option-attribute.new-title'|trans }}</a>');
+        var $newLinkLi = $('#application_options').prepend($addTagLink);
 
         jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags
@@ -93,8 +93,8 @@
                 // add a new tag form (see next code block)
                 addTagForm($collectionHolder, $newLinkLi);
             });
-
         });
+
 
     </script>
 {% endblock %}

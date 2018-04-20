@@ -10,13 +10,13 @@ namespace App\Form;
 
 use App\Entity\Profile;
 use App\Entity\User;
+use App\Entity\Application;
+use App\Entity\UserApplication;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type as Types;
 
 class UserType extends AbstractType
 {
@@ -42,6 +43,10 @@ class UserType extends AbstractType
         $this->userCaller = $options['userCaller'];
 
         $builder
+            ->add('name', TextType::class, array(
+                'constraints' => array(new Assert\NotBlank()),
+                'label' => 'users.name'
+            ))
             ->add('email', EmailType::class, array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Email()),
                 'label' => 'users.email',
@@ -50,10 +55,15 @@ class UserType extends AbstractType
                 'constraints' => array(new Assert\NotBlank()),
                 'label' => 'users.username',
             ))
-            ->add('name', TextType::class, array(
-                'constraints' => array(new Assert\NotBlank()),
-                'label' => 'users.name'
-            ));
+
+            ->add('userApplication', Types\CollectionType::class,  array(
+                'entry_type' => UserApplicationType::class,
+                'entry_options' => array('label' => false),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => 'application.list-name',
+            ))
+            ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             /* @var User */
@@ -81,7 +91,7 @@ class UserType extends AbstractType
                     ->add('isActive', ChoiceType::class, array(
                         'label' => 'users.status',
                         'attr' => ['readonly' => true],
-                        'choices' => array('users.active' => true),
+                        'choices' => array('active' => true),
                     ));
             } else {
                 $form->add('profile', EntityType::class, array(
@@ -112,6 +122,10 @@ class UserType extends AbstractType
             $form->add('submit', SubmitType::class, array(
                 'label' => 'users.register-submit',
                 'attr' => array('class' => 'btn-primary')
+            ))
+                ->add('cancel', SubmitType::class, array(
+                'label' => 'cancel',
+                'attr' => array('class' => 'btn-default')
             ));
         });
 

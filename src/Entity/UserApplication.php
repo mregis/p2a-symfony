@@ -8,6 +8,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,7 +27,7 @@ class UserApplication
     private $id;
 
     /**
-     * @var array
+     * @var ArrayCollection|OptionAttribute[]
      * @ORM\Column(name="opcoes", type="json_array", length=255, nullable=true)
      */
     private $options;
@@ -45,21 +46,46 @@ class UserApplication
      */
     private $application;
 
-    /**
-     * @return array
-     */
-    public function getOptions()
+
+    public function __construct()
     {
-        return $this->options;
+        $this->options = new ArrayCollection();
     }
 
     /**
-     * @param array $options
-     * @return UserApplication
+     * @return ArrayCollection
      */
-    public function setOptions($options)
+    public function getOptions()
     {
-        $this->options = $options;
+        $options = new ArrayCollection();
+        foreach($this->options as $k => $value) {
+            /* @var $option OptionAttribute */
+            $option = new OptionAttribute();
+            $option->unserialize($value);
+            $options->add($option);
+        }
+        return $options;
+    }
+
+    /**
+     * @param ArrayCollection $options
+     * @return Application
+     */
+    public function setOptions(ArrayCollection $options)
+    {
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
+        return $this;
+    }
+
+    /**
+     * @param OptionAttribute $option
+     * @return $this
+     */
+    public function addOption(OptionAttribute $option)
+    {
+        $this->options[] = $option->serialize();
         return $this;
     }
 

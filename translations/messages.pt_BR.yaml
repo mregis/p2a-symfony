@@ -163,6 +163,7 @@ application:
 option-attribute:
     new-title: 'Cadastrar nova Opção'
     new-form-title: 'Informações da nova Opção'
+    delete-btn: 'Excluir opção'
     name: 'Nome Atributo'
     defaultvalue: 'Valor padrão por omissão'
     required: 'Forçar preenchimento'
@@ -186,3 +187,8 @@ option-attribute:
         BirthdayType: 'Data Nascimento'
         CheckboxType: 'Booleano'
         FileType: 'Arquivo'
+
+user-application:
+    new-title: 'Vincular novo Aplicativo'
+    list-title: 'Aplicativos de <span class="text-dark">%name%</span>'
+

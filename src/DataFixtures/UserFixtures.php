@@ -52,6 +52,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     {
         return array(
             ProfileFixtures::class,
+            ApplicationFixtures::class,
         );
     }
 

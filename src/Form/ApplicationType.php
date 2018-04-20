@@ -42,9 +42,14 @@ class ApplicationType extends AbstractType
             ))
             ->add('options', Types\CollectionType::class,  array(
                 'entry_type' => OptionAttributeType::class,
-                'entry_options' => array('label' => false),
+                'entry_options' => array('label' => false, 'isSubForm' => true,
+                    ),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'label' => 'application.options-name',
+                'required' => false,
+                'block_name' => 'row_col',
+                'attr'=>['class' => 'subform-row container form-control-sm'],
             ))
             ->add('isActive', ChoiceType::class, array(
                 'label' => 'application.status',

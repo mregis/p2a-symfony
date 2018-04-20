@@ -11,6 +11,7 @@ namespace App\Entity;
 
 class OptionAttribute implements \Serializable
 {
+
     /**
      * @var string
      */
