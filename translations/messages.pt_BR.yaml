@@ -18,12 +18,21 @@ not-found-error: 'Dados inválidos'
 options: 'Opções'
 save: 'Salvar'
 submit: 'Enviar'
-
+cancel: 'Cancelar'
+go: 'Avançar'
+name: 'Nome'
+value: 'Valor'
+send: 'Enviar'
+close: 'Fechar'
 search-field:
     placeholder: 'Buscar por...'
 choice-field:
     placeholder: 'Selecione...'
 resetting:
+    sending: 'Executando a operação. Aguarde...'
+    modal-title: 'Confirmar reenvio de Senha'
+    modal-body: Tem certeza que deseja enviar uma mensagem de redefinição de senha para o utilizador
+      <span class="text-dark modal-body-user-name">%user-name%</span>?
     check_email: |
             Um email foi enviado. Ele contem um link que deve ser acessado para redefinir sua palavra-passe.
             Nota: Você apenas poderá requisitar uma nova senha dentro de %tokenLifetime% horas.
@@ -191,4 +200,9 @@ option-attribute:
 user-application:
     new-title: 'Vincular novo Aplicativo'
     list-title: 'Aplicativos de <span class="text-dark">%name%</span>'
+    new-form-title: 'Configurações do vínculo'
+    list-app-available: 'Aplicativos disponíveis'
+    current-app: 'Aplicativo'
+    options-name: Configuração do aplicativo <span class="text-dark">%application%</span> para
+        <span class="text-dark">%user%</span>
 

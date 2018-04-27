@@ -44,7 +44,8 @@ class ApplicationController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
-                $data = $form->getData();
+                $options = $form->get('options')->getData();
+                $e_app->setOptions($options);
                 $objManager = $this->getDoctrine()->getManager();
                 $objManager->persist($e_app);
                 $objManager->flush();

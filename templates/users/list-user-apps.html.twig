@@ -42,21 +42,23 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for app in app_list %}
+                                        {% for userapp in app_list %}
                                             <tr>
                                                 <td>{{ loop.index }}</td>
-                                                <td>{{ app.name }}</td>
-                                                <td>{% if ((app.options|length) > 0) %} }}
-                                                        {% for option in app.options %}
-                                                        {{ option.name }}: {{ option.value }}<br />
+                                                <td>{{ userapp.application.name }}</td>
+                                                <td>{% if ((userapp.options|length) > 0) %}
+                                                        <ul class="small">
+                                                        {% for option in userapp.options %}
+                                                        <li>{{ option.name }}: {{ option }}</li>
                                                         {% endfor %}
+                                                        </ul>
                                                     {% else %}
                                                         Nenhuma opção de configuração
                                                     {% endif %}
                                                 </td>
                                                 <td class="text-nowrap">
                                                     <a class="btn btn-info btn-sm fa fa-edit"
-                                                       href="{{ path('edit-user-app', {'id' : app.id}) }}"
+                                                       href="{{ path('edit-user-app', {'id' : userapp.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
                                                 </td>
                                             </tr>

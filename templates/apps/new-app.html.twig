@@ -1,17 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% block my_CSS %}
-    <style type="text/css">
-        #application fieldset {
-            border: 1px solid #aeb3b3;
-            padding: 6px;
-            border-radius: 0.25rem;
-        }
-        #application fieldset label {
-            font-size: 0.8em;
-            font-weight: 600;
-        }
-    </style>
-{% endblock my_CSS %}
+
 {% block user_content %}
     <div class="content-wrapper">
         {{ parent() }} {# Printing Messages inside Wrapper Content #}

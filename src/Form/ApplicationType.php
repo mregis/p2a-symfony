@@ -45,6 +45,7 @@ class ApplicationType extends AbstractType
                 'entry_options' => array('label' => false, 'isSubForm' => true,
                     ),
                 'allow_add' => true,
+                'by_reference' => false,
                 'allow_delete' => true,
                 'label' => 'application.options-name',
                 'required' => false,

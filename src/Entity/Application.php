@@ -154,6 +154,7 @@ class Application
      */
     public function setOptions(ArrayCollection $options)
     {
+        $this->options = [];
         foreach ($options as $option) {
             $this->addOption($option);
         }
@@ -166,7 +167,25 @@ class Application
      */
     public function addOption(OptionAttribute $option)
     {
+        $options = $this->getOptions();
+        if ($options->contains($option)) {
+            return;
+        }
         $this->options[]= ($option->serialize());
+        return $this;
+    }
+
+    /**
+     * @param OptionAttribute $option
+     * @return $this
+     */
+    public function removeOption(OptionAttribute $option)
+    {
+        $options = $this->getOptions();
+        if ($options->contains($option)) {
+            $options->removeElement($option);
+            $this->setOptions($options);
+        }
         return $this;
     }
 

@@ -18,7 +18,7 @@ class OptionAttribute implements \Serializable
     private $name;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $defaultvalue;
 
@@ -51,11 +51,31 @@ class OptionAttribute implements \Serializable
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getDefaultValue()
     {
         return $this->defaultvalue;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        switch ($this->type) {
+            case 'DateType':
+                $ret = $this->defaultvalue->format('d-m-Y');
+                break;
+            case 'NumberType':
+            case 'MoneyType':
+                $ret = number_format($this->defaultvalue);
+                break;
+            default:
+                $ret = $this->defaultvalue;
+        }
+
+        return (string) $ret;
     }
 
     /**
@@ -69,7 +89,7 @@ class OptionAttribute implements \Serializable
     }
 
     /**
-     * @return FormTypeInterface
+     * @return string FormTypeInterface
      */
     public function getType()
     {

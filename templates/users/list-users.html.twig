@@ -21,8 +21,8 @@
                                     <i class="fa fa-table"></i> {{ 'users.list-title'|trans }}
                                 </div>
                                 <div class="col-sm-auto text-right">
-                                    <a class="btn btn-sm btn-success fa fa-plus-circle"
-                                       href="{{ path('new-user') }}">{{ 'new'|trans }}</a>
+                                    <a class="btn btn-sm btn-success"
+                                       href="{{ path('new-user') }}"><span class="fa fa-plus-circle"></span> {{ 'new'|trans }}</a>
                                 </div>
                             </div>
                         </div>
@@ -54,10 +54,12 @@
                                                 <td>{{ user.email }}</td>
                                                 <td>{{ 'roles.names.%s'|format(user.profile)|trans }}</td>
                                                 <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
-                                                <td>{% if ((user.userApplication|length) > 0) %} }}
+                                                <td>{% if ((user.userApplication|length) > 0) %}
+                                                        <ul class="small">
                                                         {% for userapp in user.userApplication %}
-                                                        {{ userapp.application.name }}<br />
+                                                        <li>{{ userapp.application.name }}</li>
                                                         {% endfor %}
+                                                        </ul>
                                                     {% else %}
                                                         Nenhum aplicativo vinculado
                                                         {% endif %}
@@ -68,7 +70,9 @@
                                                        href="{{ path('edit-user', {'id' : user.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
                                                     <span class="btn bg-gradient-warning btn-sm fa fa-envelope"
-                                                          data-target="{{ user.id }}" role="button"
+                                                          data-target="#resetPasswordModal"
+                                                          data-userid="{{ user.id }}" role="button"
+                                                          data-username="{{ user.name }}" data-toggle="modal"
                                                           title="{{ 'forgot-password.title'|trans }}"></span>
                                                     <a class="btn btn-sm bg-gradient-success fa fa-tasks"
                                                        href="{{ path('list-user-apps', {'id' : user.id}) }}"
@@ -90,42 +94,52 @@
         </div>
 
     </div>
-{% endblock user_content %}
 
-{#% block my_postload_JSes  %}
-    <script src="{{ asset('resources/list-users.js') }}"></script>
-{% endblock my_postload_JSes  %#}
+    <!-- Reset Password Modal-->
+    <div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel"
+         aria-hidden="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-info">
+                    <h5 class="modal-title" id="resetPasswordModalLabel">{{ 'resetting.modal-title' | trans }}</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'send'|trans }}">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">{{ 'resetting.modal-body'|trans|raw }}</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary cancel-btn" type="button" data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                    <button class="btn btn-primary resend-btn" type="button">{{ 'send'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock user_content %}
 
 {% block js_codes %}
 
-function addBSModal(message, header, type){
-    var types = new RegExp(/(danger|info|primary|default|success|warning|secondary|light|dark)/g);
-    var classtype = 'bg-default';
-    if (!type) { type = 'default'};
-    if (types.test(type) == true) {
-    classtype = 'bg-' + type;
-    }
-    var customModal = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel" aria-hidden="true">' +
-            '<div class="modal-dialog" role="document"><div class="modal-content">' +
-            '<div class="modal-header ' + classtype + '"><h4 class="modal-title">' + header +
-            '</h4><button class="close" type="button" data-dismiss="modal" aria-label="Close">' +
-            '<span aria-hidden="true">×</span></button></div><div class="modal-body">' + message +
-            '</div></div></div></div>');
-
-    $('body').append(customModal);
-    $(customModal).modal();
-    $(customModal).on('hidden', function () { $(customModal).remove(); });
-}
-
 $(document).ready(function () {
-    $('span[data-target].btn').click(
-    function(){
-    $.post('{{ path('send-redefine-password-email') }}', {id: $(this).data("target")},
-    function(response){
-    addBSModal(response.message, response.title, response.status);
-    }, 'json');
-    }
-    );
+    $('#resetPasswordModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('userid');
+        var recipient = button.data('username');
+        var modal = $(this);
+        modal.find('.modal-body-user-name').text(recipient);
+        modal.find('.resend-btn').click(function() {
+            modal.find('.modal-body').text('{{ 'resetting.sending' | trans }}');
+            modal.find('.resend-btn').hide();
+            modal.find('.cancel-btn').hide();
+            $.post('{{ path('send-redefine-password-email') }}', {id: id},
+                function(response){
+                    modal.find('.modal-header').removeClass('bg-gradient-info').addClass('bg-gradient-' +response.status);
+                    modal.find('.modal-title').text(response.title);
+                    modal.find('.modal-body').text(response.message);
+                    modal.find('.cancel-btn').text('{{ 'close'|trans }}').show();
+                },
+            'json');
+        });
+    });
 });
+
 
 {% endblock js_codes %}

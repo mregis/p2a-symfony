@@ -73,6 +73,7 @@ class UserApplication
      */
     public function setOptions(ArrayCollection $options)
     {
+        $this->options = [];
         foreach ($options as $option) {
             $this->addOption($option);
         }
@@ -85,7 +86,10 @@ class UserApplication
      */
     public function addOption(OptionAttribute $option)
     {
-        $this->options[] = $option->serialize();
+        if ($this->contains($option)) {
+            return;
+        }
+        $this->options[]= ($option->serialize());
         return $this;
     }
 
@@ -143,6 +147,20 @@ class UserApplication
         return $this;
     }
 
-
+    /**
+     * Check if an OptionAttribute is in $options property usin <var>name</var> like index
+     * @param OptionAttribute $option
+     * @return bool
+     */
+    public function contains(OptionAttribute $option)
+    {
+        foreach ($this->getOptions() as $o)
+        {
+            if ($o->getName() == $option->getName()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

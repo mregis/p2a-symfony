@@ -9,19 +9,11 @@
 namespace App\Form;
 
 use App\Entity\OptionAttribute;
-use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Component\Form\AbstractType;
-use App\Entity\Application;
-use App\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type as Types;
@@ -92,7 +84,7 @@ class OptionAttributeType extends AbstractType
             ))
             ->add('delete', Types\ButtonType::class, array(
                 'label' => 'option-attribute.delete-btn',
-                'attr' => array('class' => 'delete-option-btn' . ($this->isSubForm ? ' btn-sm' : '')),
+                'attr' => array('class' => 'delete-option-btn' . ($this->isSubForm ? ' btn-sm btn-info fa fa-minus-circle' : '')),
             ))
         ;
     }
