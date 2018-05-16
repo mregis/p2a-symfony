@@ -8,8 +8,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
-use App\Entity\Profile;
+use App\Entity\Main\User;
+use App\Entity\Main\Profile;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

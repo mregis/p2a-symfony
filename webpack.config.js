@@ -15,12 +15,13 @@ Encore
     .createSharedEntry('vendor', [
         'jquery',
         'bootstrap',
+        'datatables.net',
+        'datatables.net-bs4',
         'fontawesome',
         'startbootstrap-sb-admin/js/sb-admin',
         'jquery.easing',
-        'datatables.net',
-        'datatables.net-bs4',
-        './assets/scss/app.scss'
+        './assets/scss/app.scss',
+        'jquery-mask-plugin'
     ])
     .addEntry('app', './assets/js/app.js')
     .addEntry('httperrors', './assets/js/http-errors.js')

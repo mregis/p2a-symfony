@@ -1,4 +1,6 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
+
+{% block title 'application.new-title'|trans %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -18,10 +20,10 @@
 
                     <div class="card mb-3">
                         <div class="card-header">
-                            <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i> {{ 'application.new-form-title'|trans }}</em></strong>
+                            <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i> {{ 'application.new-form-title'|trans }}
                         </div>
-                        <div class="card-body">
-                            {{ form(form) }}
+                        <div class="card-body form-with-cols">
+                            {{ include('apps/_form.html.twig') }}
                         </div>
                     </div>
                 </div>
@@ -32,10 +34,11 @@
 
 {% block my_postload_JSes %}
     <script type="application/javascript">
+        var $collectionHolder;
         function addTagForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
-
+            var allStyles = $collectionHolder.attr('class');
             // get the new index
             var index = $collectionHolder.data('index');
 
@@ -52,13 +55,22 @@
             // increase the index with one for the next item
             $collectionHolder.data('index', index + 1);
 
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<fieldset></fieldset>').append(newForm);
-            $newLinkLi.before($newFormLi);
+            $(newForm).attr('class', allStyles);
+            // Display the form in the page in an fieldset, after the "New" btn
+            $newLinkLi.append(newForm);
+            delTagBtn();
         }
 
-        var $collectionHolder;
-
+        function delTagBtn() {
+            $('.delete-option-btn').on('click', function(e) {
+                e.preventDefault();
+                if (confirm('Tem certeza que deseja remover esta opção?')) {
+                    var $blck = $(this).parents('fieldset:first');
+                    $blck.addClass('bg-danger');
+                    $blck.hide(2500, function(){$(this).remove()});
+                }
+            });
+        }
         // setup an "add a tag" link
         var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus">{{ 'option-attribute.new-title'|trans }}</a>');
         var $newLinkLi = $('#application_options').append($addTagLink);
@@ -81,6 +93,7 @@
                 // add a new tag form (see next code block)
                 addTagForm($collectionHolder, $newLinkLi);
             });
+            delTagBtn();
         });
 
 

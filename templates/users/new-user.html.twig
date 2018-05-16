@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
+                <li class="breadcrumb-item">{{ 'new'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'users.new-title' |trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-gradient-info text-white">
+                            <i class="fa fa-2x fa-user-plus"></i> {{ 'users.new-form-title'|trans }}
+                        </div>
+                        <div class="card-body">
+                            {{ include('users/_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

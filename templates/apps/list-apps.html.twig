@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -15,22 +15,22 @@
                     <h1>{{ 'application.list-title'|trans }}</h1>
 
                     <div class="card mb-3">
-                        <div class="card-header">
+                        <div class="card-header bg-apps-manager">
                             <div class="row">
-                                <div class="col-sm-10">
+                                <div class="col-sm-8">
                                     <i class="fa fa-tasks fa-2x"></i> {{ 'application.list-description'|trans }}
                                 </div>
                                 <div class="col-sm-auto text-right">
-                                    <a class="btn btn-sm btn-success fa fa-plus-circle"
-                                       href="{{ path('new-app') }}">{{ 'new'|trans }}</a>
+                                    <a class="btn btn-sm btn-info" href="{{ path('new-app') }}">
+                                        <span class="fa fa-plus-circle"></span> {{ 'application.new'|trans }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-
                             {% if app_list|length > 0 %}
                                 <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped" width="100%"
+                                    <table class="table table-bordered dataTable table-striped compact form-group" width="100%"
                                            cellspacing="0">
                                         <thead class="bg-dark text-white">
                                         <tr>
@@ -46,9 +46,23 @@
                                             <tr>
                                                 <td>{{ myapp.name }}</td>
                                                 <td>{{ myapp.alias }}</td>
-                                                <td>{% for option in  myapp.options %}
-                                                    <strong>{{ option.name }}</strong> : <em>{{  ('option-attribute.labels.' ~ option.type) | trans }}</em><br />
+                                                <td><ul class="small">
+                                                        <li>
+                                                            <span class="text-danger" title="URL de acesso">URL:</span>
+                                                            <strong>{{ myapp.uri }}</strong>
+                                                        </li>
+                                                    {% for option in  myapp.options %}
+                                                        <li>
+                                                    <span{{ option.isrequired ?
+                                                        (' class="text-danger" title="' ~ ('required'|trans) ~ '"')| raw :'' }}>
+                                                        {{ option.name }}:
+                                                    </span>
+                                                    <strong>{{  ('option-attribute.labels.' ~ option.type) | trans }}</strong>
+                                                            ({{ option }})
+                                                        </li>
                                                     {% endfor %}
+                                                    </ul>
+
                                                 </td>
                                                 <td>{{ (myapp.isActive == true ? 'active' : 'inactive')|trans }}</td>
                                                 <td class="text-nowrap">

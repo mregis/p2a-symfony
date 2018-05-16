@@ -1,9 +1,19 @@
-Bad credentials.: Credenciais inválidas.
-This field is required: Este campo é obrigatório
-general_form_error: Verifique as informações do formulário e tente novamente
+flash:
+  success:
+    new: 'Cadastro criado!'
+    edit: 'Cadastro alterado!'
+    delete: 'Cadastro excluído!'
+    change-status: 'O estado do cadastro foi alterado'
+change-status: 'Alterar estado'
+working: 'Executando a operação. Aguarde...'
+page-not-found: 'Página não encontrada!'
+Bad credentials.: 'Credenciais inválidas.'
+This field is required: 'Este campo é obrigatório'
+required: 'Campo obrigatório'
+general_form_error: 'Verifique as informações do formulário e tente novamente'
 Error: 'Erro'
 home: 'Início'
-empty-result: 'Não há informações a serem exibdas'
+empty-result: 'Não há informações a serem exibidas'
 oops-error: 'Oops. Algo saiu errado!'
 basic-error: Com certeza você não deveria estar vendo essa mensagem.
              Se a estiver vendo muitas vezes entre em contato com o administrador do sistema.
@@ -28,6 +38,7 @@ search-field:
     placeholder: 'Buscar por...'
 choice-field:
     placeholder: 'Selecione...'
+
 resetting:
     sending: 'Executando a operação. Aguarde...'
     modal-title: 'Confirmar reenvio de Senha'
@@ -64,14 +75,18 @@ resetting:
 
             Atenciosamente,
             seus amigos da Address S.A.
+
 change-password:
+    title: 'Recuperação de Senha'
     flash:
         success: Agora você já pode alterar sua senha
+
 verify-code:
     code-field-label: Código
     code-field-placeholder: Código recebido
     flash:
         error: O código utilizado é inválido!
+
 forgot-password:
     e-mail-field:
         label: 'E-mail'
@@ -85,16 +100,21 @@ forgot-password:
     title: 'Redefinição de Senha'
     message_1: Esqueceu a senha?
     message_2: Entre com seu endereço de email e enviaremos as instruções de como redefinir sua senha.
-    submit: Alterar Senha
+    submit: 'Alterar Senha'
     flash:
         success: Se o endereço de e-mail informado estiver correto uma mensagem será enviada com as instruções.
                  Consulte sua caixa de mensagens. Se a mensagem não chegar em até 10 minutos verifique sua caixa de
                  SPAM ou tente novamente.
 users:
+  edit-title: 'Editar %name%'
+  edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
+  new-title: 'Novo Utilizador'
+  new-form-title: 'Formulário de cadastro de novo utilizador'
+  edit: 'Editar dados cadastrais'
   name: 'Nome'
   email: 'E-mail'
   status: 'Estado'
-  username: 'Nome de Utilizador'
+  username: 'Nome utilizador'
   profile: 'Perfil'
   add: 'Novo Utilizador'
   list: 'Usuários'
@@ -151,6 +171,9 @@ roles:
         ROLE_SUPERADMIN: Super Administrador
 
 application:
+    index: 'Exibir todos'
+    new: 'Novo aplicativo'
+    uri: 'Url do sistema'
     list-name: 'Aplicativos'
     list-title: 'Gerenciar Aplicativos'
     list-description: 'Aplicativos Cadastrados'
@@ -199,10 +222,142 @@ option-attribute:
 
 user-application:
     new-title: 'Vincular novo Aplicativo'
-    list-title: 'Aplicativos de <span class="text-dark">%name%</span>'
+    list-title: 'Aplicativos de <span class="btn disabled btn-sm btn-dark">%name%</span>'
     new-form-title: 'Configurações do vínculo'
     list-app-available: 'Aplicativos disponíveis'
     current-app: 'Aplicativo'
-    options-name: Configuração do aplicativo <span class="text-dark">%application%</span> para
-        <span class="text-dark">%user%</span>
+    options-name: 'Configuração do aplicativo'
+    edit: Editar vinculo de aplicativos
+    new-flash:
+        success: 'Aplicativo vinculado com sucesso'
 
+homepage:
+    description: Abaixo estão as aplicações disponíveis. As que estão vivamente coloridas são as que você pode
+        acessar. As demais esmaecidas não estão disponíveis para o seu perfil.
+    title: 'Este é seu espaço'
+    breadcrumb: 'Principal'
+
+menu:
+    applications: 'Aplicativos'
+    configuration: 'Configurações'
+    homepage: 'Minha Página Inicial'
+    manager: 'Gerenciar'
+
+agencia:
+    edit-title: 'Editar %name%'
+    edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
+    new: 'Adicionar Nova Agência'
+    new-title: 'Nova Agência'
+    new-form-title: 'Formulario de cadastro de nova agência'
+    list-description: 'Exibindo a lista de agências cadastradas'
+    list-name: 'Agências'
+    list-title: 'Agências cadastradas'
+    btn-agencia: 'Gerenciar Agencias'
+    homepage: 'Painel'
+    homepage-description: 'Abaixo estão as tarefas que você pode executar'
+    labels:
+      nome: Nome
+      codigo: Código
+      cep: CEP
+      endereco: Endereço
+      bairro: Bairro
+      cidade: Cidade
+      uf: UF
+      status: Estado
+    change-status:
+      send: 'Alterar Estado'
+      title: 'Alterar estado do cadastro de %name%'
+      modal-title: 'Alterar estado do cadastro de um Banco'
+      modal-body: Tem certeza que deseja alterar o estado do cadastro de
+          <span class="text-dark modal-body-placeholder">%name%</span>?
+          <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Agências vinculadas
+          são exibidas em todos os sistemas dependentes.</small></h4>
+      success: 'O cadastro de %banco% foi alterado'
+banco:
+    edit-title: 'Editar %banco%'
+    edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%banco%</span>'
+    new: 'Adicionar Novo Banco'
+    btn-banco: 'Gerenciar Bancos'
+    new-title: 'Novo Banco'
+    new-form-title: 'Formulario de cadastro de novo banco'
+    list-description: 'Exibindo a lista de bancos cadastrados'
+    list-name: 'Bancos'
+    list-title: 'Bancos cadastrados'
+    homepage: 'Bancos'
+    change-status:
+      send: 'Alterar Estado'
+      title: 'Alterar estado do cadastro de %banco%'
+      modal-title: 'Alterar estado do cadastro de um Banco'
+      modal-body: Tem certeza que deseja alterar o estado do cadastro de
+          <span class="text-dark modal-body-placeholder">%banco%</span>?
+          <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Agências vinculadas
+          são exibidas em todos os sistemas dependentes.</small></h4>
+      success: 'O cadastro de %banco% foi alterado'
+    labels:
+        cnpj: 'CNPJ'
+        status: 'Estado'
+        nome: 'Nome'
+        codigo: 'Codigo'
+
+localidade:
+  edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
+  edit-title: 'Editar informações cadastrais'
+  change-status:
+    modal-title: 'Alterar estado do cadastro'
+    modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                          <span class="text-dark modal-body-placeholder">%name%</span>?
+                          <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
+                          as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
+    title: 'Alterar o estado do cadastro de %name%'
+  homepage: 'Localidades'
+  homepage-description: 'Gerencie os cadastros de Locais'
+  regiao:
+    homepage: 'Regiões cadastradas'
+    btn-regiao: 'Cadastro de Regiões'
+    list-name: 'Regiões'
+    list-title: 'Regiões'
+    list-description: 'Exibindo as regiões cadastradas'
+    new: 'Nova Região'
+    new-title: 'Nova Região'
+    new-form-title: 'Formulario de cadastro de nova Região'
+
+    change-status:
+      modal-title: 'Alterar estado do cadastro de uma Região'
+      modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                            <span class="text-dark modal-body-user-name">%regiao%</span>?
+                            <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
+                            as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
+      success: 'O cadastro de %regiao% foi alterado'
+    send: 'Alterar'
+    labels:
+      status: 'Estado'
+      nome: 'Nome'
+      sigla: 'Sigla'
+  uf:
+    btn-uf: 'Cadastro de Estados (UF)'
+    list-name: 'Estados'
+    list-title: 'Estado'
+    list-description: 'Exibindo os estados (ufs) cadastrados'
+    new: 'Cadastrar Nova UF'
+    homepage: 'Estados cadastrados'
+    new-form-title: 'Formulario de cadastro de nova UF'
+    new-title: 'Novo Estado'
+    labels:
+      status: 'Estado'
+      nome: 'Nome'
+      sigla: 'Sigla'
+      regiao: 'Região'
+  cidade:
+    btn-cidade: 'Cadastro de Municípios'
+    list-name: 'Municípios'
+    list-title: 'Municípios'
+    list-description: 'Exibindo os municipios cadastrados'
+    new: 'Cadastrar Novo Município'
+    homepage: 'Cidades cadastrados'
+    new-form-title: 'Formulario de cadastro de nova Cidade'
+    new-title: 'Novo Munícipio'
+    labels:
+      status: 'Estado'
+      nome: 'Nome'
+      abreviacao: 'Abreviação'
+      uf: 'UF'

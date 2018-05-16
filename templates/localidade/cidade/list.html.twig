@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'localidade.cidade.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'localidade/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'localidade.cidade.list-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'localidade.cidade.list-title'|trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-apps-3 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-building-o fa-2x"></i> {{ 'localidade.cidade.list-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                    <a class="btn btn-sm btn-info" href="{{ path('new-cidade') }}">
+                                        <span class="fa fa-plus-circle"></span> {{ 'localidade.cidade.new'|trans }}
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if cidades|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                           width="100%"
+                                           cellspacing="0">
+                                        <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th>{{ 'localidade.cidade.labels.nome'|trans }}</th>
+                                            <th>{{ 'localidade.cidade.labels.abreviacao'|trans }}</th>
+                                            <th>{{ 'localidade.cidade.labels.uf'|trans }}</th>
+                                            <th>{{ 'localidade.cidade.labels.status'|trans }}</th>
+                                            <th>{{ 'actions'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for cidade in cidades %}
+                                            <tr>
+                                                <td>{{ cidade.nome }}</td>
+                                                <td>{{ cidade.abreviacao }}</td>
+                                                <td>{{ cidade.uf.nome }}</td>
+                                                <td><span class="{{ cidade.ativo ? 'text-success' : 'text-danger' }} cadastro"
+                                                          data-cadastroid="{{ cidade.id }}">
+                                                        {{ (cidade.ativo ? 'active' : 'inactive')|trans }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fa fa-edit"
+                                                       href="{{ path('edit-cidade', {'id' : cidade.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+
+                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                        <span class="btn btn-sm fa {{ cidade.ativo ?
+                                                                'fa-minus-circle btn-danger' :
+                                                                'fa-plus-circle btn-success' }}"
+                                                              data-target="#change-status-Modal"
+                                                              data-tokenid="{{ csrf_token('put' ~ cidade.id) }}"
+                                                              data-cadastroid="{{ cidade.id }}" role="button"
+                                                              data-cadastro="{{ cidade.nome }}" data-toggle="modal"
+                                                              title="{{ 'localidade.change-status.title'|trans({'%name%': cidade.nome}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <!-- Modal Inativar Banco -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-statusModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-statusModalLabel">{{ 'localidade.change-status.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'localidade.change-status.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'change-status'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        $(document).ready(function () {
+            $('#change-status-Modal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('cadastroid');
+                var token = button.data('tokenid');
+                var recipient = button.data('cadastro');
+                var modal = $(this);
+                modal.find('.modal-body-placeholder').text(recipient);
+                modal.find('.resend-btn').click(function() {
+                    modal.find('.modal-body').text('{{ 'working' | trans }}');
+                    modal.find('.resend-btn').hide();
+                    modal.find('.cancel-btn').hide();
+                    $.post('{{ path('change-status-cidade',
+                        {id: '_id'}) }}'.replace('_id', id), {_method: 'PUT', _token: token},
+                        function(response){
+                            modal.find('.modal-header').removeClass('bg-gradient-warning').addClass('bg-gradient-' +response.status);
+                            modal.find('.modal-title').text(response.title);
+                            modal.find('.modal-body').text(response.message);
+                            modal.find('.cancel-btn').text('{{ 'close'|trans }}').show();
+                            if (response.status == 'success') {
+                                button.toggleClass("fa-plus-circle btn-success")
+                                    .toggleClass("fa-minus-circle btn-danger");
+                                $('span.cadastro[data-cadastroid="'+id+'"]')
+                                    .toggleClass("text-success").toggleClass("text-danger");
+                                $('span.cadastro[data-cadastroid="'+id+'"]')
+                                    .text(function() { return ($(this).text() == 'Ativo' ? 'Inativo' : 'Ativo'); });
+                            }
+                            modal.on('hide.bs.modal', function (event) {
+                                var modal = $(this);
+                                modal.find('.modal-body').html('{{ 'localidade.change-status.modal-body'|trans|raw }}');
+                                modal.find('.modal-title').text('{{ 'localidade.change-status.modal-title' | trans }}');
+                                modal.find('.modal-header').removeClass('bg-gradient-success bg-gradient-danger')
+                                    .addClass('bg-gradient-warning');
+                                modal.find('.resend-btn').show();
+                            });
+                        },
+                        'json'
+                    );
+                });
+            })
+        });
+    {% endif %}
+
+{% endblock js_codes %}

@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'localidade.uf.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'localidade/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'localidade.uf.list-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'localidade.uf.list-title'|trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-apps-1 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-map-o fa-2x"></i> {{ 'localidade.uf.list-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                    <a class="btn btn-sm btn-info" href="{{ path('new-uf') }}">
+                                        <span class="fa fa-plus-circle"></span> {{ 'localidade.uf.new'|trans }}
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if ufs|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                           width="100%"
+                                           cellspacing="0">
+                                        <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th>{{ 'localidade.uf.labels.nome'|trans }}</th>
+                                            <th>{{ 'localidade.uf.labels.sigla'|trans }}</th>
+                                            <th>{{ 'localidade.uf.labels.regiao'|trans }}</th>
+                                            <th>{{ 'localidade.uf.labels.status'|trans }}</th>
+                                            <th>{{ 'actions'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for uf in ufs %}
+                                            <tr>
+                                                <td>{{ uf.nome }}</td>
+                                                <td>{{ uf.sigla }}</td>
+                                                <td>{{ uf.regiao.nome }}</td>
+                                                <td><span class="{{ uf.ativo ? 'text-success' : 'text-danger' }} cadastro"
+                                                          data-cadastroid="{{ uf.id }}">
+                                                        {{ (uf.ativo ? 'active' : 'inactive')|trans }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fa fa-edit"
+                                                       href="{{ path('edit-uf', {'id' : uf.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+
+                                                    {% if is_granted('ROLE_SUPERADMIN') %}
+                                                        <span class="btn btn-sm fa {{ uf.ativo ?
+                                                                'fa-minus-circle btn-danger' :
+                                                                'fa-plus-circle btn-success' }}"
+                                                              data-target="#change-status-Modal"
+                                                              data-tokenid="{{ csrf_token('put' ~ uf.id) }}"
+                                                              data-cadastroid="{{ uf.id }}" role="button"
+                                                              data-cadastro="{{ uf.nome }}" data-toggle="modal"
+                                                              title="{{ 'localidade.change-status.title'|trans({'%name%': uf.nome}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        <!-- Modal Inativar Banco -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-statusModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-statusModalLabel">{{ 'localidade.change-status.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'localidade.change-status.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'change-status'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        var $workinText = '{{ 'working' | trans }}';
+        var $statusChangePath = '{{ path('change-status-uf', {id: '_id'}) }}';
+        var $closeText = '{{ 'close'|trans }}';
+        var $modalBodyHTML = '{{ 'localidade.change-status.modal-body'|trans|raw }}';
+        var $activeText = '{{ 'active'|trans }}';
+        var $inactiveText = '{{ 'inactive'|trans }}';
+        var $modalTitleText = '{{ 'localidade.change-status.modal-title' | trans }}';
+    {% endif %}
+
+{% endblock js_codes %}

@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -7,57 +7,74 @@
 
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active">/Principal</li>
+                <li class="breadcrumb-item active">/{{ 'homepage.breadcrumb'|trans }}</li>
             </ol>
-            <div class="row">
-                <div class="col-12">
-                    <h1>Seu espaço</h1>
+            <div class="col-12">
+                    <h1>{{ app.user.name }} - <small>{{ 'homepage.title'|trans }}</small></h1>
 
-                    <p>Abaixo estão as aplicações disponíveis. As que estão vivamente coloridas são as que você pode
-                        acessar. As demais esmaecidas não estão disponíveis para o seu perfil.</p>
+                    <p>{{ 'homepage.description'|trans }}</p>
 
+                <div class="row">
 {#  ROLE_SUPERADMIN permission #}
 
                     {% if is_granted('ROLE_SUPERADMIN') %}
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="card text-white bg-warning o-hidden h-100">
-                                <a class="text-white" href="{{ path('list-apps') }}">
-                                    <div class="card-body">
+                        <div class="col-xl-3 col-sm-3 mb-3">
+                            <div class="card bg-apps-manager o-hidden h-100">
+                                <a href="{{ path('list-apps') }}">
+                                    <div class="card-body text-white">
                                         <div class="card-body-icon">
                                             <i class="fa fa-fw fa-code-fork"></i>
                                         </div>
-                                        <div class="mr-5 text-center">{{ 'application.list-title'|trans }}</div>
+                                        <h5 class="mr-5 text-center">{{ 'application.list-title'|trans }}</h5>
                                     </div></a>
                             </div>
                         </div>
 
                     {% endif %}
-
 
 {#  ROLE_ADMIN permission #}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <div class="card text-white bg-info o-hidden h-100">
-                                <a class="text-white" href="{{ path('list-users') }}">
-                                    <div class="card-body">
+                        <div class="col-xl-3 col-sm-3 mb-3">
+                            <div class="card bg-info o-hidden h-100">
+                                <a href="{{ path('list-users') }}">
+                                    <div class="card-body text-white">
                                         <div class="card-body-icon">
                                             <i class="fa fa-fw fa-group"></i>
                                         </div>
-                                        <div class="mr-5 text-center">Gerenciar Usuários</div>
+                                        <h5 class="mr-5 text-center">Gerenciar Usuários</h5>
                                     </div></a>
                             </div>
                         </div>
 
                     {% endif %}
-                    <div class="col-xl-3 col-sm-6 mb-3">
-                        <div class="card text-white bg-light o-hidden h-100">
-                            <a class="text-secondary" href="{{ path('change-password') }}">
-                            <div class="card-body">
-                                <div class="card-body-icon">
-                                    <i class="fa fa-fw fa-lock"></i>
+
+{# ROLE_USER permission #}
+                    {% if app.user.userapplication|length > 0 %}
+                        {% for userapp in app.user.userapplication %}
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-{{ loop.index % 4 }} o-hidden h-100">
+                                    <a href="{{ userapp.application.uri }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fa fa-fw fa-tasks"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ userapp.application.name }}</h5>
+                                        </div>
+                                    </a>
                                 </div>
-                                <div class="mr-5 text-center">Alterar Senha</div>
-                            </div></a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="card bg-change-pass o-hidden h-100">
+                            <a href="{{ path('change-password') }}">
+                                <div class="card-body text-white">
+                                    <div class="card-body-icon">
+                                        <i class="fa fa-fw fa-lock"></i>
+                                    </div>
+                                    <h5 class="mr-5 text-center">{{ 'reset-password.title'|trans }}</h5>
+                                </div>
+                            </a>
                         </div>
                     </div>
 

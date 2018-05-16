@@ -1,8 +1,8 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 {% block title 'reset-password.title' | trans %}
 {% block menu %}{% endblock menu %}
 {% block user_content %}
-    <div class="card card-login mx-auto mt-5">
+    <div class="card card-login mx-auto mt-2">
         <div class="card-header">
             <div class="card-body-icon text-muted o-hidden ">
                 <i class="fa fa-fw fa-user-circle-o"></i>
@@ -10,12 +10,11 @@
             {{ 'reset-password.title'| trans }}
         </div>
         <div class="card-body">
-            <div class="text-center mt-4 mb-5">
+            <div class="text-center mt-2 mb-3">
                 <p>{{ 'reset-password.message' |trans }}</p>
             </div>
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+            {{ form(form) }}
+            <a class="btn btn-block btn-secondary" href="{{ path('home') }}">{{ 'cancel'|trans }}</a>
         </div>
     </div>
 

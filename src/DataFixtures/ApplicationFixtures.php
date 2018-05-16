@@ -8,35 +8,46 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\OptionAttribute;
-use App\Entity\Application;
+use App\Entity\Main\OptionAttribute;
+use App\Entity\Main\Application;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ApplicationFixtures extends Fixture
 {
     public function load(ObjectManager $oManager)
     {
-        $types = ['TextType', 'TextareaType', 'EmailType', 'IntegerType', 'MoneyType',
-            'NumberType', 'UrlType', 'TelType', 'DateType', 'DateTimeType', 'TimeType', 'PercentType',
-            'SearchType', 'BirthdayType', 'CheckboxType', 'FileType'];
+        var_dump($oManager);
+        exit;
+        $stringTypes = ['TextType', 'TextareaType', 'EmailType', 'UrlType', 'TelType', 'SearchType',];
+        $numberTypes = ['IntegerType', 'MoneyType', 'NumberType', 'PercentType',];
+        $dateTypes = ['DateType', 'DateTimeType', 'TimeType',];
         $appsAlias = [1 => 'Facebook', 'Twitter', 'Instagram', 'Tumbler', 'Tinder'];
         foreach ($appsAlias as $k => $app) {
             /* @var $application Application */
             $application = new Application();
             $application->setName('Application Number ' . $k)
                 ->setIsActive(true)
-                ->setAlias($app);
+                ->setAlias($app)
+                ->setUri("http://www." . strtolower($app) . ".com");
 
-            $rand_keys = array_rand($types, 5);
-
-            foreach ($rand_keys as $typesKey) {
+            // String Attributes
+            foreach (array_rand($stringTypes, 3) as $typesKey) {
                 $optionAttribute = new OptionAttribute();
-                $optionAttribute->setName('Option ' . str_replace('Type', '', $types[$typesKey]))
+                $optionAttribute->setName('Option ' . str_replace('Type', '', $stringTypes[$typesKey]))
                     ->setDefaultValue('Default Value for Option ' . $typesKey)
                     ->setRequired(($typesKey % 2 == 1))
-                    ->setType($types[$typesKey]);
+                    ->setType($stringTypes[$typesKey]);
+                $application->addOption($optionAttribute);
+            }
 
+            foreach (array_rand($numberTypes, 2) as $typesKey) {
+                $optionAttribute = new OptionAttribute();
+                $optionAttribute->setName('Option ' . str_replace('Type', '', $numberTypes[$typesKey]))
+                    ->setDefaultValue(rand(0,100))
+                    ->setRequired(($typesKey % 2 == 1))
+                    ->setType($numberTypes[$typesKey]);
                 $application->addOption($optionAttribute);
             }
 

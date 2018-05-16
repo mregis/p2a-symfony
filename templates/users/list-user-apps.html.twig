@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -77,41 +77,3 @@
 
     </div>
 {% endblock user_content %}
-
-{#% block my_postload_JSes  %}
-    <script src="{{ asset('resources/list-users.js') }}"></script>
-{% endblock my_postload_JSes  %#}
-
-{% block js_codes %}
-
-function addBSModal(message, header, type){
-    var types = new RegExp(/(danger|info|primary|default|success|warning|secondary|light|dark)/g);
-    var classtype = 'bg-default';
-    if (!type) { type = 'default'};
-    if (types.test(type) == true) {
-    classtype = 'bg-' + type;
-    }
-    var customModal = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel" aria-hidden="true">' +
-            '<div class="modal-dialog" role="document"><div class="modal-content">' +
-            '<div class="modal-header ' + classtype + '"><h4 class="modal-title">' + header +
-            '</h4><button class="close" type="button" data-dismiss="modal" aria-label="Close">' +
-            '<span aria-hidden="true">×</span></button></div><div class="modal-body">' + message +
-            '</div></div></div></div>');
-
-    $('body').append(customModal);
-    $(customModal).modal();
-    $(customModal).on('hidden', function () { $(customModal).remove(); });
-}
-
-$(document).ready(function () {
-    $('span[data-target].btn').click(
-    function(){
-    $.post('{{ path('send-redefine-password-email') }}', {id: $(this).data("target")},
-    function(response){
-    addBSModal(response.message, response.title, response.status);
-    }, 'json');
-    }
-    );
-});
-
-{% endblock js_codes %}

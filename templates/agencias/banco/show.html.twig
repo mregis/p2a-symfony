@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Banco{% endblock %}
+
+{% block body %}
+    <h1>Banco</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ banco.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ banco.nome }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ banco.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Dv</th>
+                <td>{{ banco.dv }}</td>
+            </tr>
+            <tr>
+                <th>Cnpj</th>
+                <td>{{ banco.cnpj }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('agencia_banco_index') }}">back to list</a>
+
+    <a href="{{ path('agencia_banco_edit', {'id': banco.id}) }}">edit</a>
+
+    {{ include('agencia_banco/_delete_form.html.twig') }}
+{% endblock %}

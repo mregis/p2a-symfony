@@ -9,12 +9,16 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class DefaultController
+ * @package App\Controller
+ * Route("/")
+ */
 class DefaultController extends AbstractController
 {
     /**
@@ -40,7 +44,7 @@ class DefaultController extends AbstractController
      */
     public function Page404test()
     {
-        return $this->render('error404.html.twig', array());
+        return $this->render('tests/error404.html.twig', array());
     }
 
 }

@@ -1,8 +1,37 @@
+{% block form_row %}
+    <div class="form-group row">
+        {{ form_label(form, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+        <div class="col-sm-10">
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block _application_options_entry_row %}
+    <div class="form-group row">
+        <div class="col">
+            {{ form_label(form, null, {'label_attr': {'class':'col-form-label'}}) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block _application_options_widget %}
+    <fieldset>
+        {{ form_widget(form) }}
+    </fieldset>
+{% endblock %}
+
+{% block button_errors %}{# Avoiding form_errors(button) empty block error #}{% endblock %}
 {% block row_with_cols_widget %}
     <fieldset>
         <div class="form-group row form-control-sm">
             {% for key, field in form.children %}
                 <div class="col">
+                    {{ form_errors(field) }}
+                    {{ form_label(field) }}
                     {{ form_widget(field) }}
                 </div>
             {% endfor %}
@@ -14,10 +43,7 @@
     {{ block('row_with_cols_widget') }}
 {% endblock %}
 
-
 {% block _application_row_col_entry_row_col_widget %}
-    {{ form_errors(form) }}
-    {{ form_label(form) }}
     {{ form_widget(form) }}
 {% endblock %}
 
@@ -25,15 +51,20 @@
     {{ block('row_with_cols_widget') }}
 {% endblock %}
 
+{% block _application_options_entry_widget %}
+    {{ block('row_with_cols_widget') }}
+{% endblock %}
+
+
 {%- block form_label -%}
+    {% set asterisc = '' %}
+    {% if required -%}
+        {% set asterisc = '<span class="required">*</span>' %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim, 'title':'This field is required'}) %}
+    {%- endif -%}
     {% if label is not same as(false) -%}
-        {% set asterisc = '' %}
         {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
-        {%- endif -%}
-        {% if required -%}
-            {% set asterisc = '<span class="required">*</span>' %}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim, 'title':'This field is required'}) %}
         {%- endif -%}
         {% if label is empty -%}
             {%- if label_format is not empty -%}
@@ -42,7 +73,7 @@
                     '%id%': id,
                 }) %}
             {%- else -%}
-                {% set label = name|humanize %}
+                {% set label = name|humanize ~ asterisc %}
             {%- endif -%}
         {%- else -%}
             {% set label = (translation_domain is same as(false) ? asterisc ~ label : asterisc ~ label|trans({}, translation_domain)) %}
@@ -60,29 +91,8 @@
     {%- endif -%}
 {% endblock form_label %}
 
-
-{% block form_errors -%}
-    {% if errors|length > 0 %}
-    {% if form.parent %}<span class="help-block">{% else %}<div class="alert alert-danger">{% endif %}
-    <ul class="list-unstyled alert alert-danger">
-        {%- for error in errors -%}
-            <li><span class="fa fa-exclamation"></span> {{ error.message }}</li>
-        {%- endfor -%}
-    </ul>
-    {% if form.parent %}</span>{% else %}</div>{% endif %}
-    {%- endif %}
-{%- endblock form_errors %}
-
-{% block form_row %}
-    <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
-        {{ form_errors(form) }}
-        {{ form_label(form) }}
-        {{ form_widget(form) }}
-    </div>
-{% endblock form_row %}
-
 {# #}
-{% block submit_row -%}
+{%- block submit_row -%}
     <div class="form-group">
         {{- form_widget(form, {'attr': {'class': attr.class|default('btn')}}) -}}
     </div>

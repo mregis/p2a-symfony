@@ -1,12 +1,135 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="{{ description }}">
+    <meta name="author" content="Marcos Regis <marcos.regis@address.com.br>">
+    <title>{% block title '' %}</title>
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="{{ asset('resources/vendor.css') }}">
+
+    <!-- Application Icon -->
+    <link rel="shortcut icon" href="{{ asset('resources/favicon.png') }}" type="image/x-icon"/>
+    {% block my_CSS '' %}
+
+    {#
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    #}
+
+    {% if app.environment == 'prod' %}
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    {% endif %}
+</head>
+<body class="fixed-nav sticky-footer" id="page-top">
+{% block navbar %}
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-custom bg-custom-nav text-white fixed-top" id="mainNav">
+        <a class="navbar-brand" href="{{ path('home') }}">{{ apptitle }} - {{ appname }}</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% block menu %}
+            {% include '_menu.html.twig' %}
+        {% endblock menu %}
+    </nav>
+{% endblock navbar %}
+
+{% block content %}
+    <div class="container-fluid">
+        {% block user_content %}
+            {% block messages %}
+                {% if app.request.hasPreviousSession %}
+                    <div class="container">
+                        {% for alert in [ 'info', 'success', 'warning', 'danger'] %}
+                            {% for message in app.flashes(alert) %}
+                                <div class="alert alert-{{ alert }} alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                    {{ message|trans }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endblock messages %}
+        {% endblock user_content %}
+    </div>
+    <!-- /.container-fluid-->
+
+    {% block footer %}
+        {% include 'footer.html.twig' %}
+    {% endblock footer %}
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient-primary">
+                    <h5 class="modal-title" id="logoutModalLabel">{{ 'logout.title' | trans }}</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'logout.btns.close'|trans }}">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">{{ 'logout.message'|trans }}</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ 'logout.btns.cancel'|trans }}</button>
+                    <a class="btn btn-primary" href="{{ path('logout') }}">{{ 'logout.btns.logout'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block my_modals %}
+        {% if error is defined and error %}
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="MyModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h4 class="modal-title" id="MyModalLabel">{{ 'Error'|trans }}</h4>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {{ error.message|trans }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock my_modals %}
+{% endblock content %}
+
+{% block my_preload_JSes %}{% endblock my_preload_JSes %}
+<!-- App main JS -->
+<script src="{{ asset('resources/manifest.js') }}"></script>
+<script src="{{ asset('resources/vendor.js') }}"></script>
+<script src="{{ asset('resources/app.js') }}"></script>
+{% block my_postload_JSes %}{% endblock my_postload_JSes  %}
+<script>
+    {% block js_codes %}{% endblock %}
+</script>
+
+</body>
 </html>

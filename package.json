@@ -26,6 +26,7 @@
         "ajv": "^6.1.1",
         "datatables.net": "^1.10.16",
         "datatables.net-dt": "^1.10.16",
+        "jquery-mask-plugin": "^1.14.15",
         "popper": "^1.0.1",
         "popper.js": "^1.12.9"
     }

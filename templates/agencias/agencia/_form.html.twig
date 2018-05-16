@@ -1,0 +1,65 @@
+{{ form_start(form) }}
+
+{{ form_row(form.banco) }}
+{{ form_row(form.nome) }}
+
+<div class="form-group row">
+    {{ form_label(form.codigo, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+    <div class="col-sm-4">
+        {{ form_errors(form.codigo) }}
+        {{ form_widget(form.codigo) }}
+    </div>
+    <span> - </span>
+
+    <div class="col-sm-1">
+        {{ form_errors(form.dv) }}
+        {{ form_widget(form.dv) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.cep, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+    <div class="col-sm-3">
+        {{ form_errors(form.cep) }}
+        {{ form_widget(form.cep) }}
+    </div>
+    {{ form_label(form.uf, null, {'label_attr': {'class':'col-form-label col-sm-1 text-right'}}) }}
+    <div class="col-sm-30">
+        {{ form_errors(form.uf) }}
+        {{ form_widget(form.uf) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.cidade, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+    <div class="col-sm-5">
+        {{ form_errors(form.cidade) }}
+        {{ form_widget(form.cidade) }}
+    </div>
+    {{ form_label(form.bairro, null, {'label_attr': {'class':'col-form-label col-sm-1 text-right'}}) }}
+    <div class="col-sm-4">
+        {{ form_errors(form.bairro) }}
+        {{ form_widget(form.bairro) }}
+    </div>
+</div>
+{{ form_row(form.logradouro) }}
+
+<div class="form-group row">
+    {{ form_label(form.numeral, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+    <div class="col-sm-3">
+        {{ form_errors(form.numeral) }}
+        {{ form_widget(form.numeral) }}
+    </div>
+    {{ form_label(form.complemento, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
+    <div class="col-sm-5">
+        {{ form_errors(form.complemento) }}
+        {{ form_widget(form.complemento) }}
+    </div>
+</div>
+
+{{ form_widget(form) }}
+<button class="btn btn-primary col-md-2" type="submit"><i
+            class="fa fa-save"></i> {{ button_label|default('save')|trans }}</button>
+<a class="btn btn-secondary col-md-2" href="{{ path('list-agencias') }}"><i
+            class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}</a>
+{{ form_end(form) }}

@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -21,7 +21,6 @@
                             <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i> {{ 'application.new-form-title'|trans }}</em></strong>
                         </div>
                         <div class="card-body form-with-cols">
-
                           {{ form(form) }}
                         </div>
                     </div>

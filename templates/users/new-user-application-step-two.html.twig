@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block my_CSS %}
+    <style type="text/css">
+        #application fieldset {
+            border: 1px solid #aeb3b3;
+            padding: 6px;
+            border-radius: 0.25rem;
+        }
+
+        #application fieldset label {
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+    </style>
+{% endblock my_CSS %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
+                <li class="breadcrumb-item"><a
+                            href="{{ path('list-user-apps', {'id': e_user.id}) }}">{{ 'application.list-name'|trans }}</a>
+                </li>
+                <li class="breadcrumb-item">{{ 'new'|trans }}</li>
+                <li class="breadcrumb-item">{{ 'application.options-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'user-application.new-title'|trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="fa fa-2x fa-plus-circle text-success fa-2x"></i>
+                            {{ 'user-application.new-form-title'|trans }}
+                        </div>
+                        <div class="card-body form-with-cols">
+                            {{ form(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

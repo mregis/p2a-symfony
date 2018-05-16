@@ -1,24 +1,27 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 {% block title 'reset-password.title' | trans %}
-{% block menu %}{% endblock menu %}
+
 {% block user_content %}
-        <div class="card card-login mx-auto mt-5">
-            <div class="card-header">
-                <div class="card-body-icon text-muted o-hidden ">
-                    <i class="fa fa-fw fa-user-circle-o"></i>
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+            <div class="card card-login mx-auto mt-3">
+                <div class="card-header bg-change-pass">
+                    <div class="card-body-icon text-muted o-hidden ">
+                        <i class="fa fa-fw fa-user-circle-o"></i>
+                    </div>
+                    {{ 'reset-password.title'| trans }}
                 </div>
-                {{ 'reset-password.title'| trans }}
-            </div>
-            <div class="card-body">
-                <div class="text-center mt-4 mb-5">
-                    <p>{{ 'reset-password.message' |trans }}</p>
+                <div class="card-body">
+                    <div class="text-center mt-2 mb-3">
+                        <p>{{ 'reset-password.message' |trans }}</p>
+                    </div>
+                    {{ form(form) }}
+                    <a class="btn btn-block btn-secondary" href="{{ path('home') }}">{{ 'cancel'|trans }}</a>
                 </div>
-                {{ form_start(form) }}
-                {{ form_widget(form) }}
-                {{ form_end(form) }}
             </div>
         </div>
-
+    </div>
 {% endblock %}
 
 {% block footer %}

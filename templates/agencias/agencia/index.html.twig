@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'agencia.list-title'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'agencias/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('agencias-home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'agencia.list-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'agencia.list-title'|trans }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-apps-1 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-briefcase fa-2x"></i> {{ 'agencia.list-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                    <a class="btn btn-sm btn-info" href="{{ path('new-agencia') }}">
+                                        <span class="fa fa-plus-circle"></span> {{ 'agencia.new'|trans }}
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if agencias|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped" width="100%"
+                                           cellspacing="0">
+                                        <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th>{{ 'agencia.labels.nome'|trans }}</th>
+                                            <th>{{ 'agencia.labels.codigo'|trans }}</th>
+                                            <th>{{ 'agencia.labels.cep'|trans }}</th>
+                                            <th>{{ 'agencia.labels.endereco'|trans }}</th>
+                                            <th>{{ 'agencia.labels.bairro'|trans }}</th>
+                                            <th>{{ 'agencia.labels.cidade'|trans }}</th>
+                                            <th>{{ 'agencia.labels.uf'|trans }}</th>
+                                            <th>{{ 'agencia.labels.status'|trans }}</th>
+                                            <th>{{ 'actions'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for agencium in agencias %}
+                                            <tr>
+                                                <td>{{ agencium.nome }}</td>
+                                                <td>{{ agencium.codigo ~ '-' ~ agencium.dv }}</td>
+                                                <td><span class="cep">{{ agencium.cep }}</span></td>
+                                                <td>{{ (agencium.logradouro ~ ' ' ~ agencium.numeral ~ ' ' ~ agencium.complemento)|trim }}</td>
+                                                <td>{{ agencium.bairro }}</td>
+                                                <td>{{ agencium.cidade }}</td>
+                                                <td>{{ agencium.uf }}</td>
+                                                <td><span class="text-success{{ agencium.isactive ? '' : ' text-danger' }} cadastro"
+                                                          data-cadastroid="{{ agencium.id }}">{{ (agencium.isactive ? 'active' : 'inactive')|trans }}</span></td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fa fa-edit"
+                                                       href="{{ path('edit-agencia', {'id' : agencium.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+                                                    {% if is_granted('ROLE_MASTER') %}
+                                                        <span class="btn btn-sm fa {{ agencium.isactive ?
+                                                        'fa-minus-circle btn-danger' :
+                                                        'fa-plus-circle btn-success' }}"
+                                                              data-target="#change-status-Modal"
+                                                              data-tokenid="{{ csrf_token('put' ~ agencium.id) }}"
+                                                              data-cadastroid="{{ agencium.id }}" role="button"
+                                                              data-cadastro="{{ agencium.nome }}" data-toggle="modal"
+                                                              title="{{ 'agencia.change-status.title'|trans({'%agencia%': agencium.nome}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if is_granted('ROLE_MASTER') %}
+        <!-- Modal Inativar Banco -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-status-ModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-status-ModalLabel">{{ 'agencia.change-status.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'agencia.change-status.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'agencia.change-status.send'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_MASTER') %}
+        var $workinText = '{{ 'working' | trans }}';
+        var $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
+        var $closeText = '{{ 'close'|trans }}';
+        var $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
+        var $activeText = '{{ 'active'|trans }}';
+        var $inactiveText = '{{ 'inactive'|trans }}';
+        var $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
+    {% endif %}
+
+{% endblock js_codes %}

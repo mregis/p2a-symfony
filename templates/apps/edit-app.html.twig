@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -19,7 +19,7 @@
                         <div class="card-header">
                             <i class="fa fa-2x fa-pencil"></i> Dados cadastrais de <strong><em>{{ myapp.name }}</em></strong>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body form-with-cols">
                           {{ form(form) }}
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-{% extends 'layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block user_content %}
     <div class="content-wrapper">
@@ -13,15 +13,15 @@
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>Editando as informações de <span class="text-success">{{ user.name }}</span></h1>
+                    <h1>{{ 'users.edit-title'|trans({'%name%':user.name}) }}</h1>
 
                     <div class="card mb-3">
-                        <div class="card-header">
-                            <i class="fa fa-2x fa-pencil"></i> Dados cadastrais de <strong><em>{{ user.name }}</em></strong>
+                        <div class="card-header bg-gradient-info text-white">
+                            <i class="fa fa-2x fa-pencil"></i>{{ 'users.edit-form-title'|trans({'%name%':user.name})|raw }}
                         </div>
                         <div class="card-body">
 
-                          {{ form(form) }}
+                            {{ include('users/_form.html.twig') }}
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'localidade.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'localidade/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">/{{ 'localidade.homepage'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'localidade.homepage'|trans }}</h1>
+
+                    <p>{{ 'localidade.homepage-description' |trans }}</p>
+
+                    <div class="row">
+                        {% if is_granted('ROLE_SUPERADMIN') %}
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-2 o-hidden h-100">
+                                    <a href="{{ path('list-regiao') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fa fa-fw fa-globe"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'localidade.regiao.btn-regiao'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-1 o-hidden h-100">
+                                    <a href="{{ path('list-uf') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fa fa-fw fa-map-o"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'localidade.uf.btn-uf'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if is_granted('ROLE_MASTER') %}
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-3 o-hidden h-100">
+                                    <a href="{{ path('list-cidade') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fa fa-fw fa-building-o"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'localidade.cidade.btn-cidade'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock user_content %}
+
