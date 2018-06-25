@@ -27,6 +27,9 @@ Encore
     .addEntry('httperrors', './assets/js/http-errors.js')
 //    .addEntry('list-users', './assets/js/list-users.js')
 
+    // images
+    .addEntry('logo', './assets/images/logo.png')
+    .addEntry('favicon', './assets/images/favicon.png')
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader(function(sassOptions) {}, {

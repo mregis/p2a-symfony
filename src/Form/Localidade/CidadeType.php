@@ -6,6 +6,7 @@ use App\Entity\Localidade\Cidade;
 use App\Entity\Localidade\UF;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +29,8 @@ class CidadeType extends AbstractType
             ->add('abreviacao',
                     TextType::class,
                     ['label' => 'localidade.cidade.labels.abreviacao'])
-            ->add('ativo')
+            ->add('ativo', CheckboxType::class,
+                ['label' => 'active'])
         ;
     }
 

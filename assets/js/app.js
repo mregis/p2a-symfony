@@ -58,12 +58,11 @@ $(document).ready(function () {
             );
         });
     });
-
-    $(".cnpj").mask("#0.000.000/0000-00",{placeholder: "__.___.___/____-__"});
-    $(".cpf").mask("000.000.000-00",{placeholder: "___.___.___-__"});
-    $(".cep").mask("00000-000", {placeholder: "_____-___"});
-    $(".tel").mask('(00) 0000-00009', {placeholder: "(__) _____-____"});
-    $(".int").mask("###########0", {reverse: true});
+    jQuery('[data-input-mask="cnpj"]').mask("#0.000.000/0000-00",{placeholder: "__.___.___/____-__"});
+    jQuery('[data-input-mask="cpf"]').mask("000.000.000-00",{placeholder: "___.___.___-__"});
+    jQuery('[data-input-mask="cep"]').mask("00000-000", {placeholder: "_____-___"});
+    jQuery('[data-input-mask="tel"]').mask('(00) 0000-00009', {placeholder: "(__) _____-____"});
+    jQuery('[data-input-mask="int"]').mask("###########0", {reverse: true});
 });
 
 

@@ -2,7 +2,7 @@
 
 {% form_theme form 'form/horizontal-form-fields.html.twig' %}
 
-{% block title %}{{ 'localidade.cidade.edit-title'|trans }}{% endblock %}
+{% block title %}{{ 'localidade.edit-title'|trans }}{% endblock %}
 
 {% block menu %}
     {% embed '_menu.html.twig' %}
@@ -29,7 +29,7 @@
                     <h1>{{ 'localidade.edit-title'|trans }}</h1>
 
                     <div class="card mb-3">
-                        <div class="card-header bg-apps-3 text-white">
+                        <div class="card-header bg-apps-4 text-white">
                             <i class="fa fa-2x fa-edit fa-2x"></i>
                             {{ 'localidade.edit-form-title'|trans({'%name%':cidade.nome})|raw }}
                         </div>

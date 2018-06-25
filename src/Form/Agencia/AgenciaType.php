@@ -14,6 +14,7 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -37,9 +38,10 @@ class AgenciaType extends AbstractType
                     'placeholder' => 'choice-field.placeholder'
                 ))
             ->add('nome')
-            ->add('codigo', TextType::class, array('attr' => array('class' => 'int')))
-            ->add('dv', TextType::class, array('attr' => array('class' => 'int', 'maxlength' => 1)))
-            ->add('cep', TextType::class, array('attr' => array('class' => 'cep', 'maxlength' => 9)))
+            ->add('codigo', TextType::class, array('attr' => array('data-input-mask' => 'int')))
+            ->add('dv', IntegerType::class, array('attr' => array('data-input-mask' => 'int',
+                'maxlength' => 1, 'min' => "0", 'max' => "9" )))
+            ->add('cep', TextType::class, array('attr' => array('data-input-mask' => 'cep', 'maxlength' => 9)))
             ->add('uf', EntityType::class,
                 array(
                     'class' => UF::class,
@@ -50,17 +52,6 @@ class AgenciaType extends AbstractType
                         return $uf->getRegiao()->getNome();
                     },
                     'choice_value' => 'sigla',
-                    /*'choice_value' => function($uf) {
-                        return ($uf ? $uf->getSigla() : '');
-                    },
-                    'data' => function(EntityManager $er) use ($builder) {
-                        $sigla = $builder->getData()->getUf();
-                        if (!$uf = $er->getRepository(UF::class)->findOneBy(array('sigla' => $sigla)) ) {
-                            $uf = new UF();
-                        }
-                        var_dump($uf);
-                        return $uf;
-                    },*/
                     'placeholder' => 'choice-field.placeholder',
                 ))
             ->add('cidade')

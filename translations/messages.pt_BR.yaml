@@ -1,9 +1,14 @@
+new-bulk: 'Cadastro em lote'
+registry:
+  file-field:
+    label: 'Arquivo de Registros'
 flash:
   success:
     new: 'Cadastro criado!'
     edit: 'Cadastro alterado!'
     delete: 'Cadastro excluído!'
     change-status: 'O estado do cadastro foi alterado'
+    new-bulk: 'Os cadastros foram criados'
 change-status: 'Alterar estado'
 working: 'Executando a operação. Aguarde...'
 page-not-found: 'Página não encontrada!'
@@ -147,6 +152,10 @@ reset-password:
     flash:
         success: 'A senha foi redefinida com sucesso.'
         error: 'Não foi possível iniciar o processo de recuperação. Verifique as informações.'
+login:
+  forgot-password: Esqueceu a senha? Clique aqui
+  form:
+    title: Autenticação
 
 logout:
     message: Selecione "Sair" abaixo se você estiver pronto para finalizar a sessão atual.
@@ -334,20 +343,31 @@ localidade:
       nome: 'Nome'
       sigla: 'Sigla'
   uf:
+    sample-filename: 'exemplo-cadastro-estados'
     btn-uf: 'Cadastro de Estados (UF)'
     list-name: 'Estados'
     list-title: 'Estado'
     list-description: 'Exibindo os estados (ufs) cadastrados'
     new: 'Cadastrar Nova UF'
+    new-bulk: 'Carregar arquivo de UFs'
     homepage: 'Estados cadastrados'
     new-form-title: 'Formulario de cadastro de nova UF'
+    new-bulk-form-title: 'Formulario de Cadastro de UFs em lote'
     new-title: 'Novo Estado'
+    new-bulk-title: 'Cadastro de Estados em Lote através de arquivo'
+    bulk-form-description: |
+                  O arquivo a ser submetido deve conter um registro em cada linha,
+                  sendo que cada linha deve conter as seguintes informações:
+                  Sigla da Região (S, N, SE, NE, CO), Nome do Estado, Sigla do Estado e status do cadastrado (1 ou 0).
+                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas
+    bulk-example-link: Você pode usar este arquivo como exemplo, substituindo as informações existentes
     labels:
       status: 'Estado'
       nome: 'Nome'
       sigla: 'Sigla'
       regiao: 'Região'
   cidade:
+    sample-filename: 'exemplo-cadastro-cidades'
     btn-cidade: 'Cadastro de Municípios'
     list-name: 'Municípios'
     list-title: 'Municípios'

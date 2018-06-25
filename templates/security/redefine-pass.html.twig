@@ -5,12 +5,12 @@
     <div class="content-wrapper">
         {{ parent() }} {# Printing Messages inside Wrapper Content #}
         <div class="container">
-            <div class="card card-login mx-auto mt-3">
+            <div class="card card-login mx-auto mt-3 bg-gradient-card-primary">
                 <div class="card-header bg-change-pass">
                     <div class="card-body-icon text-muted o-hidden ">
                         <i class="fa fa-fw fa-user-circle-o"></i>
                     </div>
-                    {{ 'reset-password.title'| trans }}
+                    <h5>{{ 'reset-password.title'| trans }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="text-center mt-2 mb-3">

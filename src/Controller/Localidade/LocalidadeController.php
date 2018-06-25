@@ -8,9 +8,12 @@ use App\Entity\Localidade\UF;
 use App\Form\Localidade\CidadeType;
 use App\Form\Localidade\RegiaoType;
 use App\Form\Localidade\UFType;
+use App\Form\Type\BulkRegistryType;
+use PHPUnit\Runner\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -162,6 +165,92 @@ class LocalidadeController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return Response
+     * @Route("/uf/cadastro-uf-lote", name="new-uf-bulk", methods="GET|POST")
+     */
+    public function newUFBulk(Request $request): Response
+    {
+        $error = null;
+        $form = $this->createForm(BulkRegistryType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                /* @var $file \Symfony\Component\HttpFoundation\File\UploadedFile */
+                $file = $form->get('registry')->getData();
+                // Validando o arquivo
+                $serializer = $this->get('serializer');
+                $data = $serializer->decode(file_get_contents($file->getPathname()), 'csv');
+                $em = $this->getDoctrine()->getManager('locais');
+                $regiao_repo = $em->getRepository(Regiao::class);
+                try {
+                    // Desprezar primeira linha (cabeçalhos)
+                    foreach ($data as $k => $entry) {
+                        if (!isset($entry['REGIAO'], $entry['NOME'], $entry['SIGLA'])) {
+                            throw new \Exception(
+                                sprintf("Erro na linha %d. Verifique se os cabeçalhos estão corretos " .
+                                    "[REGIAO, NOME, SIGLA[, ATIVO]].", $k + 2)
+                            );
+                        }
+                        if (!$regiao = $regiao_repo->findOneBy(array('sigla' => $entry['REGIAO']))) {
+                            throw new \Exception(
+                                sprintf("Erro na linha %d. %s não é uma região válida.", $k + 2, $entry['REGIAO'])
+                            );
+                        }
+                        $uf = new UF();
+                        $uf->setRegiao($regiao)
+                            ->setNome($entry['NOME'])
+                            ->setSigla($entry['SIGLA']);
+                        if (isset($entry['ATIVO'])) {
+                            $uf->setAtivo($entry['ATIVO']);
+                        }
+
+                        $em->persist($uf);
+                    }
+                    $em->flush();
+                } catch (Exception $e) {
+                    throw new \InvalidArgumentException($e->getMessage());
+                }
+
+                $this->addFlash('success', 'flash.success.new-bulk');
+                return $this->redirectToRoute('list-uf');
+            } catch(Exception $e) {
+                $error = $e->getMessage();
+            }
+        }
+
+        return $this->render('localidade/uf/new-bulk.html.twig', [
+            'form' => $form->createView(),
+            'error' => $error
+        ]);
+
+    }
+
+    /**
+     * @return Response
+     * @Route("uf/arquivo-modelo/{source}", name="sample-file")
+     */
+    public function downloadSampleCVS(Request $request, $source): Response
+    {
+        $filename = $this->getParameter('app.samples.dir');
+        $outputname = 'filaname';
+        switch ($source) {
+            case 'uf':
+                $filename .= 'uf.sample.csv';
+                $outputname = $this->get('translator')->trans('localidade.uf.sample-filename');
+                break;
+            case '
+            ':
+                $filename .= 'local.sample.csv';
+                $outputname = $this->get('translator')->trans('localidade.cidade.sample-filename');
+                break;
+            default:
+                throw new NotFoundHttpException();
+        }
+        return $this->file($filename, $outputname . '.csv');
+    }
+
+    /**
      * @Route("/uf/{id}", name="show-uf", methods="GET")
      */
     public function showUf(UF $uf): Response
@@ -201,7 +290,7 @@ class LocalidadeController extends Controller
         $em = $this->getDoctrine()->getManager('locais');
         $em->remove($uf);
         $em->flush();
-        $this->addFlash('success', 'uf.flash.delete-success');
+        $this->addFlash('success', 'flash.success.delete');
 
         return $this->redirectToRoute('list-uf');
     }
@@ -225,6 +314,7 @@ class LocalidadeController extends Controller
 
         return $this->json(array('message' => $message, 'status' => $statusMode, 'title' => $title), Response::HTTP_OK);
     }
+
 
     ######## END - UF ROUTES
 

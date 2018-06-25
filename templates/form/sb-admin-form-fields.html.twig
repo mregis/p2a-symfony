@@ -1,7 +1,28 @@
+{% block _bulk_registry_registry_errors %}
+    {%- if errors|length > 0 -%}
+        <div class="alert alert-danger">
+            <ul class="list-unstyled mb-0">
+                {%- for error in errors -%}
+                    <li>{{ error.message }}</li>
+                {%- endfor -%}
+            </ul>
+        </div>
+    {%- endif %}
+{% endblock %}
+
+{% block _bulk_registry_registry_row %}
+    <div class="form-group row">
+        {{ form_label(form, null, {'label_attr': {'class':'col-form-label col-sm-4 text-right'}}) }}
+        <div class="col-sm-7">
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        </div>
+    </div>
+{% endblock %}
 {% block form_row %}
     <div class="form-group row">
-        {{ form_label(form, null, {'label_attr': {'class':'col-form-label col-sm-2 text-right'}}) }}
-        <div class="col-sm-10">
+        {{ form_label(form, null, {'label_attr': {'class':'col-form-label col-sm-6 text-right'}}) }}
+        <div class="col-sm-6">
             {{ form_errors(form) }}
             {{ form_widget(form) }}
         </div>
@@ -25,6 +46,7 @@
 {% endblock %}
 
 {% block button_errors %}{# Avoiding form_errors(button) empty block error #}{% endblock %}
+
 {% block row_with_cols_widget %}
     <fieldset>
         <div class="form-group row form-control-sm">
