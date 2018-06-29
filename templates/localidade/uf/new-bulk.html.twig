@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'localidade.uf.new-bulk-title'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'agencias/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-uf') }}">{{ 'localidade.uf.list-name'|trans }}</a>
+                </li>
+                <li class="breadcrumb-item">{{ 'new-bulk'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'localidade.uf.new-bulk-title'|trans }}</h1>
+
+                    {{ form_start(form) }}
+                    <div class="card mb-3 border-apps-4">
+                        <div class="card-header bg-apps-4 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-2x fa-plus-circle fa-2x"></i>
+                                    {{ 'localidade.uf.new-bulk-form-title'|trans }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body form-with-cols">
+                            <div class="alert alert-info">
+                                <p>{{ 'localidade.uf.bulk-form-description'|trans }}</p>
+
+                                <p>
+                                    <a class="link card-link" href="{{ path('sample-file', {'source': 'uf'}) }}">
+                                        {{ 'localidade.uf.bulk-example-link'|trans }}
+                                    </a>
+                                </p>
+                            </div>
+                            <fieldset>
+                                {{ form_row(form.registry) }}
+                            </fieldset>
+                            <div class="form-group row">
+
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary col-4" type="submit">
+                                <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+                            </button>
+                            <a class="btn btn-secondary col-4" href="{{ path('list-uf') }}"><i
+                                        class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}</a>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
