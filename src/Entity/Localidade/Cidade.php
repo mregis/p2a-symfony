@@ -3,6 +3,7 @@
 namespace App\Entity\Localidade;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Localidade\CidadeRepository")
@@ -26,8 +27,16 @@ class Cidade
     /**
      * @var string
      * @ORM\Column(type="string", length=20, nullable=true)
+     *
+     * @Assert\Length(min = 4, max = 20)
      */
     private $abreviacao;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $codigo;
 
     /**
      * @var UF
@@ -104,6 +113,24 @@ class Cidade
     public function setAbreviacao($abreviacao)
     {
         $this->abreviacao = $abreviacao;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param int $codigo
+     * @return Cidade
+     */
+    public function setCodIBGE($codigo)
+    {
+        $this->codigo = $codigo;
         return $this;
     }
 

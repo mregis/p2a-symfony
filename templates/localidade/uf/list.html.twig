@@ -41,10 +41,10 @@
                         <div class="card-body">
                             {% if ufs|length > 0 %}
                                 <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                    <table class="table table-bordered dataTable table-striped"
                                            width="100%"
                                            cellspacing="0">
-                                        <thead class="bg-dark text-white">
+                                        <thead>
                                         <tr>
                                             <th>{{ 'localidade.uf.labels.nome'|trans }}</th>
                                             <th>{{ 'localidade.uf.labels.sigla'|trans }}</th>
@@ -70,14 +70,20 @@
                                                        title="{{ 'edit'|trans }}"></a>
 
                                                     {% if is_granted('ROLE_SUPERADMIN') %}
-                                                        <span class="btn btn-sm fa {{ uf.ativo ?
-                                                                'fa-minus-circle btn-danger' :
-                                                                'fa-plus-circle btn-success' }}"
+                                                        <span class="btn btn-sm fa fa-refresh {{ uf.ativo ?
+                                                                'btn-warning' : 'btn-success' }}"
                                                               data-target="#change-status-Modal"
                                                               data-tokenid="{{ csrf_token('put' ~ uf.id) }}"
                                                               data-cadastroid="{{ uf.id }}" role="button"
                                                               data-cadastro="{{ uf.nome }}" data-toggle="modal"
                                                               title="{{ 'localidade.change-status.title'|trans({'%name%': uf.nome}) }}">
+                                                        </span>
+                                                        <span class="btn btn-sm btn-danger fa fa-minus-circle "
+                                                              data-target="#delete-Modal"
+                                                              data-tokenid="{{ csrf_token('delete' ~ uf.id) }}"
+                                                              data-cadastroid="{{ uf.id }}" role="button"
+                                                              data-cadastro="{{ uf.nome }}" data-toggle="modal"
+                                                              title="{{ 'localidade.delete.title'|trans({'%name%': uf.nome}) }}">
                                                         </span>
                                                     {% endif %}
                                                 </td>
@@ -97,7 +103,7 @@
 
     </div>
     {% if is_granted('ROLE_SUPERADMIN') %}
-        <!-- Modal Inativar Banco -->
+        <!-- Modal Inativar UF -->
         <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
              aria-labelledby="change-statusModalLabel"
              aria-hidden="false">
@@ -119,17 +125,41 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Delete UF -->
+        <div class="modal fade" id="delete-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-danger">
+                        <h5 class="modal-title"
+                            id="deleteModalLabel">{{ 'localidade.delete.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'localidade.delete.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary delete-btn" type="button">{{ 'delete'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock user_content %}
 {% block js_codes %}
     {% if is_granted('ROLE_SUPERADMIN') %}
-        var $workinText = '{{ 'working' | trans }}';
+        {{ parent() }}
         var $statusChangePath = '{{ path('change-status-uf', {id: '_id'}) }}';
-        var $closeText = '{{ 'close'|trans }}';
         var $modalBodyHTML = '{{ 'localidade.change-status.modal-body'|trans|raw }}';
-        var $activeText = '{{ 'active'|trans }}';
-        var $inactiveText = '{{ 'inactive'|trans }}';
         var $modalTitleText = '{{ 'localidade.change-status.modal-title' | trans }}';
+
+        var $deletePath = '{{ path('delete-uf', {id: '_id'}) }}';
+        var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
+        var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
     {% endif %}
 
 {% endblock js_codes %}

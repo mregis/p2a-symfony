@@ -1,3 +1,7 @@
+fail:
+  title: 'Falha ao processar requisição'
+  message: Ocorreu um erro ao tentar processar a requisição. Por favor tente novamente.
+           Se o erro persistir entre em contato com o suporte técnico
 new-bulk: 'Cadastro em lote'
 registry:
   file-field:
@@ -28,6 +32,7 @@ new: 'Novo'
 active: 'Ativo'
 inactive: 'Inativo'
 edit: 'Editar'
+delete: 'Excluir'
 add: 'Inserir'
 not-found-error: 'Dados inválidos'
 options: 'Opções'
@@ -311,6 +316,13 @@ banco:
 localidade:
   edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
   edit-title: 'Editar informações cadastrais'
+  delete:
+    title: 'Excluir cadastro de %name%'
+    modal-title: 'Exclusão de cadastro'
+    modal-body: Tem certeza que deseja excluir o cadastro de
+                          <span class="text-dark modal-body-placeholder">%name%</span>?
+                          <h4 class="text-warning">ATENÇÃO! <small>Esta ação não pode ser desfeita.</small></h4>
+
   change-status:
     modal-title: 'Alterar estado do cadastro'
     modal-body: Tem certeza que deseja alterar o estado do cadastro de
@@ -359,7 +371,8 @@ localidade:
                   O arquivo a ser submetido deve conter um registro em cada linha,
                   sendo que cada linha deve conter as seguintes informações:
                   Sigla da Região (S, N, SE, NE, CO), Nome do Estado, Sigla do Estado e status do cadastrado (1 ou 0).
-                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas
+                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
+                  O conteudo da primeira linha deve obrigatoriamente ser: REGIAO,NOME,SIGLA,ATIVO
     bulk-example-link: Você pode usar este arquivo como exemplo, substituindo as informações existentes
     labels:
       status: 'Estado'
@@ -373,6 +386,19 @@ localidade:
     list-title: 'Municípios'
     list-description: 'Exibindo os municipios cadastrados'
     new: 'Cadastrar Novo Município'
+    new-bulk: 'Carregar arquivo de Cidades'
+    new-bulk-title: 'Cadastro de Cidades em Lote através de arquivo'
+    new-bulk-form-title: 'Formulario de Cadastro de Cidades em lote'
+    bulk-form-description: |
+                  O arquivo a ser submetido deve conter um registro em cada linha,
+                  sendo que cada linha deve conter as seguintes informações:
+                  Sigla da UF, Nome da Cidade, Abreviação do Nome da Cidade,
+                    Codigo do IBGE e status do cadastrado (1 ou 0).
+                  O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
+                    UF,NOME,ABREVIACAO,CODIGO,ATIVO
+                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
+    bulk-example-link: Você pode usar este arquivo como exemplo,
+        substituindo as informações existentes
     homepage: 'Cidades cadastrados'
     new-form-title: 'Formulario de cadastro de nova Cidade'
     new-title: 'Novo Munícipio'
@@ -381,3 +407,4 @@ localidade:
       nome: 'Nome'
       abreviacao: 'Abreviação'
       uf: 'UF'
+      codigo: 'Codigo IBGE'

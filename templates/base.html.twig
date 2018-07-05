@@ -131,7 +131,15 @@
 <script src="{{ asset('resources/app.js') }}"></script>
 {% block my_postload_JSes %}{% endblock my_postload_JSes  %}
 <script>
-    {% block js_codes %}{% endblock %}
+    {% block js_codes %}
+    var $failTitle = '{{ 'fail.title' | trans }}';
+    var $failMessage = '{{ 'fail.message' | trans  }}';
+    var $closeText = '{{ 'close'|trans }}';
+    var $workinText = '{{ 'working' | trans }}';
+    var $activeText = '{{ 'active'|trans }}';
+    var $inactiveText = '{{ 'inactive'|trans }}';
+
+    {% endblock %}
 </script>
 
 </body>

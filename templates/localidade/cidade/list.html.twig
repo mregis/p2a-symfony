@@ -23,7 +23,7 @@
                 <div class="col-12">
                     <h1>{{ 'localidade.cidade.list-title'|trans }}</h1>
 
-                    <div class="card mb-3">
+                    <div class="card mb-3 border-apps-4">
                         <div class="card-header bg-apps-4 text-white">
                             <div class="row">
                                 <div class="col-sm-8">
@@ -39,56 +39,24 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            {% if cidades|length > 0 %}
+
                                 <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                    <table class="table table-bordered table-striped"
                                            width="100%"
-                                           cellspacing="0">
+                                           cellspacing="0" data-role="paginatedDataTable">
                                         <thead class="bg-dark text-white">
                                         <tr>
                                             <th>{{ 'localidade.cidade.labels.nome'|trans }}</th>
                                             <th>{{ 'localidade.cidade.labels.abreviacao'|trans }}</th>
                                             <th>{{ 'localidade.cidade.labels.uf'|trans }}</th>
+                                            <th>{{ 'localidade.cidade.labels.codigo'|trans }}</th>
                                             <th>{{ 'localidade.cidade.labels.status'|trans }}</th>
                                             <th>{{ 'actions'|trans }}</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        {% for cidade in cidades %}
-                                            <tr>
-                                                <td>{{ cidade.nome }}</td>
-                                                <td>{{ cidade.abreviacao }}</td>
-                                                <td>{{ cidade.uf.nome }}</td>
-                                                <td><span class="{{ cidade.ativo ? 'text-success' : 'text-danger' }} cadastro"
-                                                          data-cadastroid="{{ cidade.id }}">
-                                                        {{ (cidade.ativo ? 'active' : 'inactive')|trans }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-info btn-sm fa fa-edit"
-                                                       href="{{ path('edit-cidade', {'id' : cidade.id}) }}"
-                                                       title="{{ 'edit'|trans }}"></a>
-
-                                                    {% if is_granted('ROLE_ADMIN') %}
-                                                        <span class="btn btn-sm fa {{ cidade.ativo ?
-                                                                'fa-minus-circle btn-danger' :
-                                                                'fa-plus-circle btn-success' }}"
-                                                              data-target="#change-status-Modal"
-                                                              data-tokenid="{{ csrf_token('put' ~ cidade.id) }}"
-                                                              data-cadastroid="{{ cidade.id }}" role="button"
-                                                              data-cadastro="{{ cidade.nome }}" data-toggle="modal"
-                                                              title="{{ 'localidade.change-status.title'|trans({'%name%': cidade.nome}) }}">
-                                                        </span>
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
                                     </table>
                                 </div>
-                            {% else %}
-                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
-                            {% endif %}
+
                         </div>
                     </div>
                 </div>
@@ -97,7 +65,7 @@
 
     </div>
     {% if is_granted('ROLE_ADMIN') %}
-        <!-- Modal Inativar Banco -->
+        <!-- Modal Inativar Cidade -->
         <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
              aria-labelledby="change-statusModalLabel"
              aria-hidden="false">
@@ -119,51 +87,87 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Delete Cidade -->
+        <div class="modal fade" id="delete-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-danger">
+                        <h5 class="modal-title"
+                            id="deleteModalLabel">{{ 'localidade.delete.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'localidade.delete.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary delete-btn" type="button">{{ 'delete'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock user_content %}
 {% block js_codes %}
+    var $paginatedDataTablesSource = '{{ path('list-cidades-json') }}';
+    var $paginatedDataTablesColumns = [
+        { "data": "nome" },
+        { "data": "abreviacao" },
+        { "data": "uf"},
+        { "data": "codigo"},
+        { "data": "ativo", "searchable": false},
+        { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
+    ];
+
+    var $fnCreatedRow = function(row, data, dataIndex) { return null;};
+    var $fnRowCallback = function( row, data) {
+        console.log(data);
+        // Cor do texto da coluna ESTADO
+        if ( data.ativo == "Ativo" ) {
+            $('td:eq(4)', row).addClass( 'text-success');
+        } else {
+            $('td:eq(4)', row).addClass( 'text-danger');
+        }
+
+        // Adicionando botões de edição e de exclusão
+        $('td:eq(5)', row).html('<a class="btn btn-info btn-sm fa fa-edit"' +
+            ' href="' + data.editUrl + '"' +
+            ' title="{{ 'edit'|trans }}"></a>' +
+{% if is_granted('ROLE_SUPERADMIN') %}
+        '<span class="btn btn-sm fa fa-refresh ' +
+        ( data.ativo == 'Ativo' ? 'btn-warning' : 'btn-success' ) +
+        '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
+        '" data-cadastroid="'+ data.id + '" role="button"' +
+        ' data-cadastro="' + data.nome + '" data-toggle="modal"' +
+        ' title="' + data.changetitle + '"></span>' +
+        ' <span class="btn btn-sm btn-danger fa fa-minus-circle" ' +
+        '  data-target="#delete-Modal"  data-tokenid="'+ data.deleteToken +
+        '" data-cadastroid="'+ data.id + '" role="button"' +
+        '" data-cadastro="' + data.nome + '" data-toggle="modal"' +
+        ' title="' + data.deltitle + '"></span>'
+{% endif %}
+        );
+
+
+    };
+
+
     {% if is_granted('ROLE_SUPERADMIN') %}
-        $(document).ready(function () {
-            $('#change-status-Modal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var id = button.data('cadastroid');
-                var token = button.data('tokenid');
-                var recipient = button.data('cadastro');
-                var modal = $(this);
-                modal.find('.modal-body-placeholder').text(recipient);
-                modal.find('.resend-btn').click(function() {
-                    modal.find('.modal-body').text('{{ 'working' | trans }}');
-                    modal.find('.resend-btn').hide();
-                    modal.find('.cancel-btn').hide();
-                    $.post('{{ path('change-status-cidade',
-                        {id: '_id'}) }}'.replace('_id', id), {_method: 'PUT', _token: token},
-                        function(response){
-                            modal.find('.modal-header').removeClass('bg-gradient-warning').addClass('bg-gradient-' +response.status);
-                            modal.find('.modal-title').text(response.title);
-                            modal.find('.modal-body').text(response.message);
-                            modal.find('.cancel-btn').text('{{ 'close'|trans }}').show();
-                            if (response.status == 'success') {
-                                button.toggleClass("fa-plus-circle btn-success")
-                                    .toggleClass("fa-minus-circle btn-danger");
-                                $('span.cadastro[data-cadastroid="'+id+'"]')
-                                    .toggleClass("text-success").toggleClass("text-danger");
-                                $('span.cadastro[data-cadastroid="'+id+'"]')
-                                    .text(function() { return ($(this).text() == 'Ativo' ? 'Inativo' : 'Ativo'); });
-                            }
-                            modal.on('hide.bs.modal', function (event) {
-                                var modal = $(this);
-                                modal.find('.modal-body').html('{{ 'localidade.change-status.modal-body'|trans|raw }}');
-                                modal.find('.modal-title').text('{{ 'localidade.change-status.modal-title' | trans }}');
-                                modal.find('.modal-header').removeClass('bg-gradient-success bg-gradient-danger')
-                                    .addClass('bg-gradient-warning');
-                                modal.find('.resend-btn').show();
-                            });
-                        },
-                        'json'
-                    );
-                });
-            })
-        });
+        {{ parent() }}
+
+        var $statusChangePath = '{{ path('change-status-cidade', {id: '_id'}) }}';
+        var $modalBodyHTML = '{{ 'localidade.change-status.modal-body'|trans|raw }}';
+        var $modalTitleText = '{{ 'localidade.change-status.modal-title' | trans }}';
+
+        var $deletePath = '{{ path('delete-cidade', {id: '_id'}) }}';
+        var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
+        var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
+
+        var $statusChange
     {% endif %}
 
 {% endblock js_codes %}

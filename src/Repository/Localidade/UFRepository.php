@@ -37,7 +37,7 @@ class UFRepository extends ServiceEntityRepository
 
     /**
      * @param $sigla
-     * @return array
+     * @return UF
      */
     public function findBySigla($sigla)
     {
