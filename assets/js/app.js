@@ -9,7 +9,7 @@ global.$ = global.jQuery = $;
 const dataTableTranslation = require('../localisation/dataTables.pt_BR.json');
 
 $(document).ready(function () {
-    $("#myModal").modal("show");
+    var myModal = $("#myModal").modal("show");
     $(".dataTable").DataTable(
         {
             "language": dataTableTranslation
@@ -122,9 +122,20 @@ $(document).ready(function () {
     jQuery('[data-input-mask="cep"]').mask("00000-000", {placeholder: "_____-___"});
     jQuery('[data-input-mask="tel"]').mask('(00) 0000-00009', {placeholder: "(__) _____-____"});
     jQuery('[data-input-mask="int"]').mask("###########0", {reverse: true});
+    jQuery('[data-input-mask="dvAgenciaBradesco"]').mask("X", {reverse: true,
+            translation: {"X": {pattern: /[0-9P]/, optional: false, recursive: false}}
+            }
+        );
+
+    jQuery('[type="file"]').parents("form").on("submit", function(e){
+        $('#MyProcessModal').modal('show');
+    });
 
     // Paginated DataTables
-
+    var $fnCreatedRow = null,
+        $fnRowCallback = null,
+        $paginatedDataTablesSource = null,
+        $paginatedDataTablesColumns = null;
     var pag_table = jQuery('[data-role="paginatedDataTable"]').DataTable({
                 "language": dataTableTranslation,
                 "serverSide": true,
