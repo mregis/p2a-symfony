@@ -140,4 +140,32 @@ class Banco
     {
         return $this->nome;
     }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'nome' => $this->nome,
+            'cnpj' => $this->cnpj,
+            'ativo' => $this->is_active,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->codigo,
+            $this->nome,
+            $this->cnpj,
+            $this->is_active,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
+    }
 }

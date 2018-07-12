@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\Agencia\AgenciaRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"banco_id", "codigo"})})
  */
-class Agencia
+class Agencia implements \Serializable
 {
     /**
      * @var string
@@ -31,9 +31,7 @@ class Agencia
     private $codigo;
 
     /**
-     * @ORM\Column(type="smallint")
-     *
-     * @Assert\Range(min = 0, max = 9)
+     * @ORM\Column(type="string", length=1)
      */
     private $dv;
     
@@ -123,7 +121,7 @@ class Agencia
         return $this->dv;
     }
 
-    public function setDv(int $dv)
+    public function setDv(string $dv)
     {
         $this->dv = $dv;
 
@@ -214,6 +212,9 @@ class Agencia
         return $this;
     }
 
+    /**
+     * @return Banco
+     */
     public function getBanco()
     {
         return $this->banco;
@@ -236,5 +237,49 @@ class Agencia
         $this->isActive = $isActive;
 
         return $this;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'dv' => $this->codigo,
+            'nome' => $this->nome,
+            'bairro' => $this->bairro,
+            'uf' => $this->uf,
+            'cep' => $this->cep,
+            'logradouro' => $this->logradouro,
+            'numeral' => $this->numeral,
+            'complemento' => $this->complemento,
+            'cidade' => $this->cidade,
+            'banco' => unserialize($this->getBanco()->serialize()),
+            'ativo' => $this->isActive,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->codigo,
+            $this->dv,
+            $this->nome,
+            $this->bairro,
+            $this->uf,
+            $this->cep,
+            $this->logradouro,
+            $this->numeral,
+            $this->complemento,
+            $this->cidade,
+            $this->banco,
+            $this->isActive,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
     }
 }

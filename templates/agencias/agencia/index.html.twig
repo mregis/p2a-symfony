@@ -32,67 +32,34 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                    <a class="btn btn-sm btn-info" href="{{ path('new-agencia') }}">
-                                        <span class="fa fa-plus-circle"></span> {{ 'agencia.new'|trans }}
-                                    </a>
+                                        <a class="btn btn-sm btn-info" href="{{ path('new-agencia') }}">
+                                            <span class="fa fa-plus-circle"></span> {{ 'agencia.new'|trans }}
+                                        </a>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            {% if agencias|length > 0 %}
-                                <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped" width="100%"
-                                           cellspacing="0">
-                                        <thead class="bg-dark text-white">
-                                        <tr>
-                                            <th>{{ 'agencia.labels.nome'|trans }}</th>
-                                            <th>{{ 'agencia.labels.codigo'|trans }}</th>
-                                            <th>{{ 'agencia.labels.cep'|trans }}</th>
-                                            <th>{{ 'agencia.labels.endereco'|trans }}</th>
-                                            <th>{{ 'agencia.labels.bairro'|trans }}</th>
-                                            <th>{{ 'agencia.labels.cidade'|trans }}</th>
-                                            <th>{{ 'agencia.labels.uf'|trans }}</th>
-                                            <th>{{ 'agencia.labels.status'|trans }}</th>
-                                            <th>{{ 'actions'|trans }}</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for agencium in agencias %}
-                                            <tr>
-                                                <td>{{ agencium.nome }}</td>
-                                                <td>{{ agencium.codigo ~ '-' ~ agencium.dv }}</td>
-                                                <td><span class="cep">{{ agencium.cep }}</span></td>
-                                                <td>{{ (agencium.logradouro ~ ' ' ~ agencium.numeral ~ ' ' ~ agencium.complemento)|trim }}</td>
-                                                <td>{{ agencium.bairro }}</td>
-                                                <td>{{ agencium.cidade }}</td>
-                                                <td>{{ agencium.uf }}</td>
-                                                <td><span class="text-success{{ agencium.isactive ? '' : ' text-danger' }} cadastro"
-                                                          data-cadastroid="{{ agencium.id }}">{{ (agencium.isactive ? 'active' : 'inactive')|trans }}</span></td>
-                                                <td>
-                                                    <a class="btn btn-info btn-sm fa fa-edit"
-                                                       href="{{ path('edit-agencia', {'id' : agencium.id}) }}"
-                                                       title="{{ 'edit'|trans }}"></a>
-                                                    {% if is_granted('ROLE_MASTER') %}
-                                                        <span class="btn btn-sm fa {{ agencium.isactive ?
-                                                        'fa-minus-circle btn-danger' :
-                                                        'fa-plus-circle btn-success' }}"
-                                                              data-target="#change-status-Modal"
-                                                              data-tokenid="{{ csrf_token('put' ~ agencium.id) }}"
-                                                              data-cadastroid="{{ agencium.id }}" role="button"
-                                                              data-cadastro="{{ agencium.nome }}" data-toggle="modal"
-                                                              title="{{ 'agencia.change-status.title'|trans({'%agencia%': agencium.nome}) }}">
-                                                        </span>
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% else %}
-                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
-                            {% endif %}
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped compact"
+                                       width="100%" cellspacing="0" data-role="paginatedDataTable">
+                                    <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>{{ 'agencia.labels.banco'|trans }}</th>
+                                        <th>{{ 'agencia.labels.nome'|trans }}</th>
+                                        <th>{{ 'agencia.labels.codigo'|trans }}</th>
+                                        <th>{{ 'agencia.labels.cep'|trans }}</th>
+                                        <th>{{ 'agencia.labels.endereco'|trans }}</th>
+                                        <th>{{ 'agencia.labels.bairro'|trans }}</th>
+                                        <th>{{ 'agencia.labels.cidade'|trans }}</th>
+                                        <th>{{ 'agencia.labels.uf'|trans }}</th>
+                                        <th>{{ 'agencia.labels.status'|trans }}</th>
+                                        <th>{{ 'actions'|trans }}</th>
+                                    </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,15 +67,15 @@
         </div>
     </div>
     {% if is_granted('ROLE_MASTER') %}
-        <!-- Modal Inativar Banco -->
+        <!-- Modal Inativar Agencia -->
         <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
-             aria-labelledby="change-status-ModalLabel"
+             aria-labelledby="change-statusModalLabel"
              aria-hidden="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header bg-gradient-warning">
                         <h5 class="modal-title"
-                            id="change-status-ModalLabel">{{ 'agencia.change-status.modal-title' | trans }}</h5>
+                            id="change-statusModalLabel">{{ 'agencia.change-status.modal-title' | trans }}</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -117,7 +84,30 @@
                     <div class="modal-footer">
                         <button class="btn btn-secondary cancel-btn" type="button"
                                 data-dismiss="modal">{{ 'cancel'|trans }}</button>
-                        <button class="btn btn-primary resend-btn" type="button">{{ 'agencia.change-status.send'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'change-status'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Delete Agencia -->
+        <div class="modal fade" id="delete-Modal" tabindex="-2" role="dialog"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-danger">
+                        <h5 class="modal-title"
+                            id="deleteModalLabel">{{ 'agencia.delete.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'agencia.delete.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary delete-btn" type="button">{{ 'delete'|trans }}</button>
                     </div>
                 </div>
             </div>
@@ -125,14 +115,72 @@
     {% endif %}
 {% endblock user_content %}
 {% block js_codes %}
-    {% if is_granted('ROLE_MASTER') %}
-        var $workinText = '{{ 'working' | trans }}';
-        var $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
-        var $closeText = '{{ 'close'|trans }}';
-        var $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
-        var $activeText = '{{ 'active'|trans }}';
-        var $inactiveText = '{{ 'inactive'|trans }}';
-        var $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
-    {% endif %}
+{% if is_granted('ROLE_MASTER') %}
+    {{ parent() }}
+    var $paginatedDataTablesSource = '{{ path('list-agencias-json') }}';
+    var $paginatedDataTablesColumns = [
+        { "data": "agencia.banco.nome" },
+        { "data": "agencia.nome" },
+        { "data": "agencia.codigo"},
+        { "data": "agencia.cep"},
+        { "data": "agencia", // Exibindo Logradouro + Numeral + Complemento
+            render: function ( data, type, row ) {
+                if ( type === 'display' || type === 'filter' ) {
+                    return data.logradouro + (data.numeral ? ", " + data.numeral : "" ) +
+                        (data.complemento ? " - " + data.complemento : "");
+                }
+                return data.logradouro;
+            }
+        },
+        { "data": "agencia.bairro"},
+        { "data": "agencia.cidade"},
+        { "data": "agencia.uf"},
+        { "data": "agencia.ativo", "searchable": false},
+        { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
+    ];
 
+    var $fnCreatedRow = function(row, data, dataIndex) { return null;};
+    var $fnRowCallback = function( row, data) {
+        // Coluna Banco
+        // Cor do texto da coluna ESTADO
+        if ( data.agencia.ativo) {
+            $('td:eq(8)', row)
+            .html('Ativo')
+            .addClass( 'text-success');
+        } else {
+            $('td:eq(8)', row)
+            .html('Inativo')
+            .addClass( 'text-danger');
+        }
+
+        // Adicionando botões de edição e de exclusão
+        $('td:eq(9)', row).html('<a class="btn btn-info btn-sm fa fa-edit"' +
+            ' href="' + data.editUrl + '"' +
+            ' title="{{ 'edit'|trans }}"></a>'
+    {% if is_granted('ROLE_ADMIN') %}
+        +
+        '<span class="btn btn-sm fa fa-refresh ' +
+        ( data.agencia.ativo ? 'btn-warning' : 'btn-success' ) +
+        '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
+        '" data-cadastroid="'+ data.agencia.id + '" role="button"' +
+        ' data-cadastro="' + data.agencia.nome + '" data-toggle="modal"' +
+        ' title="' + data.changetitle + '"></span>' +
+        ' <span class="btn btn-sm btn-danger fa fa-minus-circle" ' +
+        '  data-target="#delete-Modal"  data-tokenid="'+ data.deleteToken +
+        '" data-cadastroid="'+ data.agencia.id + '" role="button"' +
+        '" data-cadastro="' + data.agencia.nome + '" data-toggle="modal"' +
+        ' title="' + data.deltitle + '"></span>'
+    {% endif %}
+        );
+    };
+{% endif %}
+        var $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
+        var $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
+        var $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
+
+    {% if is_granted('ROLE_ADMIN') %}
+        var $deletePath = '{{ path('delete-agencia', {id: '_id'}) }}';
+        var $deleteModalBodyHTML = '{{ 'agencia.delete.modal-body'|trans|raw }}';
+        var $deleteModalTitleText = '{{ 'agencia.delete.modal-title' | trans }}';
+    {% endif %}
 {% endblock js_codes %}

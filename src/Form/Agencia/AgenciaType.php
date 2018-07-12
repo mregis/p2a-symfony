@@ -39,8 +39,7 @@ class AgenciaType extends AbstractType
                 ))
             ->add('nome')
             ->add('codigo', TextType::class, array('attr' => array('data-input-mask' => 'int')))
-            ->add('dv', IntegerType::class, array('attr' => array('data-input-mask' => 'int',
-                'maxlength' => 1, 'min' => "0", 'max' => "9" )))
+            ->add('dv', TextType::class, array('attr' => array('maxlength' => 1)))
             ->add('cep', TextType::class, array('attr' => array('data-input-mask' => 'cep', 'maxlength' => 9)))
             ->add('uf', EntityType::class,
                 array(

@@ -19,6 +19,30 @@ class CidadeRepository extends ServiceEntityRepository
         parent::__construct($registry, Cidade::class);
     }
 
+    /**
+     * @param $value
+     * @param null $limit
+     * @param null $offset
+     * @return \App\Entity\Localidade\Cidade[]|array
+     */
+    public function findBySearchValue($value, $limit, $offset)
+    {
+        if ($value != null) {
+            $value = '%' . $value . '%';
+            return $this->createQueryBuilder('c')
+                ->where('c.nome ILIKE :value OR c.codigo = :value')
+                ->setParameter('value', $value)
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult()
+                ;
+        } else {
+            return $this->findBy([], null, $limit, $offset);
+        }
+
+    }
+
     /*
     public function findBySomething($value)
     {
@@ -31,4 +55,6 @@ class CidadeRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
 }

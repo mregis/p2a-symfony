@@ -4,6 +4,7 @@ namespace App\Repository\Localidade;
 
 use App\Entity\Localidade\UF;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,11 +15,15 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UFRepository extends ServiceEntityRepository
 {
+
+    /**
+     * @var array
+     */
+    private $siglasUf = array();
+
     public function __construct(RegistryInterface $registry)
     {
-//        $registry->resetEntityManager('locais');
         parent::__construct($registry, UF::class);
-
     }
 
     /*
@@ -36,11 +41,18 @@ class UFRepository extends ServiceEntityRepository
 
 
     /**
-     * @param $sigla
+     * @param $sigla string
      * @return UF
      */
     public function findBySigla($sigla)
     {
-        return $this->findOneBy(array('sigla' => $sigla));
+        if (isset($this->siglasUf[$sigla])) {
+            $uf = $this->siglasUf[$sigla];
+        } else {
+            $uf = $this->findOneBy(array('sigla' => $sigla));
+            $this->siglasUf[$sigla] = $uf;
+        }
+
+        return $uf;
     }
 }

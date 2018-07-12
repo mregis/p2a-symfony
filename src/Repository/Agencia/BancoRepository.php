@@ -14,6 +14,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BancoRepository extends ServiceEntityRepository
 {
+    /**
+     * @var array;
+     */
+    private $bancos = array();
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Banco::class);
@@ -31,4 +36,21 @@ class BancoRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    /**
+     * @param $codigo string
+     * @return Banco
+     */
+    public function findOneByCodigo($codigo)
+    {
+        if (isset($this->bancos[$codigo])) {
+            $banco = $this->bancos[$codigo];
+        } else {
+            $banco = $this->findOneBy(array('codigo' => $codigo));
+            $this->bancos[$codigo] = $banco;
+        }
+
+        return $banco;
+    }
 }

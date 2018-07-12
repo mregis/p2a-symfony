@@ -91,7 +91,7 @@ class CidadeController extends Controller
 
         $recordsTotal = count($paginator);
 
-        $response = array("draw" >= $draw,
+        $response = array("draw" => $draw,
             "recordsTotal" => $recordsTotal,
             "recordsFiltered" => $recordsTotal,
             "data" => $data,
@@ -102,7 +102,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/cidade/novo", name="new-cidade", methods="GET|POST")
+     * @Route("/novo", name="new-cidade", methods="GET|POST")
      */
     public function newCidade(Request $request): Response
     {
@@ -127,7 +127,7 @@ class CidadeController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cidade/cadastro-lote", name="new-cidade-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="new-cidade-bulk", methods="GET|POST")
      */
     public function newCidadeBulk(Request $request): Response
     {
@@ -200,7 +200,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/cidade/{id}", name="show-cidade", methods="GET")
+     * @Route("/{id}", name="show-cidade", methods="GET")
      */
     public function showCidade(Cidade $cidade): Response
     {
@@ -228,7 +228,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/cidade/{id}", name="delete-cidade", methods="DELETE")
+     * @Route("/{id}", name="delete-cidade", methods="DELETE")
      */
     public function deleteCidade(Request $request, Cidade $cidade): JsonResponse
     {
@@ -249,7 +249,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/cidade/{id}", name="change-status-cidade", methods="PUT")
+     * @Route("/{id}", name="change-status-cidade", methods="PUT")
      */
     public function changeStatusCidade(Request $request, Cidade $cidade): JsonResponse
     {

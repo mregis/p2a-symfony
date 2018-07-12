@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'localidade.cidade.new-bulk-title'|trans }}{% endblock %}
+{% block title %}{{ 'agencia.new-bulk-title'|trans }}{% endblock %}
 
 {% block menu %}
     {% embed '_menu.html.twig' %}
         {% block app_panel %}
-            {% include 'localidade/_app-menu.html.twig' %}
+            {% include 'agencias/_app-menu.html.twig' %}
         {% endblock %}
     {% endembed %}
 {% endblock menu %}
@@ -16,14 +16,13 @@
         <div class="container">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-cidade') }}">{{ 'localidade.cidade.list-name'|trans }}</a>
-                </li>
+                <li class="breadcrumb-item"><a href="{{ path('agencias-home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('list-agencias') }}">{{ 'agencia.list-name'|trans }}</a></li>
                 <li class="breadcrumb-item active">{{ 'new-bulk'|trans }}</li>
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>{{ 'localidade.cidade.new-bulk-title'|trans }}</h1>
+                    <h1>{{ 'agencia.new-bulk-title'|trans }}</h1>
 
                     {{ form_start(form) }}
                     <div class="card mb-3 border-apps-4">
@@ -31,17 +30,17 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <i class="fa fa-2x fa-plus-circle fa-2x"></i>
-                                    {{ 'localidade.cidade.new-bulk-form-title'|trans }}
+                                    {{ 'agencia.new-bulk-form-title'|trans }}
                                 </div>
                             </div>
                         </div>
                         <div class="card-body form-with-cols">
                             <div class="alert alert-info">
-                                <p>{{ 'localidade.cidade.bulk-form-description'|trans }}</p>
+                                <p>{{ 'agencia.bulk-form-description'|trans }}</p>
 
                                 <p>
-                                    <a class="link card-link" href="{{ path('sample-file', {'source': 'cidade'}) }}">
-                                        {{ 'localidade.cidade.bulk-example-link'|trans }}
+                                    <a class="link card-link" href="{{ path('agencia-sample-file', {'source': 'agencia'}) }}">
+                                        {{ 'agencia.bulk-example-link'|trans }}
                                     </a>
                                 </p>
                             </div>
@@ -57,7 +56,7 @@
                             <button class="btn btn-primary col-4" type="submit">
                                 <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
                             </button>
-                            <a class="btn btn-secondary col-4" href="{{ path('list-cidade') }}"><i
+                            <a class="btn btn-secondary col-4" href="{{ path('list-agencias') }}"><i
                                         class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}</a>
                         </div>
                     </div>

@@ -42,8 +42,7 @@
 
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped"
-                                           width="100%"
-                                           cellspacing="0" data-role="paginatedDataTable">
+                                           width="100%" cellspacing="0" data-role="paginatedDataTable">
                                         <thead class="bg-dark text-white">
                                         <tr>
                                             <th>{{ 'localidade.cidade.labels.nome'|trans }}</th>
@@ -125,7 +124,6 @@
 
     var $fnCreatedRow = function(row, data, dataIndex) { return null;};
     var $fnRowCallback = function( row, data) {
-        console.log(data);
         // Cor do texto da coluna ESTADO
         if ( data.ativo == "Ativo" ) {
             $('td:eq(4)', row).addClass( 'text-success');
@@ -136,8 +134,9 @@
         // Adicionando botões de edição e de exclusão
         $('td:eq(5)', row).html('<a class="btn btn-info btn-sm fa fa-edit"' +
             ' href="' + data.editUrl + '"' +
-            ' title="{{ 'edit'|trans }}"></a>' +
+            ' title="{{ 'edit'|trans }}"></a>'
 {% if is_granted('ROLE_SUPERADMIN') %}
+        +
         '<span class="btn btn-sm fa fa-refresh ' +
         ( data.ativo == 'Ativo' ? 'btn-warning' : 'btn-success' ) +
         '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
@@ -166,8 +165,6 @@
         var $deletePath = '{{ path('delete-cidade', {id: '_id'}) }}';
         var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
         var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
-
-        var $statusChange
     {% endif %}
 
 {% endblock js_codes %}

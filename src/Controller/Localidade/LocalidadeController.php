@@ -29,7 +29,6 @@ class LocalidadeController extends Controller
     public function downloadSampleCVS(Request $request, $source): Response
     {
         $filename = $this->getParameter('app.samples.dir');
-        $outputname = 'filaname';
         switch ($source) {
             case 'uf':
                 $filename .= 'uf.sample.csv';

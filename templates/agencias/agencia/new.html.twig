@@ -30,11 +30,22 @@
 
                     <div class="card mb-3 border-apps-1">
                         <div class="card-header bg-apps-1 text-white">
-                            <i class="fa fa-2x fa-plus-circle fa-2x"></i> {{ 'agencia.new-form-title'|trans }}
+                            <div class="row">
+                                <div class="col-8">
+                                    <i class="fa fa-2x fa-plus-circle fa-2x"></i>
+                                    {{ 'agencia.new-form-title'|trans }}
+                                </div>
+                                <div class="col-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('new-agencia-bulk') }}">
+                                            <span class="fa fa-plus-circle"></span> {{ 'agencia.new-bulk'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body form-with-cols">
                             {{ include('agencias/agencia/_form.html.twig') }}
-
                         </div>
                     </div>
                 </div>
