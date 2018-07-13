@@ -9,14 +9,15 @@
 namespace App\Entity\Main;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="usuario")
  * @ORM\Entity(repositoryClass="App\Repository\Main\UserRepository")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements UserInterface, EquatableInterface, \Serializable
 {
 
     /**
@@ -185,6 +186,8 @@ class User implements AdvancedUserInterface, \Serializable
             $this->password,
             $this->isActive,
             $this->profile,
+            $this->email,
+            $this->name
             // see section on salt below
             // $this->salt,
         ));
@@ -199,6 +202,8 @@ class User implements AdvancedUserInterface, \Serializable
             $this->password,
             $this->isActive,
             $this->profile,
+            $this->email,
+            $this->name
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
@@ -389,6 +394,35 @@ class User implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @param UserInterface $user
+     */
+    public function isEqualTo(UserInterface $user): Bool
+    {
+        return (
+            $this->password === $user->getPassword() &&
+            $this->username === $user->getUsername() &&
+            $this->isActive === $user->isIsActive() &&
+            $this->email === $user->getEmail() &&
+            $this->profile === $user->getProfile()
+        );
 
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isDeleted(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isExpired(): bool
+    {
+        return false;
+    }
 
 }

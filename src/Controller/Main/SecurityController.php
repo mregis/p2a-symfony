@@ -150,6 +150,7 @@ class SecurityController extends Controller
                         return $this->redirect($this->generateUrl('redefine-password'), 301);
                     } else {
                         $this->addFlash('success', 'users.first-login');
+                        $request->getSession()->set('myToken', $tokenStorage);
                         // First login
                         return $this->redirect($this->generateUrl('complete-register'), 301);
                     }
@@ -224,7 +225,9 @@ class SecurityController extends Controller
     public function completeRegister(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $error = null;
-        $user = $this->getUser();
+        /* @var $tokenStorage TokenStorageInterface */
+        $tokenStorage = $request->getSession()->get('myToken');
+        $user = $tokenStorage->getToken()->getUser();
         $form = $this->createFormBuilder()
             ->add('email', EmailType::class, array(
                 'data' => $user->getEmail(),
@@ -282,9 +285,9 @@ class SecurityController extends Controller
                 $objManager->flush();
                 $this->addFlash('success', 'users.complete-register.success');
                 return $this->redirect($this->generateUrl('home'), 301);
+            } else {
+                $error = new FormError('general_form_error');
             }
-        } else {
-            $error = new FormError('general_form_error');
         }
         return $this->render('security/complete-register.html.twig', array(
             'form' => $form->createView(),

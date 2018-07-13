@@ -1,4 +1,9 @@
 security:
+    encoders:
+        App\Entity\Main\User:
+            algorithm: bcrypt
+            cost: 12
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
 #        in_memory: { memory: ~ }
@@ -11,13 +16,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            #anonymous: ~
-            # activate different ways to authenticate
-            # http_basic: ~
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-#            form_login: ~
-            # https://symfony.com/doc/current/security/form_login_setup.html
-#                csrf_provider: security.csrf.token_manager
+            pattern: ^/
+            user_checker: App\Security\UserChecker
             form_login:
                 provider: my_db_provider
                 login_path: login
@@ -31,7 +31,7 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path:     /
                 always_remember_me: true
-            logout_on_user_change: true
+
 #        secured_area:
 #            csrf_token_generator: security.csrf.token_manager
 #            # ...
@@ -50,11 +50,6 @@ security:
         - { path: ^/, roles: ROLE_USER }
         - { path: ^/agencias/banco, roles: ROLE_ADMIN }
 #        - { path: ^/agencias, roles: ROLE_USER }
-
-    encoders:
-        App\Entity\Main\User:
-            algorithm: bcrypt
-            cost: 12
 
     role_hierarchy:
         ROLE_MASTER:     ROLE_USER
