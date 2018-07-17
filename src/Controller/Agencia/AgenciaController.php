@@ -10,9 +10,11 @@ use App\Form\Type\BulkRegistryType;
 use App\Repository\Agencia\AgenciaRepository;
 use App\Util\CalculationsBancoBradesco;
 use App\Util\CalculationsBancoFactory;
+use App\Util\CalculationsBancoInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use PHPUnit\Runner\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,81 +51,30 @@ class AgenciaController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager('agencia');
-            $em->persist($agencium);
-            $em->flush();
+            // Verificando Dígito Verificador
 
-            return $this->redirectToRoute('list-agencias');
+            /* @var $formData Agencia */
+            $formData =  $form->getData();
+            /* @var $calculations CalculationsBancoInterface */
+            $calculations = CalculationsBancoFactory::get($formData->getBanco()->getCodigo());
+            $dv = $calculations->calculateDvAgencia($formData->getCodigo());
+            if ($dv == $formData->getDv()) {
+                $em = $this->getDoctrine()->getManager('agencia');
+                $em->persist($agencium);
+                $em->flush();
+                $this->addFlash('success', 'flash.success.new');
+                return $this->redirectToRoute('list-agencias');
+            } else {
+                $form['dv']->addError(new FormError(
+                    $this->get('translator')->trans('agencia.invalid-dv')
+                ));
+            }
         }
 
         return $this->render('agencias/agencia/new.html.twig', [
             'agencium' => $agencium,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     * @Route("/agencia/json/", name="list-agencias-json", methods="GET|POST")
-     */
-    public function getAgencias(Request $request): JsonResponse
-    {
-        // Query Parameters
-        $length = $request->get('length', 10);
-        $start =  $request->get('start', 0);
-        $draw =  $request->get('draw', 0);
-        $search_value = $request->get('search', ['value' => null])['value'];
-        $orderNumColumn = $request->get('order', [0=>['column' => 0]])[0]['column'];
-        // somente uma coluna para ordenação aqui
-        $orderColumn = array('a.banco','a.nome', 'a.codigo', 'a.cep', 'a.logradouro',
-            'a.bairro', 'a.cidade', 'a.uf')[$orderNumColumn];
-        $sortType = $request->get('order[0][dir]', 'ASC');
-        $cidade_repo = $this->getDoctrine()
-            ->getManager('agencia')
-            ->getRepository(Agencia::class);
-        $qb = $cidade_repo->createQueryBuilder('a')
-            ->setFirstResult($start)
-            ->setMaxResults($length)
-            ->orderBy($orderColumn, $sortType);
-
-
-        if ($search_value != null) {
-            $qb->orWhere(
-                $qb->expr()->eq('a.codigo', '?1'),
-                $qb->expr()->like('a.nome', '?2')
-            )->setParameters([1=> $search_value, 2 => '%' . $search_value . '%']);
-        }
-        $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
-
-        /* @var $tokenProvider TokenProviderInterface */
-        $tokenProvider = $this->container->get('security.csrf.token_manager');
-
-        $data = [];
-        /* @var $agencia Agencia */
-        foreach ($paginator as $agencia) {
-            $banco = $agencia->getBanco();
-            $d['agencia'] = unserialize($agencia->serialize());
-            $d['buttons'] = 'BUTTONS';
-            $d['deleteToken'] = $tokenProvider->getToken('delete' . $agencia->getId())->getValue();
-            $d['editToken'] = $tokenProvider->getToken('put' . $agencia->getId())->getValue();
-            $d['changetitle'] = $this->get('translator')
-                ->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
-            $d['deltitle'] = $this->get('translator')
-                ->trans('agencia.delete.title', ['%name%' => $agencia->getNome()]);
-            $d['editUrl'] = $this->generateUrl('edit-agencia', ['id' => $agencia->getId()]);
-            $data[] = $d;
-        }
-
-        $recordsTotal = count($paginator);
-
-        $response = array("draw" => $draw,
-            "recordsTotal" => $recordsTotal,
-            "recordsFiltered" => $recordsTotal,
-            "data" => $data,
-        );
-
-        return $this->json($response, Response::HTTP_OK);
     }
 
     /**
@@ -148,7 +99,8 @@ class AgenciaController extends Controller
                 $agencia_repo = $em->getRepository(Agencia::class);
                 $banco_repo = $em->getRepository(Banco::class);
                 set_time_limit(0); // Avoiding Maximum Execution Timeout
-                try {
+                $batchSize = max((int) $this->container->getParameter('app.bulk.batchsize'), 50);
+                $j = 0; // counter
 
                     foreach ($data as $k => $entry) {
                         if (!isset($entry['BANCO'],$entry['NOME'], $entry['CODIGO'],
@@ -159,33 +111,32 @@ class AgenciaController extends Controller
                                     "[BANCO,NOME,CODIGO,CODIGO,CEP,LOGRADOURO,NUMERAL,BAIRRO,CIDADE,UF[,ATIVO].", $k + 2)
                             );
                         }
-
                         // Validando o codigo da Agencia informado
-                        if (!preg_match('#^\d+#', $entry['CODIGO'])) {
+                        if ($entry['CODIGO'] !== (string)(int)$entry['CODIGO']) {
                             throw new \Exception(
-                                sprintf("Erro na linha %d. %s não é código de AGÊNCIA válido.",
+                                sprintf("Erro na linha %d. [%s] não é código de AGÊNCIA válido.",
                                     $k + 2, $entry['CODIGO'])
                             );
                         }
 
                         if (!$banco = $banco_repo->findOneByCodigo($entry['BANCO'])) {
                             throw new \Exception(
-                                sprintf("Erro na linha %d. %s não é código de BANCO válido.", $k + 2, $entry['BANCO'])
+                                sprintf("Erro na linha %d. [%s] não é código de BANCO válido.", $k + 2, $entry['BANCO'])
                             );
                         }
 
-
                         if (!$calculations = CalculationsBancoFactory::get($banco->getCodigo())){
                             throw new \Exception(
-                                sprintf("Erro na linha %d. O Banco %s não é suportado.", $k + 2, $entry['BANCO'])
+                                sprintf("Erro na linha %d. O Banco [%s] não é suportado.", $k + 2, $entry['BANCO'])
                             );
                         }
 
                         if (!$uf = $uf_repo->findBySigla($entry['UF'])) {
                             throw new \Exception(
-                                sprintf("Erro na linha %d. %s não é uma UF válida.", $k + 2, $entry['UF'])
+                                sprintf("Erro na linha %d. [%s] não é uma UF válida.", $k + 2, $entry['UF'])
                             );
                         }
+
 
                         if (!$agencia = $agencia_repo->findOneBy(['codigo' => $entry['CODIGO'],
                             'banco' => $banco])) {
@@ -194,44 +145,71 @@ class AgenciaController extends Controller
                             $agencia->setCodigo($entry['CODIGO'])
                                 ->setBanco($banco)
                                 ->setDv($calculations::calculateDvAgencia($entry['CODIGO']));
+                            $banco->addAgencia($agencia);
                         } // else
                         // Agência já existente, informações serão atualizadas
 
                         // Detecting encoding and converting to UTF-8 before persist into database
                         try {
-                            foreach (['NOME', 'BAIRRO', 'CIDADE', 'LOGRADOURO', 'COMPLEMENTO'] as $field) {
+                            // campos texto
+                            foreach (['NOME','CIDADE','LOGRADOURO','BAIRRO','COMPLEMENTO'] as $field) {
                                 if (isset($entry[$field])) {
                                     $current_encoding = mb_detect_encoding(
                                         $entry[$field], 'UTF-8, ISO-8859-1, ASCII'
                                     );
                                     $data = mb_convert_encoding($entry[$field], 'UTF-8', $current_encoding);
                                     $data = iconv('UTF-8', "UTF-8//TRANSLIT ", $data);
-                                    $agencia->{'set' . ucfirst(strtolower($field))}($data);
+                                    $entry[$field] = trim($data);
                                 }
                             }
+                            // Validando CEP
+                            if (!preg_match('#^(\d{5})-?(\d{3})$#', $entry['CEP'], $matches)) {
+                                throw new \Exception(
+                                    sprintf("Erro na linha %d. [%s] não é um CEP válido.",
+                                        $k + 2, $entry['CEP'])
+                                );
+                            } else {
+                                $agencia->setCep($matches[1].$matches[2]);
+                            }
+
+                            // campos obrigatórios
+                            foreach (['NOME','CIDADE','LOGRADOURO'] as $field) {
+                                if (isset($entry[$field])) {
+                                    $agencia->{'set' . ucfirst(strtolower($field))}($entry[$field]);
+                                } else {
+                                    throw new \Exception(
+                                        sprintf("Erro na linha %d. [%s] não pode ficar em branco.",
+                                            $k + 2, $field)
+                                    );
+                                }
+                            }
+
                         } catch (Exception $e) {
-                            throw new Exception(sprintf('Error on line %d, field %s. more -> ' .
+                            throw new \Exception(sprintf('Error on line %d, field %s. more -> ' .
                                 $e->getMessage(), $k +2, $field));
                         }
                         $agencia->setNumeral(trim($entry['NUMERAL']))
-                            ->setUf($uf->getSigla())
-                            ->setCep($entry['CEP']);
+                            ->setUf($uf->getSigla());
 
                         if (isset($entry['ATIVO'])) {
                             $agencia->setIsActive($entry['ATIVO']);
                         }
 
                         $em->persist($agencia);
+                        if ($j++ > $batchSize)
+                        {
+                            $em->flush();
+//                            $em->clear();
+                            $j = 0;
+                        }
                     }
                     $em->flush();
-                } catch (Exception $e) {
-                    throw new \InvalidArgumentException($e->getMessage());
-                }
 
-                $this->addFlash('success', 'flash.success.new-bulk');
+                $this->addFlash('success',
+                    $this->container->get('translator')->trans('flash.success.new-bulk'));
                 return $this->redirectToRoute('list-agencias');
             } catch(Exception $e) {
-                $error = $e->getMessage();
+                $error = new FormError('Arquivo inválido! ' . $e->getMessage());
             }
         }
 
@@ -251,8 +229,8 @@ class AgenciaController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
+            $this->getDoctrine()->getManager('agencia')->flush();
+            $this->addFlash('success', 'flash.success.edit');
             return $this->redirectToRoute('list-agencias', ['id' => $agencium->getId()]);
         }
 
@@ -323,5 +301,73 @@ class AgenciaController extends Controller
     public function show(Agencia $agencium): Response
     {
         return $this->render('agencias_agencia_show.html.twig', ['agencium' => $agencium]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/agencia/json", name="list-agencias-json", methods="GET|POST")
+     */
+    public function getAgencias(Request $request): JsonResponse
+    {
+        // Query Parameters
+        $length = $request->get('length', 10);
+        $start =  $request->get('start', 0);
+        $draw =  $request->get('draw', 0);
+        $search_value = $request->get('search', ['value' => null])['value'];
+        $orderNumColumn = $request->get('order', [0=>['column' => 0]])[0]['column'];
+        // somente uma coluna para ordenação aqui
+        $orderColumn = array('a.banco','a.nome', 'a.codigo', 'a.cep', 'a.logradouro',
+            'a.bairro', 'a.cidade', 'a.uf')[$orderNumColumn];
+        $sortType = $request->get('order[0][dir]', 'ASC');
+        $cidade_repo = $this->getDoctrine()
+            ->getManager('agencia')
+            ->getRepository(Agencia::class);
+        $qb = $cidade_repo->createQueryBuilder('a')
+            ->setFirstResult($start)
+            ->setMaxResults($length)
+            ->orderBy($orderColumn, $sortType);
+
+
+        if ($search_value != null) {
+            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $qb->orWhere(
+                $qb->expr()->eq('a.codigo', '?1'),
+                $qb->expr()->like('LOWER(a.nome)', '?2'),
+                $qb->expr()->like('LOWER(a.cidade)', '?2'),
+                $qb->expr()->like('LOWER(a.logradouro)', '?2'),
+                $qb->expr()->like('LOWER(a.bairro)', '?2')
+            )->setParameters([1=> (int)$search_value, 2 => '%' . strtolower($search_value) . '%']);
+        }
+        $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
+
+        /* @var $tokenProvider TokenProviderInterface */
+        $tokenProvider = $this->container->get('security.csrf.token_manager');
+
+        $data = [];
+        /* @var $agencia Agencia */
+        foreach ($paginator as $agencia) {
+            $banco = $agencia->getBanco(); // Lazy Load
+            $d['agencia'] = unserialize($agencia->serialize());
+            $d['buttons'] = 'BUTTONS';
+            $d['deleteToken'] = $tokenProvider->getToken('delete' . $agencia->getId())->getValue();
+            $d['editToken'] = $tokenProvider->getToken('put' . $agencia->getId())->getValue();
+            $d['changetitle'] = $this->get('translator')
+                ->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
+            $d['deltitle'] = $this->get('translator')
+                ->trans('agencia.delete.title', ['%name%' => $agencia->getNome()]);
+            $d['editUrl'] = $this->generateUrl('edit-agencia', ['id' => $agencia->getId()]);
+            $data[] = $d;
+        }
+
+        $recordsTotal = count($paginator);
+
+        $response = array("draw" => $draw,
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsTotal,
+            "data" => $data,
+        );
+
+        return $this->json($response, Response::HTTP_OK);
     }
 }

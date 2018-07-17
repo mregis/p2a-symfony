@@ -2,15 +2,49 @@
  * Created by Marcos Regis on 15/02/2018.
  */
 
-// var $ = require('jquery');
-
 global.$ = global.jQuery = $;
+
+// ### For Datatables
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+const JSZip = require('jszip');
+window.JSZip = JSZip;
 
 const dataTableTranslation = require('../localisation/dataTables.pt_BR.json');
 
+// ##### Global vars
+// DataTables
+global.pag_table = null;
+global.oTable = null;
+// Modals texts
+global.$closeText = 'close',
+    global.$failTitle = 'fail.title',
+    global.$failMessage = 'fail.message',
+    global.$activeText = 'active',
+    global.$inactiveText = 'inactive',
+    global.$workinText = 'working';
+
+// Status Change Modal vars
+global.$statusChangePath = null,
+    global.$modalBodyHTML = null,
+    global.$modalTitleText = null;
+
+// Delete Modal vars
+global.$deletePath = null,
+    global.$deleteModalBodyHTML = null,
+    global.$deleteModalTitleText = null;
+
+// Paginated DataTables
+global.$fnCreatedRow = null,
+    global.$fnRowCallback = null;
+global.$paginatedDataTablesSource = './wtf',
+global.$paginatedDataTablesColumns = null;
+
 $(document).ready(function () {
     var myModal = $("#myModal").modal("show");
-    $(".dataTable").DataTable(
+    oTable = $(".dataTable").DataTable(
         {
             "language": dataTableTranslation
         }
@@ -68,6 +102,7 @@ $(document).ready(function () {
                 });
         });
     });
+
 
     $('#delete-Modal').on('hide.bs.modal', function (event) {
         var deleteModal = $(this);
@@ -131,22 +166,44 @@ $(document).ready(function () {
         $('#MyProcessModal').modal('show');
     });
 
-    // Paginated DataTables
-    var $fnCreatedRow = null,
-        $fnRowCallback = null,
-        $paginatedDataTablesSource = null,
-        $paginatedDataTablesColumns = null;
-    var pag_table = jQuery('[data-role="paginatedDataTable"]').DataTable({
-                "language": dataTableTranslation,
-                "serverSide": true,
-                "createdRow": $fnCreatedRow,
-                "rowCallback": $fnRowCallback,
-                ajax: {
-                    url: $paginatedDataTablesSource,
-                    type: 'POST',
-                },
-                "columns": $paginatedDataTablesColumns
-            });
+    pag_table = jQuery('[data-role="paginatedDataTable"]').DataTable({
+        "dom": "<'row'<'col-10'r>>" +
+        "<'row'<'col-5'l><'col-7 text-right'f>>" +
+        "<'row'<'col-sm-12'B>>" +
+        "<'row'<'col-sm-12't>>" +
+        "<'row'<'col-5'i><'col-7'p>>",
+        "buttons": [
+            {extend: "print", text: "<i class='fa fa-print'></i> Imprimir", 'page': 'all'},
+            {extend: "excelHtml5", text: "<i class='fa fa-th-list'></i> Excel HTML5 Export"},
+            {extend: "pdfHtml5", text: "<i class='fa fa-save'></i> Salvar PDF ", title: "Arquivo"}
+        ],
+        "processing": true,
+        "searchDelay": 200,
+        "language": dataTableTranslation,
+        "serverSide": true,
+        "createdRow": $fnCreatedRow,
+        "rowCallback": $fnRowCallback,
+        ajax: {
+            url: $paginatedDataTablesSource,
+            type: 'POST',
+        },
+        "columns": $paginatedDataTablesColumns
+    });
+
+    jQuery('.dataTables_filter input')
+        .unbind()
+        .bind('input', function(e){
+            // If the length is 4 or more characters, or the user pressed ENTER, search
+            if(this.value.length > 5 || e.keyCode == 13) {
+                // Call the API search function
+                pag_table.search(this.value).draw();
+            }
+            // Ensure we clear the search if they backspace far enough
+            if(this.value == "") {
+                dtable.search("").draw();
+            }
+            return;
+        });
 });
 
 

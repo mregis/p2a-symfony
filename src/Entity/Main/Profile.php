@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="perfil")
  * @ORM\Entity
  */
-class Profile
+class Profile implements \Serializable
 {
 
     /**
@@ -147,4 +147,27 @@ class Profile
         return $this->name;
     }
 
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->name,
+            $this->description,
+            $this->level,
+            $this->isActive,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->name,
+            $this->description,
+            $this->level,
+            $this->isActive,
+            ) = unserialize($serialized);
+    }
 }

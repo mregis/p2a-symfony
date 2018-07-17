@@ -7,7 +7,7 @@
   "sInfoThousands": ".",
   "sLengthMenu": "Exibir _MENU_ resultados por página",
   "sLoadingRecords": "Carregando...",
-  "sProcessing": "Processando...",
+  "sProcessing": "<i class=\"fa fa-spinner fa-spin fa-3x fa-fw\"></i><span class=\"sr-only\">Loading...</span> ",
   "sZeroRecords": "Nenhum registro encontrado",
   "sSearch": "Pesquisar",
   "oPaginate": {

@@ -136,9 +136,12 @@ class Banco
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return $this->nome;
+        return sprintf('[%d] %s',$this->codigo, $this->nome);
     }
 
     /** @see \Serializable::serialize() */

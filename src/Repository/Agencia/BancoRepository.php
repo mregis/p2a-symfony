@@ -4,6 +4,7 @@ namespace App\Repository\Agencia;
 
 use App\Entity\Agencia\Banco;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -15,13 +16,14 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class BancoRepository extends ServiceEntityRepository
 {
     /**
-     * @var array;
+     * @var ArrayCollection;
      */
-    private $bancos = array();
+    private $bancos;
 
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Banco::class);
+        $this->bancos = new ArrayCollection();
     }
 
     /*
@@ -44,11 +46,9 @@ class BancoRepository extends ServiceEntityRepository
      */
     public function findOneByCodigo($codigo)
     {
-        if (isset($this->bancos[$codigo])) {
-            $banco = $this->bancos[$codigo];
-        } else {
+        if (!$banco = $this->bancos->get($codigo) ) {
             $banco = $this->findOneBy(array('codigo' => $codigo));
-            $this->bancos[$codigo] = $banco;
+            $this->bancos->set($codigo, $banco);
         }
 
         return $banco;

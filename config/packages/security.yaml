@@ -22,6 +22,8 @@ security:
                 provider: my_db_provider
                 login_path: login
                 check_path: login
+                always_use_default_target_path: true
+                default_target_path: check_last_login
                 csrf_token_generator: security.csrf.token_manager
 
             logout:       true
@@ -41,8 +43,6 @@ security:
     access_control:
         # require ROLE_ADMIN for /admin*
         - { path: ^/usuario, roles: ROLE_ADMIN }
-#        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/autenticacao/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/autenticar-via-codigo, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -53,5 +53,5 @@ security:
 
     role_hierarchy:
         ROLE_MASTER:     ROLE_USER
-        ROLE_ADMIN:      ROLE_MASTER
+        ROLE_ADMIN:      [ROLE_MASTER, ROLE_ALLOWED_TO_SWITCH]
         ROLE_SUPERADMIN: [ROLE_ADMIN, ROLE_MASTER, ROLE_USER, ROLE_ALLOWED_TO_SWITCH]

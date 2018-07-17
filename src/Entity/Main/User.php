@@ -151,7 +151,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function getRoles()
     {
-        return array((string) $this->profile);
+        return array((string) $this->getProfile()->getName());
     }
 
     /**

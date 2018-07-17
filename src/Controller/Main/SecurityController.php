@@ -8,7 +8,9 @@
 
 namespace App\Controller\Main;
 
+use App\Controller\DefaultController;
 use App\Entity\Main\User;
+use App\Repository\Main\UserRepository;
 use App\Util\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -21,11 +23,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Class SecurityController
@@ -107,7 +111,7 @@ class SecurityController extends Controller
     /**
      * @Route("/autenticar-via-codigo", name="login-by-code")
      */
-    public function loginByCode(Request $request, TokenStorageInterface $tokenStorage)
+    public function loginByCode(Request $request)
     {
         $error = null;
         $form = $this->createFormBuilder()
@@ -137,20 +141,12 @@ class SecurityController extends Controller
                     ->getRepository(User::class)
                     ->findOneBy(array('confirmationToken' => $data['code']));
                 if ($user && $user->isEnabled()) {
-                    $token = new UsernamePasswordToken(
-                        $user,
-                        $user->getPassword(),
-                        'main',
-                        $user->getRoles()
-                    );
-                    $tokenStorage->setToken($token);
-
                     if ($user->getLastLogin()) {
                         $this->addFlash('success', 'change-password.flash.success');
                         return $this->redirect($this->generateUrl('redefine-password'), 301);
                     } else {
                         $this->addFlash('success', 'users.first-login');
-                        $request->getSession()->set('myToken', $tokenStorage);
+                        $request->getSession()->set('myUser', $user);
                         // First login
                         return $this->redirect($this->generateUrl('complete-register'), 301);
                     }
@@ -222,32 +218,35 @@ class SecurityController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function completeRegister(Request $request, UserPasswordEncoderInterface $encoder)
+    public function completeRegister(Request $request,
+                                     UserPasswordEncoderInterface $encoder,
+                                     TokenStorageInterface $tokenStorage)
     {
         $error = null;
-        /* @var $tokenStorage TokenStorageInterface */
-        $tokenStorage = $request->getSession()->get('myToken');
-        $user = $tokenStorage->getToken()->getUser();
+
+        /* @var $preuser User */
+        $preuser = $request->getSession()->get('myUser');
+
         $form = $this->createFormBuilder()
             ->add('email', EmailType::class, array(
-                'data' => $user->getEmail(),
+                'data' => $preuser->getEmail(),
                 'label' => 'users.email',
                 'attr' => array('readonly' => true),
             ))
             ->add('username', TextType::class, array(
-                'data' => $user->getUsername(),
+                'data' => $preuser->getUsername(),
                 'label' => 'users.username',
                 'attr' => array('readonly' => true),
             ))
             ->add('roles', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank()),
-                'data' => $this->get('translator')->trans('roles.names.' . $user->getRoles()[0]),
+                'data' => $this->get('translator')->trans('roles.names.' . $preuser->getRoles()[0]),
                 'label' => 'users.profile',
                 'attr' => array('readonly' => true),
             ))
             ->add('name', TextType::class, array(
                 'constraints' => array(new Assert\NotBlank()),
-                'data' => $user->getName(),
+                'data' => $preuser->getName(),
                 'label' => 'users.name'
             ))
 
@@ -274,15 +273,25 @@ class SecurityController extends Controller
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
                 $data = $form->getData();
+                /* @var $user_repo UserRepository */
+                $user_repo = $this->getDoctrine()->getRepository(User::class);
+                $user = $user_repo->loadUserByUsername($data['username']);
                 $password = $encoder->encodePassword($user, $data['password_repeated']);
                 /* @var $user User */
                 $user->setPassword($password)
                     ->setName($data['name'])
                     ->setLastLogin(new \DateTime());
-
                 $objManager = $this->getDoctrine()->getManager();
                 $objManager->persist($user);
                 $objManager->flush();
+                // authenticating
+                $token = new UsernamePasswordToken(
+                    $user,
+                    $user->getPassword(),
+                    'main',
+                    $user->getRoles()
+                );
+                $tokenStorage->setToken($token);
                 $this->addFlash('success', 'users.complete-register.success');
                 return $this->redirect($this->generateUrl('home'), 301);
             } else {
@@ -332,6 +341,7 @@ class SecurityController extends Controller
                 $objManager->persist($user);
                 $objManager->flush();
                 $this->addFlash('success', 'reset-password.flash.success');
+
                 return $this->redirect($this->generateUrl('home'), 301);
             }
             // Form valido mas não redirecionou, algo de errado tem...
@@ -342,5 +352,30 @@ class SecurityController extends Controller
             'form' => $form->createView(),
             'error' => $error,
         ));
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/check-last-login", name="check_last_login")
+     * @param Request $request
+     * @return Response
+     *
+     */
+    public function checkLastLogin(Request $request)
+    {
+        /* @var $user User */
+        if (!$user = $this->getUser()) {
+            throw new AuthenticationCredentialsNotFoundException();
+        }
+        if ($user->getLastLogin() == null) {
+            $request->getSession()->set('myUser', $user);
+            return $this->redirectToRoute('complete-register');
+        }
+        $user->setLastLogin(new \DateTime());
+        $oManager = $this->getDoctrine()->getManager();
+        $oManager->persist($user);
+        $oManager->flush();
+
+        return $this->redirectToRoute('home');
     }
 }

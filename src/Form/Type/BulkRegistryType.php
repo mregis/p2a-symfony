@@ -21,7 +21,8 @@ class BulkRegistryType extends AbstractType
                         )
                     )
                 ),
-                'label' => 'registry.file-field.label')
+                'label' => 'registry.file-field.label',
+            )
         );
     }
 

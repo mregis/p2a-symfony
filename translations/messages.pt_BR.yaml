@@ -263,6 +263,7 @@ menu:
     manager: 'Gerenciar'
 
 agencia:
+    invalid-dv: 'DV inválido'
     edit-title: 'Editar %name%'
     edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
     new: 'Adicionar Nova Agência'

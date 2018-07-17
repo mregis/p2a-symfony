@@ -383,3 +383,13 @@ $custom-hover-color: #fffc67 !default;
     }
   }
 }
+
+.custom-file-input
+{
+  opacity: 100;
+  border: 1px solid #666;
+  border-radius: 3px 6px;
+  padding: 3px;
+  color: #2e2e2e;
+  font-size: 0.7em;
+}

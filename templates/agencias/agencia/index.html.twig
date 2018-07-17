@@ -117,8 +117,8 @@
 {% block js_codes %}
 {% if is_granted('ROLE_MASTER') %}
     {{ parent() }}
-    var $paginatedDataTablesSource = '{{ path('list-agencias-json') }}';
-    var $paginatedDataTablesColumns = [
+    $paginatedDataTablesSource = '{{ path('list-agencias-json') }}';
+    $paginatedDataTablesColumns = [
         { "data": "agencia.banco.nome" },
         { "data": "agencia.nome" },
         { "data": "agencia.codigo"},
@@ -139,8 +139,7 @@
         { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
     ];
 
-    var $fnCreatedRow = function(row, data, dataIndex) { return null;};
-    var $fnRowCallback = function( row, data) {
+    $fnRowCallback = function( row, data) {
         // Coluna Banco
         // Cor do texto da coluna ESTADO
         if ( data.agencia.ativo) {
@@ -174,13 +173,13 @@
         );
     };
 {% endif %}
-        var $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
-        var $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
-        var $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
+        $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
+        $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
+        $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
 
     {% if is_granted('ROLE_ADMIN') %}
-        var $deletePath = '{{ path('delete-agencia', {id: '_id'}) }}';
-        var $deleteModalBodyHTML = '{{ 'agencia.delete.modal-body'|trans|raw }}';
-        var $deleteModalTitleText = '{{ 'agencia.delete.modal-title' | trans }}';
+        $deletePath = '{{ path('delete-agencia', {id: '_id'}) }}';
+        $deleteModalBodyHTML = '{{ 'agencia.delete.modal-body'|trans|raw }}';
+        $deleteModalTitleText = '{{ 'agencia.delete.modal-title' | trans }}';
     {% endif %}
 {% endblock js_codes %}

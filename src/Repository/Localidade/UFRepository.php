@@ -17,13 +17,14 @@ class UFRepository extends ServiceEntityRepository
 {
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
-    private $siglasUf = array();
+    private $siglasUf;
 
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, UF::class);
+        $this->siglasUf = new ArrayCollection();
     }
 
     /*
@@ -46,11 +47,9 @@ class UFRepository extends ServiceEntityRepository
      */
     public function findBySigla($sigla)
     {
-        if (isset($this->siglasUf[$sigla])) {
-            $uf = $this->siglasUf[$sigla];
-        } else {
+        if (!$uf = $this->siglasUf->get($sigla) ) {
             $uf = $this->findOneBy(array('sigla' => $sigla));
-            $this->siglasUf[$sigla] = $uf;
+            $this->siglasUf->set($sigla, $uf);
         }
 
         return $uf;

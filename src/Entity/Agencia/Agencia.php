@@ -25,8 +25,9 @@ class Agencia implements \Serializable
     private $nome;
 
     /**
-     * @ORM\Column(type="string", length=10)
-     * @Assert\Regex("/^\d+$/")
+     * @var int
+     * @ORM\Column(type="integer", length=8)
+     * @Assert\Range(min = 1, max=99999999)
      */
     private $codigo;
 
@@ -104,12 +105,15 @@ class Agencia implements \Serializable
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getCodigo()
     {
         return $this->codigo;
     }
 
-    public function setCodigo(string $codigo)
+    public function setCodigo(int $codigo)
     {
         $this->codigo = $codigo;
 
@@ -281,5 +285,13 @@ class Agencia implements \Serializable
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf('[%04d] %s', $this->codigo, $this->nome);
     }
 }
