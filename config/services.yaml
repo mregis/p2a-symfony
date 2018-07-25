@@ -30,5 +30,16 @@ services:
         arguments: ['@doctrine.orm.locais_entity_manager']
         tags: ['uf.transformer']
 
+    App\Form\DataTransformer\BancoToIntegerTransformer:
+        arguments: ['@doctrine.orm.agencia_entity_manager']
+        tags: ['banco.transformer']
+
+    App\Form\DataTransformer\JuncaoToStringTransformer:
+        arguments: ['@doctrine.orm.gefra_entity_manager']
+        tags: ['juncao.transformer']
+
+    App\Form\Type\AutocompleteJuncaoType:
+        arguments: ['@doctrine.orm.gefra_entity_manager']
+        tags: ['autocompletejuncao.type']
 imports:
     - { resource: 'parameters.yaml' }
