@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agencia{% endblock %}
+
+{% block body %}
+    <h1>Agencia</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ agencium.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ agencium.nome }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ agencium.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Dv</th>
+                <td>{{ agencium.dv }}</td>
+            </tr>
+            <tr>
+                <th>Cep</th>
+                <td>{{ agencium.cep }}</td>
+            </tr>
+            <tr>
+                <th>Logradouro</th>
+                <td>{{ agencium.logradouro }}</td>
+            </tr>
+            <tr>
+                <th>Numeral</th>
+                <td>{{ agencium.numeral }}</td>
+            </tr>
+            <tr>
+                <th>Bairro</th>
+                <td>{{ agencium.bairro }}</td>
+            </tr>
+            <tr>
+                <th>Cidade</th>
+                <td>{{ agencium.cidade }}</td>
+            </tr>
+            <tr>
+                <th>Uf</th>
+                <td>{{ agencium.uf }}</td>
+            </tr>
+            <tr>
+                <th>Is_active</th>
+                <td>{{ agencium.is_active ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('agencia_agencia_index') }}">back to list</a>
+
+    <a href="{{ path('agencia_agencia_edit', {'id': agencium.id}) }}">edit</a>
+
+    {{ include('agencia_agencia/_delete_form.html.twig') }}
+{% endblock %}

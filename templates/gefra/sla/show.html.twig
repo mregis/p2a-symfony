@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SLA{% endblock %}
+
+{% block body %}
+    <h1>SLA</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ sla.id }}</td>
+            </tr>
+            <tr>
+                <th>Prazo</th>
+                <td>{{ sla.prazo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('gefra_sla_index') }}">back to list</a>
+
+    <a href="{{ path('gefra_sla_edit', {'id': sla.id}) }}">edit</a>
+
+    {{ include('gefra_sla/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'form/horizontal-form-fields.html.twig' %}
+{% block title %}{{ 'gefra.operador.edit-title'|trans({'%name%' : operador.nome }) }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'gefra/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('gefra_operador_index') }}">{{ 'gefra.operador.index'|trans }}</a>
+                </li>
+                <li class="breadcrumb-item">{{ 'edit'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'gefra.operador.edit-title'|trans({'%name%' : operador.nome }) }}</h1>
+
+                    <div class="card mb-3">
+                        <div class="card-header bg-apps-2">
+                            <i class="fa fa-2x fa-edit fa-2x"></i>
+                            {{ 'gefra.operador.edit-form-title'|trans({'%name%' : operador.nome })|raw }}</em></strong>
+                        </div>
+                        <div class="card-body form-with-cols">
+                            {{ include('gefra/operador/_form.html.twig') }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

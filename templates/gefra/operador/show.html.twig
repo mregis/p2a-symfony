@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Operador{% endblock %}
+
+{% block body %}
+    <h1>Operador</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ operador.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ operador.nome }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ operador.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Cidade</th>
+                <td>{{ operador.cidade }}</td>
+            </tr>
+            <tr>
+                <th>Uf</th>
+                <td>{{ operador.uf }}</td>
+            </tr>
+            <tr>
+                <th>Bairro</th>
+                <td>{{ operador.bairro }}</td>
+            </tr>
+            <tr>
+                <th>Endereco</th>
+                <td>{{ operador.endereco }}</td>
+            </tr>
+            <tr>
+                <th>Cep</th>
+                <td>{{ operador.cep }}</td>
+            </tr>
+            <tr>
+                <th>Cnpj</th>
+                <td>{{ operador.cnpj }}</td>
+            </tr>
+            <tr>
+                <th>IsActive</th>
+                <td>{{ operador.isActive ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('gefra_operador_index') }}">back to list</a>
+
+    <a href="{{ path('gefra_operador_edit', {'id': operador.id}) }}">edit</a>
+
+    {{ include('gefra_operador/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% set activelink = app.request.attributes.get('_route') %}
+{% if is_granted('ROLE_USER') %}
+<li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'gefra.homepage'|trans }}">
+    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseGefraJuncao" data-parent="#Accordion">
+        <i class="fas fa-road"></i>
+        <span class="nav-link-text">{{ 'gefra.name'|trans }}</span>
+    </a>
+    <ul class="sidenav-second-level collapse" id="collapseGefraJuncao">
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra-home' ? path('gefra-home') : '#' }}"
+               class="nav-link{{ activelink == 'gefra-home' ? ' active' : '' }}">
+                {{ 'gefra.home' | trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_envio_index' ? path('gefra_envio_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_envio_index' ? ' active' : '' }}">
+                {{ 'gefra.envio.index' | trans }}</a>
+        </li>
+    {% if is_granted('ROLE_MASTER') %}
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_juncao_index' ? path('gefra_juncao_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_juncao_index' ? ' active' : '' }}">
+                {{ 'gefra.juncao.index' | trans }}</a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_operador_index' ? path('gefra_operador_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_operador_index' ? ' active' : '' }}">
+                {{ 'gefra.operador.index' | trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_sla_index' ? path('gefra_sla_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_sla_index' ? ' active' : '' }}">
+                {{ 'gefra.sla.index' | trans }}</a>
+        </li>
+    {% endif %}
+    </ul>
+</li>
+{% endif %}

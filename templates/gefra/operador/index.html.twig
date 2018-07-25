@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'gefra.operador.index'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'gefra/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('gefra-home') }}">{{ 'gefra.homepage'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'gefra.operador.index'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'gefra.operador.index'|trans }}</h1>
+
+                    <div class="card mb-3 border-apps-1">
+                        <div class="card-header bg-apps-1 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-truck fa-2x"></i> {{ 'gefra.operador.index-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_operador_new') }}">
+                                            <span class="fa fa-plus-circle"></span> {{ 'gefra.operador.new'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped compact"
+                                       width="100%" cellspacing="0" data-role="paginatedDataTable">
+                                    <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>{{ 'fields.name.codigo'|trans }}</th>
+                                        <th>{{ 'fields.name.nome'|trans }}</th>
+                                        <th>{{ 'fields.name.cnpj'|trans }}</th>
+                                        <th>{{ 'fields.name.endereco'|trans }}</th>
+                                        <th>{{ 'fields.name.bairro'|trans }}</th>
+                                        <th>{{ 'fields.name.cidade'|trans }}</th>
+                                        <th>{{ 'fields.name.uf'|trans }}</th>
+                                        <th>{{ 'fields.name.status'|trans }}</th>
+                                        <th>{{ 'actions'|trans }}</th>
+                                    </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if is_granted('ROLE_MASTER') %}
+        <!-- Modal Inativar Agencia -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-statusModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-statusModalLabel">{{ 'gefra.operador.changestatus.modaltitle' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'gefra.operador.changestatus.modalbody'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'change-status'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+{% if is_granted('ROLE_MASTER') %}
+    {{ parent() }}
+    $paginatedDataTablesSource = '{{ path('gefra_operador_json_list') }}';
+    $paginatedDataTablesColumns = [
+        { "data": "operador.codigo"},
+        { "data": "operador.nome" },
+        { "data": "operador.cnpj" },
+        { "data": "operador.endereco" },
+        { "data": "operador.bairro" },
+        { "data": "operador.cidade"},
+        { "data": "operador.uf"},
+        { "data": "operador.ativo", "searchable": false},
+        { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
+    ];
+
+    $fnRowCallback = function( row, data) {
+        // Coluna Banco
+        // Cor do texto da coluna STATUS
+        if ( data.operador.ativo) {
+            $('td:eq(7)', row)
+            .html('Ativo')
+            .addClass( 'text-success');
+        } else {
+            $('td:eq(7)', row)
+            .html('Inativo')
+            .addClass( 'text-danger');
+        }
+
+        // Adicionando botões de edição e de exclusão
+        $('td:eq(8)', row).html('<a class="btn btn-info btn-sm fas fa-edit"' +
+            ' href="' + data.editUrl + '"' +
+            ' title="{{ 'edit'|trans }}"></a>'
+    {% if is_granted('ROLE_ADMIN') %}
+        +
+        '<span class="btn btn-sm fas fa-sync ' +
+        ( data.operador.ativo ? 'btn-warning' : 'btn-success' ) +
+        '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
+        '" data-cadastroid="'+ data.operador.id + '" role="button"' +
+        ' data-cadastro="' + data.operador.nome + '" data-toggle="modal"' +
+        ' title="' + data.changetitle + '"></span>'
+    {% endif %}
+        );
+    };
+{% endif %}
+        $statusChangePath = '{{ path('gefra_operador_changestatus', {id: '_id'}) }}';
+        $modalBodyHTML = '{{ 'gefra.operador.changestatus.modalbody'|trans|raw }}';
+        $modalTitleText = '{{ 'gefra.operador.changestatus.modaltitle' | trans }}';
+{% endblock js_codes %}

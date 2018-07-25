@@ -1,0 +1,79 @@
+{{ form_start(form) }}
+<div class="form-group row">
+    {{ form_label(form.operador, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-9">
+        {{ form_errors(form.operador) }}
+        {{ form_widget(form.operador) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.juncao, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-6">
+        {{ form_errors(form.juncao) }}
+
+                    {{ form_widget(form.juncao, {'attr': {'autocomplete': 'off'}}) }}
+
+    </div>
+
+    {{ form_label(form.prazo, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-2">
+        {{ form_errors(form.prazo) }}
+        {{ form_widget(form.prazo) }}
+    </div>
+</div>
+{{ form_widget(form) }}
+<div class="row form-group justify-content-md-center">
+    <div class="col-4">
+        <button class="btn btn-primary btn-block " type="submit">
+            <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+        </button>
+    </div>
+    <div class="col-4">
+        <a class="btn btn-secondary btn-block" href="{{ path('gefra_sla_index') }}">
+            <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
+        </a>
+    </div>
+</div>
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    $typeaheadInput = '#sla_juncao';
+    $typeahedRemoteUrl = '{{ path('gefra_juncao_list_json') }}';
+    $typeaheadTemplate = "<small style='color:#999;'>{{ '[{{codigo}}] {{nome}} - {{cidade}}/{{uf}}' }}</small>";
+    $typeaheadBackdrop = { "background-color": "#eeeeee" };
+    $typeaheadEmptyTemplate = "{{ 'gefra.juncao.emtpy-list' | trans }}";
+    $typeaheadSource = {
+        juncao: {
+            display: ["codigo", "nome", "cidade"],
+            ajax: function (query) {
+                return {
+                    type: "POST",
+                    url: '{{ path('gefra_juncao_list_json') }}',
+                    path: "juncao",
+                    data: {
+                        "search[value]": "{{ '{{query}}' }}",
+                        "length" : "40",
+                    },
+                    callback: {
+                        done: function (res) {
+                            var d = {juncao:[]};
+                            jQuery(res.data).each(function(index, value) {
+                                d.juncao[index] = (value.juncao);
+                            });
+                            return d;
+                        }
+                    }
+                }
+            }
+
+        }
+    };
+    $typeaheadCallback = {
+        onClickAfter: function (node, a, item, event) {
+            event.preventDefault();
+            // node.val();
+            jQuery(node).val("[" + item.codigo + "] " + item.nome + ' - ' + item.cidade + '/' + item.uf);
+        }
+    };
+
+</script>
