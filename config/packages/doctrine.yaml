@@ -22,6 +22,8 @@ doctrine:
                 url: '%env(resolve:DATABASE2_URL)%'
             localidade:
                 url: '%env(resolve:DATABASE3_URL)%'
+            gefra:
+                url: '%env(resolve:DATABASE4_URL)%'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
@@ -29,6 +31,15 @@ doctrine:
 #        auto_mapping: false
         default_entity_manager: default
         entity_managers:
+            gefra:
+                connection: gefra
+                mappings:
+                    Agencia:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity/Gefra'
+                        prefix: 'App\Entity\Gefra'
+                        alias: Gefra
             agencia:
                 connection: agencia
                 mappings:

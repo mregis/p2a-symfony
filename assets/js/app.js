@@ -42,6 +42,24 @@ global.$fnCreatedRow = null,
 global.$paginatedDataTablesSource = './wtf',
 global.$paginatedDataTablesColumns = null;
 
+// Autocomplete Fields
+global.$BloodhoundRemotePath = "./wtf",
+    global.$BloodhoundPrefetchPath = "./wtf",
+    global.$BloodhoundIdentifyFunction = null,
+    global.$typeaheadDisplay = "name",
+    global.$typeaheadName = "name",
+    global.$BloodhoundRemote = $BloodhoundRemotePath,
+    global.$typeaheadTransformFunction = null;
+// jQuery Typeahead
+global.$typeaheadInput = typeof $typeaheadInput == 'undefined' ? "#remote :input:first" : $typeaheadInput,
+    global.$typeahedRemoteUrl = typeof $typeahedRemoteUrl == 'undefined' ? "./wtf" : $typeahedRemoteUrl,
+    global.$typeaheadTemplate = typeof $typeaheadTemplate == 'undefined' ? "{{display}} <small style='color:#999;'>{{group}}</small>" : $typeaheadTemplate,
+    global.$typeaheadSource = typeof $typeaheadSource == 'undefined' ? null : $typeaheadSource,
+    global.$typeaheadCallback = typeof $typeaheadCallback == 'undefined' ? null : $typeaheadCallback,
+    global.$typeaheadEmptyTemplate = typeof $typeaheadEmptyTemplate == 'undefined' ? null : $typeaheadEmptyTemplate,
+    global.$typeaheadBackdrop = typeof $typeaheadBackdrop == 'undefined' ? null : $typeaheadBackdrop;
+
+
 $(document).ready(function () {
     var myModal = $("#myModal").modal("show");
     oTable = $(".dataTable").DataTable(
@@ -187,23 +205,40 @@ $(document).ready(function () {
             url: $paginatedDataTablesSource,
             type: 'POST',
         },
-        "columns": $paginatedDataTablesColumns
+        "columns": $paginatedDataTablesColumns,
+        "initComplete": function(settings, json) {
+            jQuery('.dataTables_filter input').unbind();
+            jQuery('.dataTables_filter input').on('keyup', function (e) {
+                console.log(e.keyCode);
+                // If the length is 4 or more characters, or the user pressed ENTER, search
+                if (this.value.length > 3 || e.keyCode == 13 || e.which == 13) {
+                    // Call the API search function
+                    pag_table.search(this.value).draw();
+                }
+                // Ensure we clear the search if they backspace far enough
+                if (this.value == "") {
+                    pag_table.search("").draw();
+                }
+
+                return;
+            });
+        }
     });
 
-    jQuery('.dataTables_filter input')
-        .unbind()
-        .bind('input', function(e){
-            // If the length is 4 or more characters, or the user pressed ENTER, search
-            if(this.value.length > 5 || e.keyCode == 13) {
-                // Call the API search function
-                pag_table.search(this.value).draw();
-            }
-            // Ensure we clear the search if they backspace far enough
-            if(this.value == "") {
-                dtable.search("").draw();
-            }
-            return;
-        });
+    jQuery.typeahead({
+        input: $typeaheadInput,
+        minLength: 1,
+        maxItem: 20,
+        order: "asc",
+        dynamic: true,
+        delay: 500,
+        backdrop: $typeaheadBackdrop,
+        template: $typeaheadTemplate,
+        emptyTemplate: $typeaheadEmptyTemplate,
+        source: $typeaheadSource,
+        callback: $typeaheadCallback,
+        debug: true
+    });
 });
 
 

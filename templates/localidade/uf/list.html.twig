@@ -65,12 +65,12 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-info btn-sm fa fa-edit"
+                                                    <a class="btn btn-info btn-sm fas fa-edit"
                                                        href="{{ path('edit-uf', {'id' : uf.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
 
                                                     {% if is_granted('ROLE_SUPERADMIN') %}
-                                                        <span class="btn btn-sm fa fa-refresh {{ uf.ativo ?
+                                                        <span class="btn btn-sm fas fa-sync {{ uf.ativo ?
                                                                 'btn-warning' : 'btn-success' }}"
                                                               data-target="#change-status-Modal"
                                                               data-tokenid="{{ csrf_token('put' ~ uf.id) }}"
@@ -78,7 +78,7 @@
                                                               data-cadastro="{{ uf.nome }}" data-toggle="modal"
                                                               title="{{ 'localidade.change-status.title'|trans({'%name%': uf.nome}) }}">
                                                         </span>
-                                                        <span class="btn btn-sm btn-danger fa fa-minus-circle "
+                                                        <span class="btn btn-sm btn-danger fas fa-trash-alt "
                                                               data-target="#delete-Modal"
                                                               data-tokenid="{{ csrf_token('delete' ~ uf.id) }}"
                                                               data-cadastroid="{{ uf.id }}" role="button"

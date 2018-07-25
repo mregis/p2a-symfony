@@ -13,8 +13,10 @@ Encore
 
     //assets of the project
     .createSharedEntry('vendor', [
+        '@fortawesome/fontawesome-free',
         'jquery',
         'bootstrap',
+        'startbootstrap-sb-admin/js/sb-admin',
         'datatables.net',
         'datatables.net-bs4',
         'datatables.net-buttons',
@@ -23,11 +25,10 @@ Encore
         'datatables.net-buttons/js/buttons.print.js',
         'datatables.net-buttons/js/buttons.html5.js',
         'datatables.net-select-bs4',
-        'fontawesome',
-        'startbootstrap-sb-admin/js/sb-admin',
         'jquery.easing',
         './assets/scss/app.scss',
-        'jquery-mask-plugin'
+        'jquery-mask-plugin',
+        'jquery-typeahead'
     ])
     .addEntry('app', './assets/js/app.js')
     .addEntry('httperrors', './assets/js/http-errors.js')

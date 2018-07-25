@@ -1,8 +1,8 @@
 // $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$icon-font-path: "~font-awesome/fonts/";
+$icon-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 
 // set if you're also including font-awesome
-$fa-font-path: "~font-awesome/fonts";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 
 $enable-gradients: true;
 
@@ -38,17 +38,26 @@ $nav-tabs-link-active-color:        $blue-700;
 $nav-tabs-link-active-border-color: $blue-300 $blue-300 $blue-300;
 */
 
+
 @import 'variables.scss';
 
+
 // the ~ allows you to reference things in node_modules
-// @import '~font-awesome/scss/font-awesome.scss';
-@import '~startbootstrap-sb-admin/vendor/font-awesome/scss/font-awesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~startbootstrap-sb-admin/scss/sb-admin.scss';
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import '~datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css';
 
 
 @import 'bootswatch.scss';
 
+@import '~jquery-typeahead/src/jquery.typeahead.scss';
+// Spacing Variables
+// Change below variable if the height of the navbar changes
+$navbar-base-height: 71px;
 
 html {
   position: relative;
@@ -212,6 +221,22 @@ $custom-nav-900: #000079 !default;
 $custom-color: #fafafa !default;
 $custom-hover-color: #fffc67 !default;
 
+#mainNav {
+  .navbar-collapse {
+    .navbar-sidenav {
+      .nav-link-collapse:after {
+        font-family: 'Font Awesome 5 Free';
+      }
+    }
+    .navbar-nav > .nav-item.dropdown {
+      > .nav-link {
+        &:after {
+          font-family: 'Font Awesome 5 Free';
+        }
+      }
+    }
+  }
+}
 // Color support for .navbar-custom
 #mainNav.navbar-custom {
   .navbar-collapse {
@@ -270,6 +295,7 @@ $custom-hover-color: #fffc67 !default;
     }
   }
 }
+
 #mainNav.fixed-top .sidenav-toggler > .nav-item {
   background: darken($blue, 10%);
 }
@@ -341,7 +367,8 @@ $custom-hover-color: #fffc67 !default;
             color: $custom-color;
             background-color: darken($blue, 20%);
             &:focus,
-            &:hover {
+            &:hover,
+            &.active {
               color: $custom-hover-color;
               background: $custom-bg-hover;
             }
@@ -360,6 +387,7 @@ $custom-hover-color: #fffc67 !default;
   @media (min-width: 992px) {
     .navbar-collapse {
       .navbar-sidenav {
+        margin-top: 71px;
         background: $blue;
         li {
           &.active {

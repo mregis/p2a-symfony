@@ -153,18 +153,18 @@
         }
 
         // Adicionando botões de edição e de exclusão
-        $('td:eq(9)', row).html('<a class="btn btn-info btn-sm fa fa-edit"' +
+        $('td:eq(9)', row).html('<a class="btn btn-info btn-sm fas fa-edit"' +
             ' href="' + data.editUrl + '"' +
             ' title="{{ 'edit'|trans }}"></a>'
     {% if is_granted('ROLE_ADMIN') %}
         +
-        '<span class="btn btn-sm fa fa-refresh ' +
+        '<span class="btn btn-sm fas fa-sync ' +
         ( data.agencia.ativo ? 'btn-warning' : 'btn-success' ) +
         '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
         '" data-cadastroid="'+ data.agencia.id + '" role="button"' +
         ' data-cadastro="' + data.agencia.nome + '" data-toggle="modal"' +
         ' title="' + data.changetitle + '"></span>' +
-        ' <span class="btn btn-sm btn-danger fa fa-minus-circle" ' +
+        ' <span class="btn btn-sm btn-danger fas fa-trash-alt" ' +
         '  data-target="#delete-Modal"  data-tokenid="'+ data.deleteToken +
         '" data-cadastroid="'+ data.agencia.id + '" role="button"' +
         '" data-cadastro="' + data.agencia.nome + '" data-toggle="modal"' +

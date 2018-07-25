@@ -67,7 +67,7 @@
                                                 <td>{{ (user.isActive==true ? 'active':'inactive')|trans }}</td>
                                                 <td>
                                                     {% if app.user.profile.level < user.profile.level %}
-                                                    <a class="btn btn-info btn-sm fa fa-edit"
+                                                    <a class="btn btn-info btn-sm fas fa-edit"
                                                        href="{{ path('edit-user', {'id' : user.id}) }}"
                                                        title="{{ 'users.edit'|trans }}"></a>
                                                         <a class="btn btn-sm bg-gradient-success fa fa-tasks"
