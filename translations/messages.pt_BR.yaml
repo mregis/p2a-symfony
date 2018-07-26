@@ -1,3 +1,15 @@
+fields:
+  name:
+    cep: CEP
+    cnpj: CNPJ
+    banco: Banco
+    nome: Nome
+    codigo: Código
+    endereco: Endereço
+    bairro: Bairro
+    cidade: Cidade
+    uf: UF
+    status: Estado
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -17,7 +29,7 @@ flash:
     edit: 'Cadastro alterado!'
     delete: 'Cadastro excluído!'
     change-status: 'O estado do cadastro foi alterado'
-    new-bulk: 'Os cadastros foram criados'
+    new-bulk: 'Os cadastros foram criados ou atualizados'
 change-status: 'Alterar estado'
 working: 'Executando a operação. Aguarde...'
 page-not-found: 'Página não encontrada!'
@@ -346,6 +358,12 @@ banco:
         codigo: 'Codigo'
 
 localidade:
+  homepage: Localidades
+  homepage-description: Gerencie os cadastros de Locais
+  labels:
+    sigla: Sigla
+    regiao: Região
+    abreviacao: Abreviação
   edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
   edit-title: 'Editar informações cadastrais'
   delete:
@@ -362,8 +380,7 @@ localidade:
                           <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
                           as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
     title: 'Alterar o estado do cadastro de %name%'
-  homepage: 'Localidades'
-  homepage-description: 'Gerencie os cadastros de Locais'
+
   regiao:
     homepage: 'Regiões cadastradas'
     btn-regiao: 'Cadastro de Regiões'
@@ -373,19 +390,14 @@ localidade:
     new: 'Nova Região'
     new-title: 'Nova Região'
     new-form-title: 'Formulario de cadastro de nova Região'
-
     change-status:
       modal-title: 'Alterar estado do cadastro de uma Região'
       modal-body: Tem certeza que deseja alterar o estado do cadastro de
-                            <span class="text-dark modal-body-user-name">%regiao%</span>?
+                            <span class="text-dark modal-body-placeholder">%regiao%</span>?
                             <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
                             as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
       success: 'O cadastro de %regiao% foi alterado'
     send: 'Alterar'
-    labels:
-      status: 'Estado'
-      nome: 'Nome'
-      sigla: 'Sigla'
   uf:
     sample-filename: 'exemplo-cadastro-estados'
     btn-uf: 'Cadastro de Estados (UF)'
@@ -406,11 +418,6 @@ localidade:
                   A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
                   O conteudo da primeira linha deve obrigatoriamente ser: REGIAO,NOME,SIGLA,ATIVO
     bulk-example-link: Você pode usar este arquivo como exemplo, substituindo as informações existentes
-    labels:
-      status: 'Estado'
-      nome: 'Nome'
-      sigla: 'Sigla'
-      regiao: 'Região'
   cidade:
     sample-filename: 'exemplo-cadastro-cidades'
     btn-cidade: 'Cadastro de Municípios'

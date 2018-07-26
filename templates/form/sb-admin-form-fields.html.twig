@@ -111,7 +111,7 @@
                 {% set label = name|humanize ~ asterisc %}
             {%- endif -%}
         {%- else -%}
-            {% set label = (translation_domain is same as(false) ? asterisc ~ label : asterisc ~ label|trans({}, translation_domain)) %}
+            {% set label = (translation_domain is same as(false) ? label ~ asterisc : label|trans({}, translation_domain)) ~ asterisc %}
         {%- endif -%}
 
         <{{ element|default('label') }}

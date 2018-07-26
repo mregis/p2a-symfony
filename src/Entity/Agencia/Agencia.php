@@ -48,7 +48,7 @@ class Agencia implements \Serializable
     private $logradouro;
 
     /**
-     * @ORM\Column(type="string", length=10, nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $numeral;
 
