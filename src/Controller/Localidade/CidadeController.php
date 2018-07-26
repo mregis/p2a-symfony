@@ -48,7 +48,7 @@ class CidadeController extends Controller
         $search_value = $request->get('search', ['value' => null])['value'];
         $orderNumColumn = $request->get('order', [0=>['column' => 0]])[0]['column']; // somente uma coluna para ordenação aqui
         $orderColumn = array('c.nome', 'c.abreviacao', 'c.uf', 'c.codigo')[$orderNumColumn];
-        $sortType = $request->get('order[0][dir]', 'ASC');
+        $sortType = $request->get('order',[0=>['dir' => 'ASC']])[0]['dir'];
         $cidade_repo = $this->getDoctrine()
             ->getManager('locais')
             ->getRepository(Cidade::class);
@@ -56,7 +56,6 @@ class CidadeController extends Controller
             ->setFirstResult($start)
             ->setMaxResults($length)
             ->orderBy($orderColumn, $sortType);
-
 
         if ($search_value != null) {
             $qb->orWhere(

@@ -48,13 +48,10 @@ class JuncaoType extends AbstractType
                 ))
             ->add('cidade')
             ->add('is_active', CheckboxType::class, ['label' => 'active', 'required' => false]);
-
         $builder->get('banco')
             ->addModelTransformer($this->bancotransformer);
         $builder->get('uf')
             ->addModelTransformer($this->uftransformer);
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -42,7 +42,7 @@ class BancoController extends Controller
             $banco->setCnpj(preg_replace('#\D#', '', $banco->getCnpj()));
             $em->persist($banco);
             $em->flush();
-            $this->addFlash('success', 'banco.flash.new-success');
+            $this->addFlash('success', 'flash.success.new');
             return $this->redirectToRoute('list-bancos');
         }
 

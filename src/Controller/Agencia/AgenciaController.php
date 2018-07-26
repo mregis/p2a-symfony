@@ -174,7 +174,7 @@ class AgenciaController extends Controller
 
                             // campos obrigatórios
                             foreach (['NOME','CIDADE','LOGRADOURO'] as $field) {
-                                if (isset($entry[$field])) {
+                                if (isset($entry[$field]) && $entry[$field] != '') {
                                     $agencia->{'set' . ucfirst(strtolower($field))}($entry[$field]);
                                 } else {
                                     throw new \Exception(
@@ -202,11 +202,11 @@ class AgenciaController extends Controller
 //                            $em->clear();
                             $j = 0;
                         }
+                        echo "\n"; // Avoiding Browser Timeout
                     }
                     $em->flush();
 
-                $this->addFlash('success',
-                    $this->container->get('translator')->trans('flash.success.new-bulk'));
+                $this->addFlash('success', 'flash.success.new-bulk');
                 return $this->redirectToRoute('list-agencias');
             } catch(Exception $e) {
                 $error = new FormError('Arquivo inválido! ' . $e->getMessage());
@@ -319,7 +319,7 @@ class AgenciaController extends Controller
         // somente uma coluna para ordenação aqui
         $orderColumn = array('a.banco','a.nome', 'a.codigo', 'a.cep', 'a.logradouro',
             'a.bairro', 'a.cidade', 'a.uf')[$orderNumColumn];
-        $sortType = $request->get('order[0][dir]', 'ASC');
+        $sortType = $request->get('order',[0=>['dir' => 'ASC']])[0]['dir'];
         $cidade_repo = $this->getDoctrine()
             ->getManager('agencia')
             ->getRepository(Agencia::class);

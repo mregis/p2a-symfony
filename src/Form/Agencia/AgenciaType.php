@@ -62,7 +62,7 @@ class AgenciaType extends AbstractType
 
         $builder->get('uf')
             ->addModelTransformer($this->uftransformer);
-        ;
+
 
     }
 
