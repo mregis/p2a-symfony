@@ -49,16 +49,16 @@
                     {% endif %}
 
 {# ROLE_USER permission #}
-                    {% if app.user.userapplication|length > 0 %}
-                        {% for userapp in app.user.userapplication %}
+                    {% if userapps|length > 0 %}
+                        {% for application in userapps %}
                             <div class="col-xl-3 col-sm-3 mb-3">
                                 <div class="card bg-apps-{{ loop.index % 4 }} o-hidden h-100">
-                                    <a href="{{ userapp.application.uri }}">
+                                    <a href="{{ application.uri }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
-                                                <i class="fa fa-fw fa-tasks"></i>
+                                                <i class="fas fa-tasks"></i>
                                             </div>
-                                            <h5 class="mr-5 text-center">{{ userapp.application.name }}</h5>
+                                            <h5 class="mr-5 text-center">{{ application.name }}</h5>
                                         </div>
                                     </a>
                                 </div>
