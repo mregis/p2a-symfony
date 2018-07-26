@@ -237,7 +237,7 @@ $(document).ready(function () {
         emptyTemplate: $typeaheadEmptyTemplate,
         source: $typeaheadSource,
         callback: $typeaheadCallback,
-        debug: true
+        debug: false
     });
 });
 
