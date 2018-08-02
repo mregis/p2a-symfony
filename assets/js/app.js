@@ -39,8 +39,13 @@ global.$deletePath = null,
 // Paginated DataTables
 global.$fnCreatedRow = null,
     global.$fnRowCallback = null;
-global.$paginatedDataTablesSource = './wtf',
-global.$paginatedDataTablesColumns = null;
+    global.$paginatedDataTablesSource = './wtf',
+    global.$domDTPaginated = "<'row'<'col-10'r>>" +
+        "<'row'<'col-5'l><'col-7 text-right'f>>" +
+        "<'row'<'col-sm-12'B>>" +
+        "<'row'<'col-sm-12't>>" +
+        "<'row'<'col-5'i><'col-7'p>>",
+    global.$paginatedDataTablesColumns = null;
 
 // Autocomplete Fields
 global.$BloodhoundRemotePath = "./wtf",
@@ -179,17 +184,16 @@ $(document).ready(function () {
             translation: {"X": {pattern: /[0-9P]/, optional: false, recursive: false}}
             }
         );
+    jQuery('[data-input-mask="moeda"]').mask('#.##0,00', {reverse: true});
+    jQuery('[data-input-mask="peso"]').mask('#.##0,000', {reverse: true});
+
 
     jQuery('[type="file"]').parents("form").on("submit", function(e){
         $('#MyProcessModal').modal('show');
     });
 
     pag_table = jQuery('[data-role="paginatedDataTable"]').DataTable({
-        "dom": "<'row'<'col-10'r>>" +
-        "<'row'<'col-5'l><'col-7 text-right'f>>" +
-        "<'row'<'col-sm-12'B>>" +
-        "<'row'<'col-sm-12't>>" +
-        "<'row'<'col-5'i><'col-7'p>>",
+        "dom": $domDTPaginated,
         "buttons": [
             {extend: "print", text: "<i class='fa fa-print'></i> Imprimir", 'page': 'all'},
             {extend: "excelHtml5", text: "<i class='fa fa-th-list'></i> Excel HTML5 Export"},

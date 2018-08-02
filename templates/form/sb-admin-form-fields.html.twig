@@ -95,7 +95,10 @@
     {% set asterisc = '' %}
     {% if required -%}
         {% set asterisc = '<span class="required">*</span>' %}
-        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim, 'title':'This field is required'}) %}
+        {% set label_attr = label_attr|merge(
+        {'class': (label_attr.class|default('') ~ ' required')|trim,
+        'title': (label_attr.title|default('') ~ ' This field is required')|trim }
+        ) %}
     {%- endif -%}
     {% if label is not same as(false) -%}
         {% if not compound -%}

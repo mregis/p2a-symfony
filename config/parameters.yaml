@@ -1,8 +1,8 @@
 parameters:
     app.version: '2.0'
     app.title: 'Address S.A.'
-    app.name: 'Login Unificado'
-    app.description: 'Software parte do parque de Sistemas Address para gerenciar acessos e cadastros'
+    app.name: 'Painel Softwares Address'
+    app.description: 'Parque de Sistemas Address'
     app.footer: '®Address S.A. - 2013 ~ 2018 - Reservado os direitos'
     app.author: 'Marcos Regis <marcos.regis@address.com.br>'
     mail.name: 'Suporte Técnico'
