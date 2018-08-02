@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'gefra.envio.list'|trans }}{% endblock %}
+{% block title %}{{ 'gefra.envio.index'|trans }}{% endblock %}
 
 {% block menu %}
     {% embed '_menu.html.twig' %}
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('gefra-juncao-new') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_envio_new') }}">
                                             <span class="fa fa-plus-circle"></span> {{ 'gefra.envio.new'|trans }}
                                         </a>
                                     {% endif %}
@@ -42,15 +42,16 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped compact"
-                                       width="100%" cellspacing="0" data-role="paginatedDataTable">
+                                       width="100%" cellspacing="0" data-role="paginatedDataTable"
+                                        id="table-envios-list">
                                     <thead class="bg-dark text-white">
                                     <tr>
-                                        <th>{{ 'fields.name.banco'|trans }}</th>
-                                        <th>{{ 'fields.name.codigo'|trans }}</th>
-                                        <th>{{ 'fields.name.nome'|trans }}</th>
-                                        <th>{{ 'fields.name.cidade'|trans }}</th>
-                                        <th>{{ 'fields.name.uf'|trans }}</th>
-                                        <th>{{ 'fields.name.status'|trans }}</th>
+                                        <th></th>
+                                        <th>{{ 'fields.name.solicitacao'|trans }}</th>
+                                        <th>{{ 'gefra.labels.operador'|trans }}</th>
+                                        <th>{{ 'gefra.labels.juncao'|trans }}</th>
+                                        <th>{{ 'gefra.labels.status-envio'|trans }}</th>
+                                        <th>{{ 'gefra.labels.status_entrega'|trans }}</th>
                                         <th>{{ 'actions'|trans }}</th>
                                     </tr>
                                     </thead>
@@ -63,76 +64,136 @@
             </div>
         </div>
     </div>
-    {% if is_granted('ROLE_MASTER') %}
-        <!-- Modal Inativar Agencia -->
-        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
-             aria-labelledby="change-statusModalLabel"
-             aria-hidden="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-gradient-warning">
-                        <h5 class="modal-title"
-                            id="change-statusModalLabel">{{ 'gefra.envio.changestatus.modaltitle' | trans }}</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">{{ 'gefra.envio.changestatus.modalbody'|trans|raw }}</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary cancel-btn" type="button"
-                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
-                        <button class="btn btn-primary resend-btn" type="button">{{ 'change-status'|trans }}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    {% endif %}
 {% endblock user_content %}
+
 {% block js_codes %}
-{% if is_granted('ROLE_MASTER') %}
+
     {{ parent() }}
-    $paginatedDataTablesSource = '{{ path('gefra_juncao_list_json') }}';
+    var $dateTimeFormatOptions = {
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', hour12: false
+    };
+
+    function showExtraInfos(d) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="7" cellspacing="0" border="0" ' +
+            'class="table bg-apps-2 extra-info">' +
+            '<tr>' +
+                '<th>{{ 'gefra.labels.criado_em'|trans }}</th>' +
+                '<td>' +
+                (new Intl.DateTimeFormat('pt-BR', $dateTimeFormatOptions).format(new Date(d.envio.created_at))) +
+                '</td>' +
+                '<th>{{ 'fields.name.cidade'|trans }}</th>' +
+                '<td colspan="3">' + d.envio.juncao.cidade + '/' + d.envio.juncao.uf + '</td>' +
+                '<th>{{ 'fields.name.grm'|trans }}</th>' +
+                '<td>' + d.envio.grm + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<th>{{ 'fields.name.valor'|trans }}</th>' +
+                '<td>' +
+                 new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(d.envio.valor) +
+                '</td>' +
+                '<th>{{ 'fields.name.peso'|trans }}</th>' +
+                '<td>' + new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 3}).format(d.envio.peso) + ' Kg' +
+                '</td>' +
+                '<th>{{ 'fields.name.qt_vol'|trans }}</th>' +
+                '<td>' + d.envio.qt_vol + '</td>' +
+                '<th>{{ 'fields.name.lote'|trans }}</th>' +
+                '<td>' + d.envio.lote + '</td>' +
+            '</tr>' +
+            '<tr>' +
+                '<th title="{{ 'gefra.labels.cte' |trans }}">{{ 'fields.name.cte'|trans }}</th>' +
+                '<td>' +
+                (d.envio.cte == null ? 'Não emitido' : d.envio.cte) +
+                '</td>' +
+                '<th>{{ 'gefra.labels.dt-emissao-cte'|trans }}</th>' +
+                '<td>' +
+                (d.envio.dt_emissao_cte == null ? '-' : new Intl.DateTimeFormat('pt-BR').format(new Date(d.envio.dt_emissao_cte))) +
+                '</td>' +
+                '<th>{{ 'gefra.labels.dt-varredura'|trans }}</th>' +
+                '<td>' +
+                (d.envio.dt_varredura == null ? '-' : new Intl.DateTimeFormat('pt-BR').format(new Date(d.envio.dt_varredura))) +
+                '</td>' +
+                '<th>{{ 'gefra.labels.dt-coleta'|trans }}</th>' +
+                '<td>' +
+                (d.envio.dt_coleta == null ? '-' : new Intl.DateTimeFormat('pt-BR').format(new Date(d.envio.dt_coleta))) +
+                '</td>' +
+            '</tr>' +
+                '<th>{{ 'gefra.labels.dt-previsao-entrega'|trans }}</th>' +
+                '<td>' +
+                (d.envio.dt_previsao_entrega == null ? '-' : new Intl.DateTimeFormat('pt-BR').format(new Date(d.envio.dt_previsao_entrega))) +
+                '</td>' +
+                '<th>{{ 'gefra.labels.dt-entrega'|trans }}</th>' +
+                '<td colspan="3">' +
+                (d.envio.dt_entrega == null ? '-' : new Intl.DateTimeFormat('pt-BR').format(new Date(d.envio.dt_entrega))) +
+                '</td>' +
+                '<th>{{ 'gefra.labels.ocorrencias'|trans }}</th>' +
+                '<td>' +
+                (d.envio.qt_ocorrencias == 0 ? 'Nenhuma Atividade' : d.envio.qt_ocorrencias + ' atividades') +
+                '</td>' +
+            '</tr>' +
+        '</table>';
+    }
+    $domDTPaginated = "<'row'<'col-10'r>>" +
+        "<'row'<'col-5'l><'col-7 text-right'f>>" +
+        "<'row'<'col-sm-12't>>" +
+        "<'row'<'col-5'i><'col-7'p>>";
+    $paginatedDataTablesSource = '{{ path('gefra_envio_list_json') }}';
     $paginatedDataTablesColumns = [
-        { "data": "juncao.banco.nome" },
-        { "data": "juncao.codigo"},
-        { "data": "juncao.nome" },
-        { "data": "juncao.cidade"},
-        { "data": "juncao.uf"},
-        { "data": "juncao.ativo", "searchable": false},
-        { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
+        {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+        },
+        { "data": "envio.solicitacao" },
+        { "data": "envio.operador.nome" },
+        { "data": "envio.juncao.nome"},
+        { "data": "envio.status"},
+        { "data": "envio.status_entrega"},
+        { "data": "buttons", "searchable": false, "orderable": false}
     ];
 
     $fnRowCallback = function( row, data) {
-        // Coluna Banco
-        // Cor do texto da coluna STATUS
-        if ( data.juncao.ativo) {
-            $('td:eq(5)', row)
-            .html('Ativo')
-            .addClass( 'text-success');
-        } else {
-            $('td:eq(5)', row)
-            .html('Inativo')
-            .addClass( 'text-danger');
-        }
-
         // Adicionando botões de edição e de exclusão
         $('td:eq(6)', row).html('<a class="btn btn-info btn-sm fas fa-edit"' +
             ' href="' + data.editUrl + '"' +
             ' title="{{ 'edit'|trans }}"></a>'
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_MASTER') %}
         +
         '<span class="btn btn-sm fas fa-sync ' +
-        ( data.juncao.ativo ? 'btn-warning' : 'btn-success' ) +
+        ( data.envio.ativo ? 'btn-warning' : 'btn-success' ) +
         '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
-        '" data-cadastroid="'+ data.juncao.id + '" role="button"' +
-        ' data-cadastro="' + data.juncao.nome + '" data-toggle="modal"' +
+        '" data-cadastroid="'+ data.envio.id + '" role="button"' +
+        ' data-cadastro="' + data.envio.cet + '" data-toggle="modal"' +
         ' title="' + data.changetitle + '"></span>'
     {% endif %}
         );
     };
-{% endif %}
-        $statusChangePath = '{{ path('gefra-juncao-changestatus', {id: '_id'}) }}';
-        $modalBodyHTML = '{{ 'gefra.envio.changestatus.modalbody'|trans|raw }}';
-        $modalTitleText = '{{ 'gefra.envio.changestatus.modaltitle' | trans }}';
+
+    $(document).ready(function(){
+        $('#table-envios-list tbody').on('click', 'td.details-control', function () {
+
+            var tr = $(this).closest('tr');
+            var row = pag_table.row( tr );
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown bg-apps-2');
+            }
+            else {
+                // Close all other
+                $('tr.shown').each(function(i, v){
+                    pag_table.row( $(v).closest('tr')).child.hide();
+                    $(v).removeClass('shown bg-apps-2');
+                });
+
+                // Open this row
+                row.child( showExtraInfos(row.data()) ).show();
+                tr.addClass('shown bg-apps-2');
+            }
+        } );
+    });
+
 {% endblock js_codes %}

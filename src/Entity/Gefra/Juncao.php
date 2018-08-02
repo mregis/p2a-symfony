@@ -48,7 +48,7 @@ class Juncao implements \Serializable
 
     /**
      * @var Collection|Envio[]
-     * @ORM\OneToMany(targetEntity="App\Entity\Gefra\Envio", mappedBy="destino", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Gefra\Envio", mappedBy="juncao", orphanRemoval=true)
      */
     private $envios;
 

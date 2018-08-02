@@ -17,7 +17,12 @@ class BulkRegistryType extends AbstractType
                     new Assert\File(
                         array(
                             'maxSize' => '4096k',
-                            'mimeTypes' => array('text/csv', 'application/vnd.ms-excel', 'text/plain')
+                            'mimeTypes' => array(
+                                'text/csv',
+                                'application/vnd.ms-excel',
+                                'text/plain',
+                                'application/xml',
+                                )
                         )
                     )
                 ),

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'gefra.envio.load-file-title'|trans }}{% endblock %}
+{% block title %}{{ 'gefra.envio.load-xmlfile-title'|trans }}{% endblock %}
 
 {% block menu %}
     {% embed '_menu.html.twig' %}
@@ -22,25 +22,25 @@
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>{{ 'gefra.envio.load-file-title'|trans }}</h1>
+                    <h1>{{ 'gefra.envio.load-xmlfile-title'|trans }}</h1>
 
                     {{ form_start(form) }}
-                    <div class="card mb-3 border-apps-4">
-                        <div class="card-header bg-apps-4 text-white">
+                    <div class="card mb-3 border-apps-3">
+                        <div class="card-header bg-apps-3 text-white">
                             <div class="row">
                                 <div class="col-sm-8">
                                     <i class="fa fa-2x fa-plus-circle fa-2x"></i>
-                                    {{ 'gefra.envio.load-file-form-title'|trans }}
+                                    {{ 'gefra.envio.load-xmlfile-form-title'|trans }}
                                 </div>
                             </div>
                         </div>
                         <div class="card-body form-with-cols">
                             <div class="alert alert-info">
-                                <p>{{ 'gefra.envio.load-file-form-description'|trans|raw }}</p>
+                                <p>{{ 'gefra.envio.load-xmlfile-form-description'|trans|raw }}</p>
 
                                 <p>
                                     <a class="link card-link" href="{{ path('gefra_samplefile', {'source': 'envio'}) }}">
-                                        {{ 'gefra.envio.load-file-example-link'|trans }}
+                                        {{ 'gefra.envio.load-xmlfile-example-link'|trans }}
                                     </a>
                                 </p>
                             </div>

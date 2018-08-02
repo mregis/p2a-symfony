@@ -1,43 +1,67 @@
 {{ form_start(form) }}
 
+{{ form_row(form.operador) }}
+{{ form_row(form.juncao) }}
 <div class="form-group row">
-    {{ form_label(form.banco, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
-    <div class="col-5">
-        {{ form_errors(form.banco) }}
-        {{ form_widget(form.banco) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ form_label(form.nome, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
-    <div class="col-9">
-        {{ form_errors(form.nome) }}
-        {{ form_widget(form.nome) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ form_label(form.codigo, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    {{ form_label(form.solicitacao, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
     <div class="col-4">
-        {{ form_errors(form.codigo) }}
-        {{ form_widget(form.codigo) }}
+        {{ form_errors(form.solicitacao) }}
+        {{ form_widget(form.solicitacao) }}
     </div>
-
-    {{ form_label(form.uf, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
-    <div class="col-4">
-        {{ form_errors(form.uf) }}
-        {{ form_widget(form.uf) }}
+    {{ form_label(form.grm, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.grm) }}
+        {{ form_widget(form.grm) }}
     </div>
 </div>
+<div class="form-group row">
+    {{ form_label(form.qt_vol, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-2">
+        {{ form_errors(form.qt_vol) }}
+        {{ form_widget(form.qt_vol) }}
+    </div>
 
+    {{ form_label(form.valor, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.valor) }}
+        {{ form_widget(form.valor) }}
+    </div>
+
+    {{ form_label(form.peso, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-2">
+        {{ form_errors(form.peso) }}
+        {{ form_widget(form.peso) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.cte, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-4">
+        {{ form_errors(form.cte) }}
+        {{ form_widget(form.cte) }}
+    </div>
+    {{ form_label(form.dt_emissao_cte, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.dt_emissao_cte) }}
+        {{ form_widget(form.dt_emissao_cte) }}
+    </div>
+</div>
 
 <div class="form-group row">
-    {{ form_label(form.cidade, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
-    <div class="col-sm-9">
-        {{ form_errors(form.cidade) }}
-        {{ form_widget(form.cidade) }}
+    {{ form_label(form.dt_coleta, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.dt_coleta) }}
+        {{ form_widget(form.dt_coleta) }}
+    </div>
+    {{ form_label(form.dt_varredura, null, {'label_attr': {'class':'col-form-label col-3 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.dt_varredura) }}
+        {{ form_widget(form.dt_varredura) }}
     </div>
 </div>
+
 
 {{ form_widget(form) }}
+
 <div class="row form-group justify-content-md-center">
     <div class="col-4">
         <button class="btn btn-primary btn-block " type="submit">
@@ -45,9 +69,50 @@
         </button>
     </div>
     <div class="col-4">
-        <a class="btn btn-secondary btn-block" href="{{ path('gefra_juncao_index') }}">
+        <a class="btn btn-secondary btn-block" href="{{ path('gefra_envio_index') }}">
             <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
         </a>
     </div>
 </div>
 {{ form_end(form) }}
+
+<script type="text/javascript">
+    $typeaheadInput = '#envio_juncao';
+    $typeahedRemoteUrl = '{{ path('gefra_juncao_list_json') }}';
+    $typeaheadTemplate = "<small style='color:#999;'>{{ '[{{codigo}}] {{nome}} - {{cidade}}/{{uf}}' }}</small>";
+    $typeaheadBackdrop = { "background-color": "#eeeeee" };
+    $typeaheadEmptyTemplate = "{{ 'gefra.juncao.emtpy-list' | trans }}";
+    $typeaheadSource = {
+        juncao: {
+            display: ["codigo", "nome", "cidade"],
+            ajax: function (query) {
+                return {
+                    type: "POST",
+                    url: '{{ path('gefra_juncao_list_json') }}',
+                    path: "juncao",
+                    data: {
+                        "search[value]": "{{ '{{query}}' }}",
+                        "length" : "40",
+                    },
+                    callback: {
+                        done: function (res) {
+                            var d = {juncao:[]};
+                            jQuery(res.data).each(function(index, value) {
+                                d.juncao[index] = (value.juncao);
+                            });
+                            return d;
+                        }
+                    }
+                }
+            }
+
+        }
+    };
+    $typeaheadCallback = {
+        onClickAfter: function (node, a, item, event) {
+            event.preventDefault();
+            // node.val();
+            jQuery(node).val("[" + item.codigo + "] " + item.nome + ' - ' + item.cidade + '/' + item.uf);
+        }
+    };
+</script>

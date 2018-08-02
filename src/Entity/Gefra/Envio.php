@@ -2,6 +2,8 @@
 
 namespace App\Entity\Gefra;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,10 +23,15 @@ class Envio implements \Serializable
     /**
      * @var string
      * @ORM\Column(type="string", length=15,
-     *              options={"comment"="Conhecimento de Transporte", "default"="''"},
-     *              unique=true)
+     *              options={"comment"="Conhecimento de Transporte"}, nullable=true)
      */
     private $cte;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="criado_em", type="datetime", options={"comment"="Data de Criação do Envio"})
+     */
+    private $created_at;
 
     /**
      * @var \DateTime
@@ -34,13 +41,13 @@ class Envio implements \Serializable
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="date", options={"comment"="Data da Previsão de Coleta"}, nullable=true)
+     * @ORM\Column(type="date", options={"comment"="Data Informada da Coleta"}, nullable=true)
      */
-    private $dt_previsao_coleta;
+    private $dt_coleta;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="date", options={"comment"="Data Varredura"}, nullable=false)
+     * @ORM\Column(type="date", options={"comment"="Data Varredura"}, nullable=true)
      */
     private $dt_varredura;
 
@@ -59,25 +66,29 @@ class Envio implements \Serializable
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=15, options={"comment"="Numero da Guia de Remessa de Material"})
+     * @ORM\Column(type="string", length=15,
+     *              options={"comment"="Numero da Guia de Remessa de Material"})
      */
     private $grm;
 
     /**
      * @var float
-     * @ORM\Column(type="decimal", precision=2, options={"comment"="Valor do Conhecimento - CTE"})
+     * @ORM\Column(type="decimal", precision=10, scale=2, options={"comment"="Valor do Conhecimento - CTE"})
+     * @Assert\GreaterThanOrEqual(0.50)
      */
     private $valor;
 
     /**
      * @var int
-     * @ORM\Column(type="integer", options={"comment"="Quantidade de Volumes do envio"})
+     * @ORM\Column(type="integer", options={"comment"="Quantidade de Volumes do envio", "default"="1"})
+     * @Assert\GreaterThanOrEqual(1)
      */
     private $qt_vol;
 
     /**
      * @var float
-     * @ORM\Column(type="decimal", precision=4, options={"comment"="Peso total dos volumes em KG"})
+     * @ORM\Column(type="decimal", precision=6, scale=3, options={"comment"="Peso total dos volumes em KG"})
+     * @Assert\GreaterThanOrEqual(0.150)
      */
     private $peso;
 
@@ -97,16 +108,33 @@ class Envio implements \Serializable
 
     /**
      * @var string
-     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"})
+     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"},
+     *              unique=true)
      */
     private $solicitacao;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Gefra\Ocorrencia", mappedBy="envio", orphanRemoval=true)
+     */
+    private $ocorrencias;
+
+    /**
+     * @ORM\Column(type="integer", options={"comment"="Lote a qual o Envio esta ligado"})
+     */
+    private $lote;
+
+    public function __construct()
+    {
+        $this->ocorrencias = new ArrayCollection();
+        $this->qt_vol = 1;
+        $this->created_at = new \DateTime();
+    }
 
 
     public function getId()
     {
         return $this->id;
     }
-
 
     /** @see \Serializable::serialize() */
     public function serialize()
@@ -116,8 +144,9 @@ class Envio implements \Serializable
             'cte' => $this->cte,
             'juncao' => unserialize($this->getJuncao()->serialize()),
             'operador' => unserialize($this->getOperador()->serialize()),
-            'dt_cte' => $this->dt_emissao_cte,
-            'dt_previsao_coleta' => $this->dt_previsao_coleta,
+            'created_at' => $this->created_at,
+            'dt_emissao_cte' => $this->dt_emissao_cte,
+            'dt_coleta' => $this->dt_coleta,
             'dt_varredura' => $this->dt_varredura,
             'grm' => $this->grm,
             'peso' => $this->peso,
@@ -126,6 +155,7 @@ class Envio implements \Serializable
             'dt_previsao_entrega' => $this->dt_previsao_entrega,
             'dt_entrega' => $this->dt_entrega,
             'solicitacao' => $this->solicitacao,
+            'lote' => $this->lote,
         ));
     }
 
@@ -137,8 +167,9 @@ class Envio implements \Serializable
             $this->cte,
             $this->juncao,
             $this->operador,
+            $this->created_at,
             $this->dt_emissao_cte,
-            $this->dt_previsao_coleta,
+            $this->dt_coleta,
             $this->dt_varredura,
             $this->grm,
             $this->peso,
@@ -147,6 +178,7 @@ class Envio implements \Serializable
             $this->dt_previsao_entrega,
             $this->dt_entrega,
             $this->solicitacao,
+            $this->lote,
             ) = unserialize($serialized);
     }
 
@@ -194,6 +226,12 @@ class Envio implements \Serializable
         return $this;
     }
 
+    public function setDocumento(string $grm): self
+    {
+        $this->grm = $grm;
+        return $this;
+    }
+
     public function getValor()
     {
         return $this->valor;
@@ -214,7 +252,12 @@ class Envio implements \Serializable
     public function setQtVol(int $qt_vol): self
     {
         $this->qt_vol = $qt_vol;
+        return $this;
+    }
 
+    public function setVolume(int $qt_vol): self
+    {
+        $this->qt_vol = $qt_vol;
         return $this;
     }
 
@@ -266,14 +309,14 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getDtPrevisaoColeta(): ?\DateTimeInterface
+    public function getDtColeta(): ?\DateTimeInterface
     {
-        return $this->dt_previsao_coleta;
+        return $this->dt_coleta;
     }
 
-    public function setDtPrevisaoColeta(\DateTimeInterface $dt_previsao_coleta): self
+    public function setDtColeta(\DateTimeInterface $dt_coleta = null): self
     {
-        $this->dt_previsao_coleta = $dt_previsao_coleta;
+        $this->dt_coleta = $dt_coleta;
 
         return $this;
     }
@@ -322,6 +365,73 @@ class Envio implements \Serializable
     public function setJuncao(?Juncao $juncao): self
     {
         $this->juncao = $juncao;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ocorrencia[]
+     */
+    public function getOcorrencias(): Collection
+    {
+        return $this->ocorrencias;
+    }
+
+    public function addOcorrencia(Ocorrencia $ocorrencia): self
+    {
+        if (!$this->ocorrencias->contains($ocorrencia)) {
+            $this->ocorrencias[] = $ocorrencia;
+            $ocorrencia->setEnvio($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOcorrencia(Ocorrencia $ocorrencia): self
+    {
+        if ($this->ocorrencias->contains($ocorrencia)) {
+            $this->ocorrencias->removeElement($ocorrencia);
+            // set the owning side to null (unless already changed)
+            if ($ocorrencia->getEnvio() === $this) {
+                $ocorrencia->setEnvio(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDtEntrega(): ?\DateTimeInterface
+    {
+        return $this->dt_entrega;
+    }
+
+    public function setDtEntrega(?\DateTimeInterface $dt_entrega): self
+    {
+        $this->dt_entrega = $dt_entrega;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getLote(): ?int
+    {
+        return $this->lote;
+    }
+
+    public function setLote(int $lote): self
+    {
+        $this->lote = $lote;
 
         return $this;
     }

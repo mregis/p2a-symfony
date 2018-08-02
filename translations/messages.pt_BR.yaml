@@ -10,6 +10,13 @@ fields:
     cidade: Cidade
     uf: UF
     status: Estado
+    cte: C.T.E.
+    grm: G.R.M.
+    valor: Valor
+    qt_vol: Volumes
+    peso: Peso
+    solicitacao: Solicitação
+    lote: Lote
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -453,9 +460,19 @@ gefra:
     sla: SLA
     operador: Operador
     juncao: Junção
-    cte: Conhecimento de Transporte (CTE)
+    cte: Conhecimento de Transporte Eletrônico
     destino: Junção de Destino
     prazo: Prazo (em dias)
+    status-envio: Estado atual
+    dt-emissao-cte: Emissão CTE
+    dt-previsao-coleta: Previsão Coleta
+    dt-coleta: Data Coleta
+    dt-previsao-entrega: Previsão Entrega
+    dt-entrega: Data Entrega
+    ocorrencias: Ocorrências
+    criado_em: Criado em
+    status_entrega: Posição Entrega
+    dt-varredura: Data Varredura
   juncao:
     emtpy-list: Não há resultados para o termo pesquisado
     sample-filename: exemplo-cadastro-juncao.csv
@@ -495,12 +512,12 @@ gefra:
     new-form-title: Criar Novo Envio
     index: Envios
     index-description: Envios Cadastrados
-    new-bulk: Carregar arquivo de Envios
-    new-bulk-form-title: Formulario de carga de Envios em lote
-    new-bulk-title: Cadastro de Envios em Lote através de arquivo
-    bulk-example-link: Você pode usar este arquivo como exemplo,
+    load-xmlfile: Carregar arquivo de Envios
+    load-xmlfile-form-title: Formulario de carga de Envios em lote
+    load-xmlfile-title: Cadastro de Envios em Lote através de arquivo
+    load-xmlfile-example-link: Você pode usar este arquivo como exemplo,
                         substituindo as informações existentes
-    bulk-form-description: >
+    load-xmlfile-form-description: >
             O arquivo a ser submetido deve ser um XML valido de acordo com a
              documentação do sistema sendo que cada linha deve conter
              as seguintes informações:

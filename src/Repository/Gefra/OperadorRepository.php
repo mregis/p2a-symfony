@@ -4,6 +4,7 @@ namespace App\Repository\Gefra;
 
 use App\Entity\Gefra\Operador;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,14 +15,31 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class OperadorRepository extends ServiceEntityRepository
 {
+
+    /**
+     * @var ArrayCollection;
+     */
+    private $operadores;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Operador::class);
+        $this->operadores = new ArrayCollection();
     }
 
-//    /**
-//     * @return Juncao[] Returns an array of Juncao objects
-//     */
+    /**
+     * @param $codigo string
+     * @return Operador
+     */
+    public function findOneByCodigo($codigo)
+    {
+        if (!$operador = $this->operadores->get($codigo) ) {
+            $operador = $this->findOneBy(array('codigo' => $codigo));
+            $this->operadores->set($codigo, $operador);
+        }
+
+        return $operador;
+    }
     /*
     public function findByExampleField($value)
     {
