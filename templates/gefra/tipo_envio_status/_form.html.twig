@@ -1,0 +1,15 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+<div class="row form-group justify-content-md-center">
+    <div class="col-4">
+        <button class="btn btn-primary btn-block " type="submit">
+            <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+        </button>
+    </div>
+    <div class="col-4">
+        <a class="btn btn-secondary btn-block" href="{{ path('gefra_tipo_envio_status_index') }}">
+            <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
+        </a>
+    </div>
+</div>
+{{ form_end(form) }}

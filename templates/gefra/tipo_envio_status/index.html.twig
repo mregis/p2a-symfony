@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'gefra.tipo-envio-status.index'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'gefra/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('gefra-home') }}">{{ 'gefra.homepage'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'gefra.tipo-envio-status.index'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'gefra.tipo-envio-status.index'|trans }}</h1>
+
+                    <div class="card mb-3 border-apps-4">
+                        <div class="card-header bg-apps-4 text-white">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-calendar-check fa-2x"></i> {{ 'gefra.tipo-envio-status.index-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    <a class="btn btn-sm btn-info" href="{{ path('gefra_tipo_envio_status_new') }}">
+                                        <span class="fas fa-plus-circle"></span> {{ 'gefra.tipo-envio-status.new'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped compact dataTable"
+                                       width="100%" cellspacing="0">
+                                    <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>{{ 'fields.name.nome'|trans }}</th>
+                                        <th>{{ 'fields.name.descricao'|trans }}</th>
+                                        <th>{{ 'actions'|trans }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for el in tipo_envio_statuses %}
+                                        <tr>
+                                            <td>{{ el.nome }}</td>
+                                            <td>{{ el.descricao }}</td>
+                                            <td>
+                                                <a class="btn btn-info btn-sm fas fa-edit"
+                                                   href="{{ path('gefra_tipo_envio_status_edit', {'id' : el.id}) }}"
+                                                   title="{{ 'edit'|trans }}"></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock user_content %}
+
+{% block js_codes %}
+    $dataTableOptions.columnDefs = [ {
+        "searchable": false,
+        "orderable": false,
+        "targets": 2
+    } ];
+{% endblock %}
