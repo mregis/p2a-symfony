@@ -27,14 +27,19 @@
                     <div class="card mb-3 border-apps-3">
                         <div class="card-header bg-apps-3 text-white">
                             <div class="row">
-                                <div class="col-sm-8">
+                                <div class="col-sm-6">
                                     <i class="fas fa-truck-loading fa-2x"></i> {{ 'gefra.envio.index-description'|trans }}
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_envio_new') }}">
-                                            <span class="fa fa-plus-circle"></span> {{ 'gefra.envio.new'|trans }}
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_envio_load_xlsfile') }}">
+                                            <span class="fas fa-file-excel"></span> {{ 'gefra.envio.load-xlsfile'|trans }}
                                         </a>
+
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_envio_new') }}">
+                                            <span class="fas fa-plus-circle"></span> {{ 'gefra.envio.new'|trans }}
+                                        </a>
+
                                     {% endif %}
                                 </div>
                             </div>
@@ -47,7 +52,7 @@
                                     <thead class="bg-dark text-white">
                                     <tr>
                                         <th></th>
-                                        <th>{{ 'fields.name.solicitacao'|trans }}</th>
+                                        <th>{{ 'fields.name.grm'|trans }}</th>
                                         <th>{{ 'gefra.labels.operador'|trans }}</th>
                                         <th>{{ 'gefra.labels.juncao'|trans }}</th>
                                         <th>{{ 'gefra.labels.status-envio'|trans }}</th>
@@ -86,8 +91,8 @@
                 '</td>' +
                 '<th>{{ 'fields.name.cidade'|trans }}</th>' +
                 '<td colspan="3">' + d.envio.juncao.cidade + '/' + d.envio.juncao.uf + '</td>' +
-                '<th>{{ 'fields.name.grm'|trans }}</th>' +
-                '<td>' + d.envio.grm + '</td>' +
+                '<th>{{ 'fields.name.solicitacao'|trans }}</th>' +
+                '<td>' + (d.envio.solicitacao == null ? '-' : d.envio.solicitacao)  + '</td>' +
             '</tr>' +
             '<tr>' +
                 '<th>{{ 'fields.name.valor'|trans }}</th>' +
@@ -147,7 +152,7 @@
                 "data":           null,
                 "defaultContent": ''
         },
-        { "data": "envio.solicitacao" },
+        { "data": "envio.grm" },
         { "data": "envio.operador.nome" },
         { "data": "envio.juncao.nome"},
         { "data": "envio.status"},
@@ -157,18 +162,10 @@
 
     $fnRowCallback = function( row, data) {
         // Adicionando botões de edição e de exclusão
-        $('td:eq(6)', row).html('<a class="btn btn-info btn-sm fas fa-edit"' +
+        $('td:eq(6)', row).html(
+            '<a class="btn btn-info btn-sm fas fa-edit"' +
             ' href="' + data.editUrl + '"' +
             ' title="{{ 'edit'|trans }}"></a>'
-    {% if is_granted('ROLE_MASTER') %}
-        +
-        '<span class="btn btn-sm fas fa-sync ' +
-        ( data.envio.ativo ? 'btn-warning' : 'btn-success' ) +
-        '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
-        '" data-cadastroid="'+ data.envio.id + '" role="button"' +
-        ' data-cadastro="' + data.envio.cet + '" data-toggle="modal"' +
-        ' title="' + data.changetitle + '"></span>'
-    {% endif %}
         );
     };
 

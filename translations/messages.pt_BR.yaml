@@ -17,6 +17,8 @@ fields:
     peso: Peso
     solicitacao: Solicitação
     lote: Lote
+    descricao: Descriação
+    razao-social: Razão Social
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -504,7 +506,7 @@ gefra:
             O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
             <strong>BANCO,CONDIGO,NOME,UF,CIDADE,ATIVO</strong><br>
   envio:
-    sample-filename: exemplo-arquivo-envio.xml
+    sample-filename: exemplo-arquivo-envio.xls
     edit-form-title: Alterar informações do Envio
                     <span class="btn disabled btn-sm btn-dark">%name%</span>
     edit-title: 'Editar Envio'
@@ -523,6 +525,21 @@ gefra:
              as seguintes informações:
               <strong>DOCUMENTO, DATA DE ENTREGA, VALOR, DATA EMISSÃO,
               VOLUME, PESO, FORNECEDOR, LOCALIZAÇÃO, SOLICITAÇÃO</strong>
+
+    load-xlsfile: Carregar Planilha de Envios
+    load-xlsfile-form-title: Formulario de envio de Planilha de Envios
+    load-xlsfile-title: Cadastro/Alteração de Envios através de planilha
+    load-xlsfile-example-link: Você pode usar este arquivo como exemplo,
+                          substituindo as informações existentes
+    load-xlsfile-form-description: >
+              O arquivo a ser submetido deve ser um XLS valido de acordo com a
+              documentação do sistema sendo que cada linha deve conter
+              as seguintes informações:
+              <strong>GRM, JUNÇÃO, VALOR, OPERADOR LOGÍSTICO, VOLUME, PESO, DATA COLETA, DATA VARREDURA, FORNECEDOR</strong>
+              para novos envios e também
+              <strong>CTE, DATA EMISSAO CTE, DATA ENTREGA, NOME RECEBEDOR, DOC RECEBEDOR</strong>
+              para atualizações de informações
+
   operador:
     sample-filename: exemplo-arquivo-operador.csv
     edit-form-title: Alterar informações do Operador
@@ -566,3 +583,18 @@ gefra:
              (CSV). Pode-se delimitar o conteúdo usando aspas duplas (opcional). <br>
              A primeira linha obrigatoriamente deve conter os cabeçalhos a seguir:
               <strong>OPERADOR, DESTINO, PRAZO</strong><br>
+
+  tipo-envio-status:
+    index: Status de Envio
+    index-description: Status de Envio Existentes
+    new: Novo Status de Envio
+    new-form-title: Cadastrar Novo Status de Envio
+
+  transportadora:
+    index: Transportadoras
+    index-description: Transportadoras Cadastradas
+    new: Nova Transportadora
+    new-form-title: Cadastrar Nova Transportadora
+    edit-form-title: Alterar informações da Transportadora
+                        <span class="btn disabled btn-sm btn-dark">%name%</span>
+    edit-title: Editar Transportadora

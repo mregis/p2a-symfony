@@ -20,7 +20,7 @@
                             <i class="fa fa-2x fa-pencil"></i> Dados cadastrais de <strong><em>{{ myapp.name }}</em></strong>
                         </div>
                         <div class="card-body form-with-cols">
-                          {{ form(form) }}
+                            {{ include('apps/_form.html.twig') }}
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
         var $collectionHolder;
 
         // setup an "add a tag" link
-        var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fa fa-plus-circle">{{ 'option-attribute.new-title' | trans }}</a>');
+        var $addTagLink = $('<a href="#" class="btn btn-sm btn-warning fas fa-plus-circle">{{ 'option-attribute.new-title' | trans }}</a>');
         var $newLinkLi = $('#application_options').prepend($addTagLink);
 
         function addTagForm($collectionHolder, $newLinkLi) {

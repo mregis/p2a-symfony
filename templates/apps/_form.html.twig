@@ -6,10 +6,16 @@
 {{ form_row(form.options) }}
 {{ form_row(form.isActive) }}
 
-<button class="btn btn-primary col-md-2" type="submit">
-    <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
-</button>
-<a class="btn btn-secondary col-md-2" href="{{ path('list-apps') }}">
-    <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
-</a>
+<div class="row form-group justify-content-md-center">
+    <div class="col-4">
+        <button class="btn btn-primary btn-block " type="submit">
+            <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+        </button>
+    </div>
+    <div class="col-4">
+        <a class="btn btn-secondary btn-block" href="{{ path('list-apps') }}">
+            <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
+        </a>
+    </div>
+</div>
 {{ form_end(form) }}

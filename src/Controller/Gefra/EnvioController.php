@@ -8,18 +8,21 @@
 
 namespace App\Controller\Gefra;
 
-use App\Entity\Agencia\Banco;
 use App\Entity\Gefra\Envio;
 use App\Entity\Gefra\Juncao;
 use App\Entity\Gefra\Ocorrencia;
 use App\Entity\Gefra\Operador;
-use App\Entity\Localidade\UF;
+use App\Entity\Gefra\SLA;
+use App\Entity\Gefra\TipoEnvioStatus;
+use App\Entity\Gefra\Transportadora;
 use App\Form\Gefra\EnvioType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\JuncaoRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,11 +54,11 @@ class EnvioController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager('gefra');
-                $em->persist($envio);
-                $em->flush();
-                $this->addFlash('success', 'flash.success.new');
-                return $this->redirectToRoute('gefra_envio_index');
+            $em = $this->getDoctrine()->getManager('gefra');
+            $em->persist($envio);
+            $em->flush();
+            $this->addFlash('success', 'flash.success.new');
+            return $this->redirectToRoute('gefra_envio_index');
         }
 
         return $this->render('gefra/envio/new.html.twig', [
@@ -84,15 +87,15 @@ class EnvioController extends Controller
 
                 $worksheet_tableRows = $domDocument->getElementsByTagName('Row');
                 $entries = array();
-                $heads = ['documento','volume','valor','peso','fornecedor','localização','solicitação'];
+                $heads = ['documento', 'volume', 'valor', 'peso', 'fornecedor', 'localização', 'solicitação'];
                 $found = false;
                 $i = 1;
-                foreach( $worksheet_tableRows as $idx => $rowChild) {
+                foreach ($worksheet_tableRows as $idx => $rowChild) {
                     /* @var $rowChild \DomNode */
-                    if ($rowChild->childNodes->length > 10 ) {
+                    if ($rowChild->childNodes->length > 10) {
                         if ($found) {
                             // Já foi encontrado a linha dos cabeçalhos, essa é uma de dados
-                            foreach($entries[0] as $ix => $nodeName) {
+                            foreach ($entries[0] as $ix => $nodeName) {
                                 $entries[$i][$nodeName] = $rowChild->childNodes->item($ix)->nodeValue;
                             }
                             $i++;
@@ -122,10 +125,10 @@ class EnvioController extends Controller
                 $juncao_repo = $em->getRepository(Juncao::class);
                 $operador_repo = $em->getRepository(Operador::class);
                 set_time_limit(0); // Avoiding Maximum Execution Timeout
-                $batchSize = max((int) $this->container->getParameter('app.bulk.batchsize'), 50);
+                $batchSize = max((int)$this->container->getParameter('app.bulk.batchsize'), 50);
                 $j = 0; // counter
                 $lote = date('YmdH');
-                for($i = 1; $i < count($entries); $i++) {
+                for ($i = 1; $i < count($entries); $i++) {
                     // Verificando se existe a junção requisitada
                     if (!$juncao = $juncao_repo->findOneBy(['codigo' => $entries[$i]['localização']])) {
                         continue;
@@ -158,7 +161,7 @@ class EnvioController extends Controller
                     }
 
                     // campos obrigatórios
-                    foreach (['valor','peso', 'volume', 'documento'] as $field) {
+                    foreach (['valor', 'peso', 'volume', 'documento'] as $field) {
                         if (isset($entries[$i][$field]) && $entries[$i][$field] != '') {
                             $envio->{'set' . ucfirst(strtolower($field))}($entries[$i][$field]);
                         } else {
@@ -171,8 +174,7 @@ class EnvioController extends Controller
 
                     $envio->setLote($lote)
                         ->setJuncao($juncao)
-                        ->setOperador($operador)
-                        ;
+                        ->setOperador($operador);
                     $em->persist($envio);
                     if ($j++ > $batchSize) {
                         $em->flush();
@@ -184,7 +186,365 @@ class EnvioController extends Controller
                 $em->flush();
                 $this->addFlash('success', 'flash.success.new-bulk');
                 return $this->redirectToRoute('gefra_envio_index');
-            } catch(Exception $e) {
+            } catch (Exception $e) {
+                $error = new FormError('Arquivo inválido! ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('gefra/envio/new-bulk.html.twig', [
+            'form' => $form->createView(),
+            'error' => $error
+        ]);
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/carregar-planilha-envios", name="gefra_envio_load_xlsfile", methods="GET|POST")
+     */
+    public function loadPlanilhaEnvios(Request $request): Response
+    {
+        $error = null;
+        $form = $this->createForm(BulkRegistryType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+
+                /* @var $file \Symfony\Component\HttpFoundation\File\UploadedFile */
+                $file = $form->get('registry')->getData();
+                $reader = new Xlsx();
+                $reader->setReadDataOnly(true);
+                echo "\n"; // resetting browser timeout
+                set_time_limit(0); // Avoiding Maximum Execution Timeout
+                $spreadsheet = $reader->load($file->getPathname());
+                // Procurando a linha do cabeçalho
+                for ($col = 'A'; $col < 'Z'; $col++) { // Procurar da coluna A a Z
+                    for ($line = 1; $line < 5; $line++) { // e da linha 1 a 5
+                        if (strtoupper($spreadsheet->getActiveSheet()
+                                ->getCell($col . $line)) == 'GRM'
+                        ) {
+                            // célula desejada encontrada
+                            $found = true;
+                            break 2;
+                        }
+                    }
+                }
+                if ($found == false) {
+                    throw new \Exception("O arquivo parece não conter " .
+                        "informações de envios. Verifique o conteúdo.");
+                }
+
+                // @todo Converter para tornar estas informações dinamicas e personalizáveis
+                // Linha dos cabeçalhos encontrada, determinando quais colunas devem ser lidas
+                $mandatoryColumns = [
+                    "GRM" => "grm",
+                    "JUNÇÃO" => "juncao",
+                    "OP. LOGÍSTCIO" => "operador",
+                    "VARREDURA" => "dt_varredura",
+                    "VOL" => "qt_vol",
+                    "PESO" => "peso",
+                    "VALOR" => "valor",
+                    "COLETA" => "dt_previsao_coleta"];
+                $updatingColumns = ["CTE" => "cte",
+                    "EMISSÃO CTE" => "dt_emissao_cte",
+                    "DATA ENTREGA" => "dt_entrega",
+                    "NOME RECEBEDOR" => "recebedor",
+                    "CÓD FUNCIONAL" => "doc_recebedor"];
+                $headers = []; // Irá armanezar os Metadados de mapeamento Planilha x Entidade
+                // Procurando as informações obrigatórias
+                foreach ($mandatoryColumns as $column => $entityAttribute) {
+                    $col = 'A';
+                    $precol = '';
+                    while ($col) { // Procurar da coluna A a AZ (54 colunas)
+                        if (strtoupper($spreadsheet->getActiveSheet()
+                                ->getCell($precol . $col . $line)) == $column
+                        ) {
+                            // célula desejada encontrada
+                            $headers[$column] = $precol . $col;
+                            break; // saltando para a proxima coluna
+                        }
+
+                        if ($col != 'Z') {
+                            $col++;
+                        } else {
+                            if ($precol != 'A') {
+                                $precol = 'A';
+                            } else {
+                                throw new Exception(
+                                    sprintf('A coluna %s não está presente na lina de cabeçalhos. Processo abortado!',
+                                        $column)
+                                );
+                            }
+                            $col = 'A';
+                        }
+
+                    }
+                }
+
+                // Procurando as informações opcionais
+                foreach ($updatingColumns as $column => $entityAttribute) {
+                    $col = 'A';
+                    $precol = '';
+                    while ($col) { // Procurar da coluna A a AZ (54 colunas)
+                        if (strtoupper($spreadsheet->getActiveSheet()
+                                ->getCell($precol . $col . $line)) == $column
+                        ) {
+                            // célula desejada encontrada
+                            $headers[$column] = $precol . $col;
+                            break;
+                        }
+
+                        if ($col != 'Z') {
+                            $col++;
+                        } else {
+                            if ($precol != 'A') {
+                                $precol = 'A';
+                            } else {
+                                break; // Não encontrado - ignorando
+                            }
+                            $col = 'A';
+                        }
+
+                    }
+                }
+                // Mapeado todos cabeçalhos, processando os registros
+                $em = $this->getDoctrine()->getManager('gefra');
+                $envio_repo = $em->getRepository(Envio::class);
+                /* @var $juncao_repo JuncaoRepository */
+                $juncao_repo = $em->getRepository(Juncao::class);
+                $operador_repo = $em->getRepository(Operador::class);
+                $sla_repo = $em->getRepository(SLA::class);
+
+                $batchSize = max((int)$this->container->getParameter('app.bulk.batchsize'), 50);
+
+                $j = $r1 = $r2 = 0; // counter
+                while (true) {
+                    $line++; // Indo para a linha de registros
+                    // Ainda tem registros???
+                    $col = $headers['GRM']; // jamais deveria deixar de existir o indice
+                    $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+                    if ($val != '') {
+                        // Validando conteudo das colunas obrigatórias
+                        foreach ($mandatoryColumns as $column => $entityAttribute) {
+                            $col = $headers[$column]; // jamais deveria não existir o indice
+                            $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+                            if ($val == '') {
+                                throw new Exception(
+                                    sprintf("A coluna [%s] da linha [%d] deveria conter" .
+                                        "informação de [%s], porém está em branco!",
+                                        $col, $line, $column)
+                                );
+                            }
+                        }
+
+                        foreach ($mandatoryColumns as $column => $entityAttribute) {
+                            $col = $headers[$column]; // jamais deveria não existir o indice
+                            $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+                            switch ($entityAttribute) {
+                                case 'juncao':
+                                    if (!$juncao = $juncao_repo->findOneBy(['codigo' => $val])) {
+                                        continue;
+                                        /*
+                                        throw new \Exception(
+                                            sprintf("A Junção para o código [%s] não foi encontrado. " .
+                                                "Se a informação está correta é necessário criar o cadastro primeiro.",
+                                                $entries[$i]['localização'])
+                                        );
+                                        */
+                                    }
+                                    break;
+
+                                case 'operador':
+                                    // Validando o operador
+                                    if (!$operador = $operador_repo->findOneByCodigo($val)) {
+                                        throw new \Exception(
+                                            sprintf("Operador [%s] não foi encontrado. " .
+                                                "Se a informação está correta é necessário criar o cadastro primeiro.",
+                                                $val)
+                                        );
+                                    }
+                                    break;
+
+                                case 'qt_vol':
+                                    if ((int)$val < 1) {
+                                        throw new \Exception(
+                                            sprintf("[%s] não é um valor para [%s] válido na coluna [%s] linha [%d]. " .
+                                                "Registro será ignorado.", $val, $column, $col, $line)
+                                        );
+                                    }
+                                    break;
+
+                                case 'peso':
+                                case 'valor':
+                                    if (!(float)$val > 0) {
+                                        throw new \Exception(
+                                            sprintf("[%s] não é um valor para [%s] válido na coluna [%s] da linha [%d]. " .
+                                                "Registro será ignorado.", $val, $column, $col, $line)
+                                        );
+                                    }
+                                    break;
+
+                                case 'dt_previsao_coleta':
+                                case 'dt_varredura':
+                                    if (!new \DateTime($val)) {
+                                        throw new \Exception(
+                                            sprintf("[%s] não é uma data válida para [%s] na coluna [%s] da linha [%d]. " .
+                                                "Registro será ignorado.", $val, $column, $col, $line)
+                                        );
+                                    }
+                                    break;
+
+                                case 'grm':
+                                    break;
+
+                                default:
+                                    throw new \Exception("Ooopss! Esqueci alguma coisa...");
+                            }
+
+
+                            // Todas as colunas obrigatórias validadas, Recuperando/Criando o Envio
+                            // Verificando se já não existe em envio para a GRM (documento) passado
+                            $col = $headers['grm']; // jamais deveria não existir o indice
+                            $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+
+
+                            if (!$envio = $envio_repo->findOneBy(['grm' => $val])) {
+                                $r1++; // Contador de registros criados
+                                // Novo Envio
+                                $envio = new Envio();
+                                // Calculando a data de entrega
+                                if (!$sla = $sla_repo->findOneBy(['juncao' => $juncao, 'operador' => $operador])) {
+                                    throw new Exception(
+                                        sprintf("Não foi possivel calcular o prazo de entrega para a GRM [%s]." .
+                                            "Verifique se a Junção [%s] possui PRAZO cadastrado para o " .
+                                            "OPERADOR [%s]",
+                                            $val, $juncao, $operador)
+                                    );
+                                }
+                                // Calculando o prazo de entrega para um novo Envio
+                                $dtprevisaocoletaindex = array_search('dt_previsao_coleta', $mandatoryColumns);
+                                $col = $headers[$dtprevisaocoletaindex]; // jamais deveria deixar de existir o indice
+                                $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+                                $dt_coleta = new \DateTime($val);
+                                $envio->setDtPrevisaoColeta($dt_coleta);
+                                $prazo = $sla->getPrazo();
+                                while ($prazo > 0) {
+                                    $dt_coleta->add(new \DateInterval('P1D'));
+                                    if ($dt_coleta->format('w') % 6 != 0) { // não é sábado nem domingo
+                                        $prazo--;
+                                    }
+                                }
+                                // @todo Verificar se tem algum feriando entre as datas de coleta e entrega
+                                // if ($feriados = $feriado_repo->findBy(['dt_feriado' => $dt_coleta])) {
+                                //     $dt_coleta->add(new \DateInterval('P'. $feriados->count() . 'D'));
+                                // }
+
+                                // Data Entrega Calculada
+                                $envio->setDtPrevisaoEntrega($dt_coleta);
+                                $envio->setJuncao($juncao)
+                                    ->setOperador($operador);
+
+                            } else {
+                                $r2++; // Contador de registros atualizados
+                            }
+                            // existe, somente atualizar
+                            $envio->setDtVarredura(new DateTime($spreadsheet->getActiveSheet()->getCell(
+                                    $headers[array_search('dt_varredura', $mandatoryColumns)] . $line))
+                            )
+                                ->setQtVol($spreadsheet->getActiveSheet()->getCell(
+                                    $headers[array_search('qt_vol', $mandatoryColumns)] . $line)
+                                )
+                                ->setValor($spreadsheet->getActiveSheet()->getCell(
+                                    $headers[array_search('valor', $mandatoryColumns)] . $line)
+                                )
+                                ->setPeso($spreadsheet->getActiveSheet()->getCell(
+                                    $headers[array_search('peso', $mandatoryColumns)] . $line)
+                                );
+                            // Demais informações
+                            foreach ($updatingColumns as $column => $entityAttribute) {
+                                $col = $headers[$column]; // jamais deveria deixar de existir o indice
+                                $val = trim($spreadsheet->getActiveSheet()->getCell($col . $line));
+                                if (strpos($entityAttribute, 'dt_') > -1) {
+                                    $val = new \DateTime($val);
+                                }
+                                // Camecalizing
+                                $methodName = 'set' . str_replace(" ", "", ucwords(str_replace("_", " ", $entityAttribute)));
+                                $envio->{$methodName}($val);
+                            }
+
+                            // Fim do tratamento do Envio atual, persistindo
+//                            $em->persist($envio);
+                            if ($j++ > $batchSize) {
+//                                $em->flush();
+                                $j = 0;
+                            }
+                        }
+                    } else {
+                        // fim dos registros
+                        // Relatorio basico
+                        $msg = sprintf("%d registros criados. %d registros atualizados.", $r1, $r2);
+                        break;
+                    }
+
+                }
+                // $em->flush();
+
+                throw new \Exception("Vá transar!");
+
+                $j = 0; // counter
+                $lote = date('YmdH');
+                for ($i = 1; $i < count($entries); $i++) {
+                    // Verificando se existe a junção requisitada
+                    if (!$juncao = $juncao_repo->findOneBy(['codigo' => $entries[$i]['localização']])) {
+                        continue;
+                        /*
+                        throw new \Exception(
+                            sprintf("A Junção para o código [%s] não foi encontrado. " .
+                                "Se a informação está correta é necessário criar o cadastro primeiro.",
+                                $entries[$i]['localização'])
+                        );
+                        */
+                    }
+
+                    // Verificando se já não existe em envio para a GRM (documento) passado
+                    if (!$envio = $envio_repo->findOneBy(['solicitacao' => $entries[$i]['solicitação']])) {
+                        // Nova Agência
+                        $envio = new Envio();
+                        $envio->setSolicitacao($entries[$i]['solicitação']);
+                    } else {
+                        // existe
+                        $b = $envio->getSolicitacao() == $entries[$i]['solicitação'];
+                    }
+
+                    // campos obrigatórios
+                    foreach (['valor', 'peso', 'volume', 'documento'] as $field) {
+                        if (isset($entries[$i][$field]) && $entries[$i][$field] != '') {
+                            $envio->{'set' . ucfirst(strtolower($field))}($entries[$i][$field]);
+                        } else {
+                            throw new \Exception(
+                                sprintf("Erro de dados no envio %s. [%s] não pode ficar em branco.",
+                                    $entries[$i]['documento'], $field)
+                            );
+                        }
+                    }
+
+                    $envio->setLote($lote)
+                        ->setJuncao($juncao)
+                        ->setOperador($operador);
+                    $em->persist($envio);
+                    if ($j++ > $batchSize) {
+                        $em->flush();
+                        $j = 0;
+                    }
+                    echo "\n"; // Avoiding Browser Timeout
+                }
+
+                $em->flush();
+                $this->addFlash('success', 'flash.success.new-bulk');
+                return $this->redirectToRoute('gefra_envio_index');
+            } catch (Exception $e) {
                 $error = new FormError('Arquivo inválido! ' . $e->getMessage());
             }
         }
@@ -221,7 +581,7 @@ class EnvioController extends Controller
      */
     public function deleteEnvio(Request $request, Envio $envio): Response
     {
-        if (!$this->isCsrfTokenValid('delete'.$envio->getId(), $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('delete' . $envio->getId(), $request->request->get('_token'))) {
             return $this->redirectToRoute('gefra_envio_index');
         }
 
@@ -233,7 +593,6 @@ class EnvioController extends Controller
     }
 
 
-
     /**
      * @param Request $request
      * @return JsonResponse
@@ -243,13 +602,13 @@ class EnvioController extends Controller
     {
         // Query Parameters
         $length = $request->get('length', 10);
-        $start =  $request->get('start', 0);
-        $draw =  $request->get('draw', 0);
+        $start = $request->get('start', 0);
+        $draw = $request->get('draw', 0);
         $search_value = $request->get('search', ['value' => null])['value'];
-        $orderNumColumn = $request->get('order', [0=>['column' => 0]])[0]['column'];
+        $orderNumColumn = $request->get('order', [0 => ['column' => 0]])[0]['column'];
         // somente uma coluna para ordenação aqui
-        $orderColumn = array('e.dt_emissao_cte', 'e.cte','o.nome', 'j.nome', 'j.cidade', 'j.uf')[$orderNumColumn];
-        $sortType = $request->get('order',[0=>['dir' => 'DESC']])[0]['dir'];
+        $orderColumn = array('e.dt_emissao_cte', 'e.cte', 'o.nome', 'j.nome', 'j.cidade', 'j.uf')[$orderNumColumn];
+        $sortType = $request->get('order', [0 => ['dir' => 'DESC']])[0]['dir'];
         $cidade_repo = $this->getDoctrine()
             ->getManager('gefra')
             ->getRepository(Envio::class);
@@ -296,7 +655,7 @@ class EnvioController extends Controller
 
             // Status da Entrega
             $d['envio']['status_entrega'] = '';
-            if ($envio->getDtEntrega() != null ) { // Envio já foi entregue
+            if ($envio->getDtEntrega() != null) { // Envio já foi entregue
                 if ($envio->getDtPrevisaoEntrega() == null) { // Data Previsão está vazia (Erro)
                     $envio->setDtPrevisaoEntrega($envio->getDtEntrega()); // Não pode haver data de Previsao vazia
                 }
@@ -347,4 +706,299 @@ class EnvioController extends Controller
         return $this->render('gefra_evio_show.html.twig', ['juncao' => $envio]);
     }
 
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/carregar-planilha-envios-teste", name="gefra_envio_load_xlsfile_teste", methods="GET")
+     */
+    public function ProccessXLSEnvios(Request $request): Response
+    {
+        try {
+            $filename = $this->getParameter('app.samples.dir') . 'exemplo-arquivo-envio.xlsx';
+            $serialized = $filename . '.serialized';
+            $lote = hash_file('crc32', $filename);
+
+            if (is_file($serialized)) {
+                $activeSheet = unserialize(file_get_contents($serialized));
+            } else {
+                $reader = new Xlsx();
+                $reader->setReadDataOnly(true);
+                $reader->getReadEmptyCells(false);
+                set_time_limit(0); // Avoiding Maximum Execution Timeout
+                $spreadsheet = $reader->load($filename);
+
+                $activeSheet = $spreadsheet->getActiveSheet();
+
+                file_put_contents($serialized, serialize($activeSheet));
+            }
+
+            // @todo Converter para tornar estas informações dinamicas e personalizáveis
+            // Linha dos cabeçalhos encontrada, determinando quais colunas devem ser lidas
+            $mandatoryColumns = [
+                "GRM" => "grm",
+                "JUNÇÃO" => "juncao",
+                "OP. LOGÍSTCIO" => "operador",
+                "VARREDURA" => "dt_varredura",
+                "VOL" => "qt_vol",
+                "PESO" => "peso",
+                "VALOR" => "valor",
+                "COLETA" => "dt_previsao_coleta"];
+            $updatingColumns = ["CTE" => "cte",
+                "EMISSÃO CTE" => "dt_emissao_cte",
+                "DATA ENTREGA" => "dt_entrega",
+                "NOME RECEBEDOR" => "recebedor",
+                "CÓD FUNCIONAL" => "doc_recebedor"];
+            $headers = []; // Irá armanezar os Metadados de mapeamento Planilha x Entity
+            // Procurando os cabeçalhos para criar mapeamento Planilha x Entity
+            $line = $col = $headline = null;
+            foreach ($activeSheet->getRowIterator() as $row) {
+                $cellIterator = $row->getCellIterator();
+                $line = $row->getRowIndex();
+                foreach ($cellIterator as $cell) {
+                    $val = strtoupper($cell->getValue());
+                    if (array_key_exists($val, $mandatoryColumns) || array_key_exists($val, $updatingColumns)) { // linha dos cabeçalhos encontrada
+                        $headers[$val] = $cell->getColumn();
+                    }
+                }
+                if (count($headers) > 0 || $line > 5) { // Tentar por no máximo 5 linhas
+                    break;
+                }
+            }
+
+            // Encontrou?
+            if (count($headers) == 0) {
+                throw new \Exception("O arquivo parece não conter " .
+                    "informações de envios. Verifique o conteúdo.");
+            }
+            // Todos os cabeçalhos necessários estão presentes?
+            if (count($headers) != count($mandatoryColumns) + count($updatingColumns)) {
+                throw new \Exception("O arquivo parece não conter " .
+                    "informações de envios. Verifique o conteúdo.");
+            }
+
+            // Mapeado todos cabeçalhos, processando os registros
+            $em = $this->getDoctrine()->getManager('gefra');
+            $envio_repo = $em->getRepository(Envio::class);
+            /* @var $juncao_repo JuncaoRepository */
+            $juncao_repo = $em->getRepository(Juncao::class);
+
+            $operador_repo = $em->getRepository(Operador::class);
+            $sla_repo = $em->getRepository(SLA::class);
+
+            $batchSize = max((int)$this->container->getParameter('app.bulk.batchsize'), 50);
+
+            $j = $r1 = $r2 = 0; // counter
+
+            //@todo Precisa ser definido no formulário
+            $transportadora = $em->getRepository(Transportadora::class)->findOneByCodigo('0001001');
+
+            $status_novo = $em->getRepository(TipoEnvioStatus::class)->findOneByName('NOVO');
+            // Transportadora
+            $current_data = array();
+            foreach ($activeSheet->getRowIterator($line + 1) as $row) {
+                $col = $headers['GRM']; // jamais deveria deixar de existir o indice
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->seek($col);
+                $grm = trim($cellIterator->current()->getValue());
+                if ($grm != '') {
+                    // Validando conteudo das colunas obrigatórias
+                    foreach ($mandatoryColumns as $column => $entityAttribute) {
+                        $col = $headers[$column]; // jamais deveria não existir o indice
+                        $cellIterator->seek($col);
+                        $val = trim($cellIterator->current()->getValue());
+                        if ($val == '') {
+                            throw new Exception(
+                                sprintf("A coluna [%s] da linha [%d] deveria conter" .
+                                    "informação de [%s], porém está em branco!",
+                                    $col, $row->getRowIndex(), $column)
+                            );
+                        }
+                    }
+                    foreach ($mandatoryColumns as $column => $entityAttribute) {
+                        $col = $headers[$column]; // jamais deveria não existir o indice
+                        $cellIterator->seek($col);
+                        $val = trim($cellIterator->current()->getValue());
+                        switch ($entityAttribute) {
+                            case 'juncao':
+                                if (!$juncao = $juncao_repo->findOneBy(['codigo' => $val])) {
+                                    throw new \Exception(
+                                        sprintf("A Junção para o código [%s] não foi encontrado. " .
+                                            "Se a informação está correta é necessário criar o cadastro primeiro.",
+                                            $val)
+                                    );
+                                }
+                                break;
+
+                            case 'operador':
+                                // Validando o operador
+                                if (!$operador = $operador_repo->findOneByCodigo($val)) {
+                                    throw new \Exception(
+                                        sprintf("Operador [%s] não foi encontrado. " .
+                                            "Se a informação está correta é necessário criar o cadastro primeiro.",
+                                            $val)
+                                    );
+                                }
+                                break;
+
+                            case 'qt_vol':
+                                if ((int)$val < 1) {
+                                    throw new \Exception(
+                                        sprintf("[%s] não é um valor para [%s] válido na coluna [%s] linha [%d]. " .
+                                            "Registro será ignorado.", $val, $column, $col, $line)
+                                    );
+                                }
+                                break;
+
+                            case 'peso':
+                            case 'valor':
+                                if (!(float)$val > 0) {
+                                    throw new \Exception(
+                                        sprintf("[%s] não é um valor para [%s] válido na coluna [%s] da linha [%d]. " .
+                                            "Registro será ignorado.", $val, $column, $col, $line)
+                                    );
+                                }
+                                break;
+
+                            case 'dt_previsao_coleta':
+                            case 'dt_varredura':
+                                // Identificando o formato lido
+                                $v = null;
+                                // tratando o valor
+                                $val = preg_replace("#[^\d\-]#", "", $val);
+                                if ($val != '') {
+                                    if (is_object($val)) {
+                                        $v = $val;
+                                    } elseif (!is_numeric($val)) {
+                                        $v = preg_replace("#[^\d\-]#", "", str_replace("/", "-", $val));
+                                    } elseif ((int)$val == $val) {
+                                        $v = Date::excelToDateTimeObject($val);
+                                    }
+                                }
+                                $val = $v;
+                                if ($val != null && !$val instanceof \DateTime) {
+                                    throw new \Exception(
+                                        sprintf("[%s] não é uma data válida para [%s] na coluna [%s] da linha [%d]. " .
+                                            "Registro será ignorado.", $val, $column, $col, $line)
+                                    );
+                                }
+                                break;
+
+                            case 'grm':
+                                break;
+
+                            default:
+                                throw new \Exception("Ooopss! Esqueci alguma coisa...");
+                        }
+                        $current_data[$entityAttribute] = $val;
+                    }
+
+                    // Todas as colunas obrigatórias validadas, Recuperando/Criando o Envio
+                    // Verificando se já não existe em envio para a GRM (documento) passado
+                    if (!$envio = $envio_repo->findOneBy(['grm' => $grm])) {
+                        $r1++; // Contador de registros criados
+                        // Novo Envio
+                        $envio = new Envio();
+                        $envio->setGrm($grm)
+                            ->setTransportadora($transportadora)
+                            ->setStatus($status_novo)
+                            ->setLote($lote);
+                        // Calculando a data de entrega
+                        if (!$sla = $sla_repo->findOneBy(['juncao' => $juncao, 'operador' => $operador])) {
+                            throw new Exception(
+                                sprintf("Não foi possivel calcular o prazo de entrega para a GRM [%s]." .
+                                    "Verifique se a Junção [%s] possui PRAZO cadastrado para o " .
+                                    "OPERADOR [%s]",
+                                    $val, $juncao, $operador)
+                            );
+                        }
+                        // Calculando o prazo de entrega para um novo Envio
+                        $dt_coleta = $current_data['dt_previsao_coleta']; // Tem que existir
+                        $envio->setDtPrevisaoColeta($dt_coleta);
+                        $prazo = $sla->getPrazo();
+                        while ($prazo > 0) {
+                            $dt_coleta->add(new \DateInterval('P1D'));
+                            if ($dt_coleta->format('w') % 6 != 0) { // não é sábado nem domingo
+                                $prazo--;
+                            }
+                        }
+                        // @todo Verificar se tem algum feriando entre as datas de coleta e entrega
+                        // if ($feriados = $feriado_repo->findBy(['dt_feriado' => $dt_coleta])) {
+                        //     $dt_coleta->add(new \DateInterval('P'. $feriados->count() . 'D'));
+                        // }
+
+                        // Data Entrega Calculada
+                        $envio->setDtPrevisaoEntrega($dt_coleta);
+                        $envio->setJuncao($juncao)
+                            ->setOperador($operador);
+
+                    } else {
+                        $r2++; // Contador de registros atualizados
+                    }
+                    // existe, somente atualizar os dados
+                    // @todo criar Listener para alterações do Envio
+                    // Data de Varredura
+                    $val = $current_data['dt_varredura'];
+                    $envio->setDtVarredura($val);
+                    // Volumes
+                    $val = $current_data['qt_vol'];
+                    $envio->setQtVol($val);
+                    // Valor
+                    $val = $current_data['valor'];
+                    $envio->setValor($val);
+                    // Peso
+                    $val = $current_data['peso'];
+                    $envio->setPeso($val);
+                    // Demais informações
+                    foreach ($updatingColumns as $column => $entityAttribute) {
+                        $col = $headers[$column]; // jamais deveria deixar de existir o indice
+                        $val = trim($cellIterator->seek($col)->current()->getValue());
+                        if (strpos($entityAttribute, 'dt_') > -1) {
+                            $v = null;
+                            $val = preg_replace("#[^\d\-]#", "", str_replace("/", "-", $val));
+                            if ($val != '') {
+                                if (is_object($val)) {
+                                    $v = $val;
+                                } elseif (!is_numeric($val)) {
+                                    $v = new \DateTime($val);
+                                } elseif ((int)$val == $val) {
+                                    $v = Date::excelToDateTimeObject($val);
+                                }
+                            }
+                            $val = $v;
+                            if ($val != null && !$val instanceof \DateTime) {
+                                throw new \Exception(
+                                    sprintf("[%s] não é uma data válida para [%s] na coluna [%s] da linha [%d]. " .
+                                        "Registro será ignorado.", $val, $column, $col, $line)
+                                );
+                            }
+
+                        }
+                        // Camecalizing
+                        $methodName = 'set' . str_replace(" ", "", ucwords(str_replace("_", " ", $entityAttribute)));
+                        $envio->{$methodName}($val);
+                    }
+
+                    // Fim do tratamento do Envio atual, persistindo
+                    $em->persist($envio);
+                    if ($j++ > $batchSize) {
+                        $em->flush();
+                        $j = 0;
+                    }
+
+                } else {
+                    // Não tem informação de GRM nesta linha
+                }
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'flash.success.new-bulk');
+            return $this->redirectToRoute('gefra_envio_index');
+        } catch (Exception $e) {
+            $error = new FormError('Arquivo inválido! ' . $e->getMessage());
+        }
+
+        return new Response('PROCESSOU!');
+
+    }
 }

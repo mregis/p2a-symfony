@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="row">
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_MASTER') %}
                     <div class="col-xl-3 col-sm-3 mb-3">
                         <div class="card bg-apps-0 o-hidden h-100">
                             <a href="{{ path('gefra_juncao_index') }}">
@@ -40,17 +40,6 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-sm-3 mb-3">
-                        <div class="card bg-apps-1 o-hidden h-100">
-                            <a href="{{ path('gefra_operador_index') }}">
-                                <div class="card-body text-white">
-                                    <div class="card-body-icon">
-                                        <i class="fas fa-truck-moving"></i>
-                                    </div>
-                                    <h5 class="mr-5">{{ 'gefra.operador.index'|trans }}</h5>
-                                </div></a>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-3 mb-3">
                         <div class="card bg-apps-2 o-hidden h-100">
                             <a href="{{ path('gefra_sla_index') }}">
                                 <div class="card-body text-white">
@@ -58,6 +47,41 @@
                                         <i class="fas fa-clock"></i>
                                     </div>
                                     <h5 class="mr-5">{{ 'gefra.sla.index'|trans }}</h5>
+                                </div></a>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="card bg-apps-1 o-hidden h-100">
+                            <a href="{{ path('gefra_operador_index') }}">
+                                <div class="card-body text-white">
+                                    <div class="card-body-icon">
+                                        <i class="fas fa-box-open"></i>
+                                    </div>
+                                    <h5 class="mr-5">{{ 'gefra.operador.index'|trans }}</h5>
+                                </div></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="card bg-apps-5 o-hidden h-100">
+                            <a href="{{ path('gefra_transportadora_index') }}">
+                                <div class="card-body">
+                                    <div class="card-body-icon">
+                                        <i class="fas fa-truck-moving"></i>
+                                    </div>
+                                    <h5 class="mr-5"><small>{{ 'gefra.transportadora.index'|trans }}</small></h5>
+                                </div></a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="card bg-apps-4 o-hidden h-100">
+                            <a href="{{ path('gefra_tipo_envio_status_index') }}">
+                                <div class="card-body text-white">
+                                    <div class="card-body-icon">
+                                        <i class="fas fa-sync"></i>
+                                    </div>
+                                    <h5 class="mr-5">{{ 'gefra.tipo-envio-status.index'|trans }}</h5>
                                 </div></a>
                         </div>
                     </div>

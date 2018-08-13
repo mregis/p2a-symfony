@@ -9,30 +9,40 @@
         <li class="nav-item">
             <a href="{{ activelink != 'gefra-home' ? path('gefra-home') : '#' }}"
                class="nav-link{{ activelink == 'gefra-home' ? ' active' : '' }}">
-                {{ 'gefra.home' | trans }}</a>
+                <i class="fas fa-home"></i> {{ 'gefra.home' | trans }}</a>
         </li>
         <li class="nav-item">
             <a href="{{ activelink != 'gefra_envio_index' ? path('gefra_envio_index') : '#' }}"
                class="nav-link{{ activelink == 'gefra_envio_index' ? ' active' : '' }}">
-                {{ 'gefra.envio.index' | trans }}</a>
+                <i class="fas fa-truck-loading"></i> {{ 'gefra.envio.index' | trans }}</a>
         </li>
     {% if is_granted('ROLE_MASTER') %}
         <li class="nav-item">
             <a href="{{ activelink != 'gefra_juncao_index' ? path('gefra_juncao_index') : '#' }}"
                class="nav-link{{ activelink == 'gefra_juncao_index' ? ' active' : '' }}">
-                {{ 'gefra.juncao.index' | trans }}</a>
+                <i class="fas fa-briefcase"></i> {{ 'gefra.juncao.index' | trans }}</a>
         </li>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item">
             <a href="{{ activelink != 'gefra_operador_index' ? path('gefra_operador_index') : '#' }}"
                class="nav-link{{ activelink == 'gefra_operador_index' ? ' active' : '' }}">
-                {{ 'gefra.operador.index' | trans }}</a>
+                <i class="fas fa-box-open"></i> {{ 'gefra.operador.index' | trans }}</a>
         </li>
         <li class="nav-item">
             <a href="{{ activelink != 'gefra_sla_index' ? path('gefra_sla_index') : '#' }}"
                class="nav-link{{ activelink == 'gefra_sla_index' ? ' active' : '' }}">
-                {{ 'gefra.sla.index' | trans }}</a>
+                <i class="fas fa-clock"></i> {{ 'gefra.sla.index' | trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_tipo_envio_status_index' ? path('gefra_tipo_envio_status_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_tipo_envio_status_index' ? ' active' : '' }}">
+                <i class="fas fa-calendar-check"></i> {{ 'gefra.tipo-envio-status.index' | trans }}</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_transportadora_index' ? path('gefra_transportadora_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_transportadora_index' ? ' active' : '' }}">
+                <i class="fas fa-truck-moving"></i> {{ 'gefra.transportadora.index' | trans }}</a>
         </li>
     {% endif %}
     </ul>

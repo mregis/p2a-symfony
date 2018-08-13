@@ -128,6 +128,18 @@ class SLAController extends Controller
                 $qb->expr()->like('LOWER(a.operador)', '?1')
             )->setParameters([1 => '%' . strtolower($search_value) . '%']);
         }
+
+        if ($search_value != null) {
+            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $qb->orWhere(
+                $qb->expr()->like('LOWER(e.cte)', '?1'),
+                $qb->expr()->like('LOWER(e.solicitacao)', '?1'),
+                $qb->expr()->like('LOWER(e.grm)', '?1'),
+                $qb->expr()->like('LOWER(j.nome)', '?1'),
+                $qb->expr()->like('LOWER(j.cidade)', '?1')
+            )->setParameters([1 => '%' . strtolower($search_value) . '%']);
+        }
+
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 
         /* @var $tokenProvider TokenProviderInterface */

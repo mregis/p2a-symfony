@@ -41,9 +41,15 @@ class Envio implements \Serializable
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="date", options={"comment"="Data Informada da Coleta"}, nullable=true)
+     * @ORM\Column(type="date", options={"comment"="Data Efetiva da Coleta"}, nullable=true)
      */
     private $dt_coleta;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="date", options={"comment"="Data Informada da Coleta - Previsao"}, nullable=true)
+     */
+    private $dt_previsao_coleta;
 
     /**
      * @var \DateTime
@@ -67,7 +73,7 @@ class Envio implements \Serializable
     /**
      * @var string
      * @ORM\Column(type="string", length=15,
-     *              options={"comment"="Numero da Guia de Remessa de Material"})
+     *              options={"comment"="Numero da Guia de Remessa de Material"}, unique=true)
      */
     private $grm;
 
@@ -100,6 +106,13 @@ class Envio implements \Serializable
     private $operador;
 
     /**
+     * @var Transportadora
+     * @ORM\ManyToOne(targetEntity="App\Entity\Gefra\Transportadora", inversedBy="envios")
+     * @ORM\JoinColumn(name="transportadora_id", nullable=false)
+     */
+    private $transportadora;
+
+    /**
      * @var Juncao
      * @ORM\ManyToOne(targetEntity="App\Entity\Gefra\Juncao", inversedBy="envios")
      * @ORM\JoinColumn(name="juncao_id", nullable=false)
@@ -107,21 +120,36 @@ class Envio implements \Serializable
     private $juncao;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"},
-     *              unique=true)
-     */
-    private $solicitacao;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Gefra\Ocorrencia", mappedBy="envio", orphanRemoval=true)
      */
     private $ocorrencias;
 
     /**
-     * @ORM\Column(type="integer", options={"comment"="Lote a qual o Envio esta ligado"})
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $recebedor;
+
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    private $doc_recebedor;
+
+    /**
+     * @ORM\Column(type="string", length=16, options={"comment"="Lote a qual o Envio esta ligado"})
      */
     private $lote;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"}, nullable=true)
+     */
+    private $solicitacao;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TipoEnvioStatus", inversedBy="envios")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -147,6 +175,7 @@ class Envio implements \Serializable
             'created_at' => $this->created_at,
             'dt_emissao_cte' => $this->dt_emissao_cte,
             'dt_coleta' => $this->dt_coleta,
+            'dt_previsao_coleta' => $this->dt_previsao_coleta,
             'dt_varredura' => $this->dt_varredura,
             'grm' => $this->grm,
             'peso' => $this->peso,
@@ -154,8 +183,11 @@ class Envio implements \Serializable
             'valor' => $this->valor,
             'dt_previsao_entrega' => $this->dt_previsao_entrega,
             'dt_entrega' => $this->dt_entrega,
+            'recebdor' => $this->recebedor,
+            'doc_recebdor' => $this->doc_recebedor,
             'solicitacao' => $this->solicitacao,
             'lote' => $this->lote,
+            'status' => unserialize($this->getStatus()->serialize()),
         ));
     }
 
@@ -163,13 +195,14 @@ class Envio implements \Serializable
     public function unserialize($serialized)
     {
         list (
-            $this->id,
+             $this->id,
             $this->cte,
             $this->juncao,
             $this->operador,
             $this->created_at,
             $this->dt_emissao_cte,
             $this->dt_coleta,
+            $this->dt_previsao_coleta,
             $this->dt_varredura,
             $this->grm,
             $this->peso,
@@ -177,8 +210,11 @@ class Envio implements \Serializable
             $this->valor,
             $this->dt_previsao_entrega,
             $this->dt_entrega,
+            $this->recebedor,
+            $this->doc_recebedor,
             $this->solicitacao,
             $this->lote,
+            $this->status,
             ) = unserialize($serialized);
     }
 
@@ -187,7 +223,7 @@ class Envio implements \Serializable
      */
     public function __toString()
     {
-        return $this->cte;
+        return $this->grm;
     }
 
     public function getCte(): ?string
@@ -195,7 +231,7 @@ class Envio implements \Serializable
         return $this->cte;
     }
 
-    public function setCte(string $cte): self
+    public function setCte(?string $cte): self
     {
         $this->cte = $cte;
 
@@ -207,7 +243,7 @@ class Envio implements \Serializable
         return $this->dt_emissao;
     }
 
-    public function setDtEmissao(\DateTimeInterface $dt_emissao): self
+    public function setDtEmissao(?\DateTimeInterface $dt_emissao): self
     {
         $this->dt_emissao = $dt_emissao;
 
@@ -273,38 +309,14 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getSolicitacao(): ?string
-    {
-        return $this->solicitacao;
-    }
-
-    public function setSolicitacao(string $solicitacao): self
-    {
-        $this->solicitacao = $solicitacao;
-
-        return $this;
-    }
-
     public function getOperador(): ?Operador
     {
         return $this->operador;
     }
 
-    public function setOperador(?Operador $operador): self
+    public function setOperador(Operador $operador): self
     {
         $this->operador = $operador;
-
-        return $this;
-    }
-
-    public function getDestino(): ?Juncao
-    {
-        return $this->destino;
-    }
-
-    public function setDestino(?Juncao $destino): self
-    {
-        $this->destino = $destino;
 
         return $this;
     }
@@ -314,7 +326,7 @@ class Envio implements \Serializable
         return $this->dt_coleta;
     }
 
-    public function setDtColeta(\DateTimeInterface $dt_coleta = null): self
+    public function setDtColeta(?\DateTimeInterface $dt_coleta = null): self
     {
         $this->dt_coleta = $dt_coleta;
 
@@ -338,7 +350,7 @@ class Envio implements \Serializable
         return $this->dt_varredura;
     }
 
-    public function setDtVarredura(\DateTimeInterface $dt_varredura): self
+    public function setDtVarredura(?\DateTimeInterface $dt_varredura): self
     {
         $this->dt_varredura = $dt_varredura;
 
@@ -362,7 +374,7 @@ class Envio implements \Serializable
         return $this->juncao;
     }
 
-    public function setJuncao(?Juncao $juncao): self
+    public function setJuncao(Juncao $juncao): self
     {
         $this->juncao = $juncao;
 
@@ -412,7 +424,7 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->created_at;
     }
@@ -424,15 +436,88 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getLote(): ?int
+    public function getRecebedor(): ?string
+    {
+        return $this->recebedor;
+    }
+
+    public function setRecebedor(?string $recebedor): self
+    {
+        $this->recebedor = $recebedor;
+
+        return $this;
+    }
+
+    public function getDocRecebedor(): ?string
+    {
+        return $this->doc_recebedor;
+    }
+
+    public function setDocRecebedor(?string $doc_recebedor): self
+    {
+        $this->doc_recebedor = $doc_recebedor;
+
+        return $this;
+    }
+
+    public function getDtPrevisaoColeta(): \DateTimeInterface
+    {
+        return $this->dt_previsao_coleta;
+    }
+
+    public function setDtPrevisaoColeta(\DateTimeInterface $dt_previsao_coleta): self
+    {
+        $this->dt_previsao_coleta = $dt_previsao_coleta;
+
+        return $this;
+    }
+
+    public function getTransportadora(): Transportadora
+    {
+        return $this->transportadora;
+    }
+
+    public function setTransportadora(Transportadora $transportadora): self
+    {
+        $this->transportadora = $transportadora;
+
+        return $this;
+    }
+
+    public function getStatus(): TipoEnvioStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(TipoEnvioStatus $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getLote(): ?string
     {
         return $this->lote;
     }
 
-    public function setLote(int $lote): self
+    public function setLote(string $lote): self
     {
         $this->lote = $lote;
 
         return $this;
     }
+
+    public function getSolicitacao(): ?string
+    {
+        return $this->solicitacao;
+    }
+
+    public function setSolicitacao(?string $solicitacao): self
+    {
+        $this->solicitacao = $solicitacao;
+
+        return $this;
+    }
+ 
 }

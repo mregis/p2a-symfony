@@ -157,6 +157,17 @@ label span.required {
 .border-apps-4 {
   border-color: rgb(180, 221, 180) !important;
 }
+
+.bg-apps-5 {
+  background: rgb(251,223,147);
+  background: -moz-linear-gradient(top, rgba(251,223,147,1) 0%, rgba(252,205,77,1) 12%, rgba(252,234,187,1) 100%);
+  background: -webkit-linear-gradient(top, rgba(251,223,147,1) 0%,rgba(252,205,77,1) 12%,rgba(252,234,187,1) 100%);
+  background: linear-gradient(to bottom, rgba(251,223,147,1) 0%,rgba(252,205,77,1) 12%,rgba(252,234,187,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbdf93', endColorstr='#fceabb',GradientType=0 );
+}
+.border-apps-5 {
+  border-color: rgba(251,223,147,1) !important;
+}
 .bg-change-pass {
   background: #e5e696; /* Old browsers */
   background: -moz-linear-gradient(top, #e5e696 0%, #d1d360 100%); /* FF3.6-15 */
@@ -473,4 +484,7 @@ table.extra-info th {
 }
 table.extra-info td {
 
+}
+.card {
+  min-height: 100px;
 }

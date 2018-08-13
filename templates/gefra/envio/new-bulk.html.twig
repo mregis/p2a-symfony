@@ -18,7 +18,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('gefra-home') }}">{{ 'home'|trans }}</a></li>
                 <li class="breadcrumb-item"><a href="{{ path('gefra_envio_index') }}">{{ 'gefra.envio.index'|trans }}</a></li>
-                <li class="breadcrumb-item active">{{ 'load-file'|trans }}</li>
+                <li class="breadcrumb-item active">{{ 'gefra.envio.load-xlsfile'|trans }}</li>
             </ol>
             <div class="row">
                 <div class="col-12">
@@ -30,17 +30,17 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <i class="fa fa-2x fa-plus-circle fa-2x"></i>
-                                    {{ 'gefra.envio.load-xmlfile-form-title'|trans }}
+                                    {{ 'gefra.envio.load-xlsfile-form-title'|trans }}
                                 </div>
                             </div>
                         </div>
                         <div class="card-body form-with-cols">
                             <div class="alert alert-info">
-                                <p>{{ 'gefra.envio.load-xmlfile-form-description'|trans|raw }}</p>
+                                <p>{{ 'gefra.envio.load-xlsfile-form-description'|trans|raw }}</p>
 
                                 <p>
                                     <a class="link card-link" href="{{ path('gefra_samplefile', {'source': 'envio'}) }}">
-                                        {{ 'gefra.envio.load-xmlfile-example-link'|trans }}
+                                        {{ 'gefra.envio.load-xlsfile-example-link'|trans }}
                                     </a>
                                 </p>
                             </div>

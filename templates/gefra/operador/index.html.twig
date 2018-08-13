@@ -33,7 +33,7 @@
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
                                         <a class="btn btn-sm btn-info" href="{{ path('gefra_operador_new') }}">
-                                            <span class="fa fa-plus-circle"></span> {{ 'gefra.operador.new'|trans }}
+                                            <span class="fas fa-plus-circle"></span> {{ 'gefra.operador.new'|trans }}
                                         </a>
                                     {% endif %}
                                 </div>
@@ -66,7 +66,7 @@
         </div>
     </div>
     {% if is_granted('ROLE_MASTER') %}
-        <!-- Modal Inativar Agencia -->
+        <!-- Modal Inativar Operador -->
         <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
              aria-labelledby="change-statusModalLabel"
              aria-hidden="false">
