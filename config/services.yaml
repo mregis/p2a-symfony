@@ -41,5 +41,9 @@ services:
     App\Form\Type\AutocompleteJuncaoType:
         arguments: ['@doctrine.orm.gefra_entity_manager']
         tags: ['autocompletejuncao.type']
+
+    App\EventListener\onLoginSuccessSubscriber:
+        arguments: ['@doctrine.orm.default_entity_manager']
+        tags: ['login.success.subscriber']
 imports:
     - { resource: 'parameters.yaml' }

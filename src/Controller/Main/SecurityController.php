@@ -8,7 +8,6 @@
 
 namespace App\Controller\Main;
 
-use App\Controller\DefaultController;
 use App\Entity\Main\User;
 use App\Repository\Main\UserRepository;
 use App\Util\TokenGenerator;
