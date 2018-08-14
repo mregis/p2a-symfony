@@ -10,6 +10,7 @@ namespace App\Form\Gefra;
 
 use App\Entity\Gefra\Envio;
 use App\Entity\Gefra\Operador;
+use App\Entity\Gefra\Transportadora;
 use App\Form\DataTransformer\JuncaoToStringTransformer;
 use App\Form\Type\AutocompleteJuncaoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,6 +36,9 @@ class EnvioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('transportadora', EntityType::class, [
+                'class' => Transportadora::class,
+                'placeholder' => 'choice-field.placeholder'])
             ->add('operador', EntityType::class, [
                 'class' => Operador::class,
                 'placeholder' => 'choice-field.placeholder'])
@@ -85,7 +89,7 @@ class EnvioType extends AbstractType
                     'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_CEILING,
                     'attr' => ['data-input-mask' => 'peso']
                 ])
-            ->add('solicitacao', TextType::class, ['label' => 'fields.name.solicitacao'])
+            ->add('solicitacao', TextType::class, ['label' => 'fields.name.solicitacao', 'required' => false])
             ;
         $builder->get('juncao')
             ->addModelTransformer($this->juncaoTransformer);

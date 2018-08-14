@@ -15,17 +15,25 @@
                     <i class="fas fa-sitemap"></i>
                     <span class="nav-link-text">{{ 'menu.applications'|trans }}</span>
                 </a>
+                {% if app.user.userapplication|length > 0 %}
                 <ul class="sidenav-second-level collapse" id="collapseMulti">
                     {# ROLE_USER permission #}
                     <li>
-                        <a href="{{ path('list-apps') }}">{{ 'application.index' | trans }}</a>
+                        <a href="{{ path('list-apps') }}"><i class="fas fa-code-branch"></i> {{ 'application.index' | trans }}</a>
                     </li>
-                    {% for userapp in app.user.userapplication %}
+
+                    {% for ua in app.user.userapplication %}
                     <li>
-                        <a href="{{ userapp.application.uri }}" target="_blank">{{ userapp.application.name }}</a>
+                        <a href="{{ ua.application.uri }}" target="_blank">
+                            {% if ua.application.getOption('icone') %}
+                                <i class="{{ ua.application.getOption('icone') }}"></i>
+                            {% endif %}
+                            {{ ua.application.name }}
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>
+                {% endif %}
             </li>
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'menu.configuration'|trans }}">
                 <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#Accordion">

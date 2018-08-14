@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% form_theme form 'form/horizontal-form-fields.html.twig' %}
-{% block title %}{{ 'gefra.envio.edit-title'|trans({'%name%' : envio.solicitacao }) }}{% endblock %}
+{% block title %}{{ 'gefra.envio.edit-title'|trans({'%name%' : envio }) }}{% endblock %}
 
 {% block menu %}
     {% embed '_menu.html.twig' %}
@@ -24,12 +24,12 @@
             </ol>
             <div class="row">
                 <div class="col-12">
-                    <h1>{{ 'gefra.envio.edit-title'|trans({'%name%' : envio.solicitacao }) }}</h1>
+                    <h1>{{ 'gefra.envio.edit-title'|trans({'%name%' : envio }) }}</h1>
 
                     <div class="card mb-3 border-apps-3">
                         <div class="card-header bg-apps-3 text-white">
                             <i class="fa fa-2x fa-edit fa-2x"></i>
-                            {{ 'gefra.envio.edit-form-title'|trans({'%name%' : envio.solicitacao })|raw }}</em></strong>
+                            {{ 'gefra.envio.edit-form-title'|trans({'%name%' : envio })|raw }}</em></strong>
                         </div>
                         <div class="card-body form-with-cols">
                             {{ include('gefra/envio/_form.html.twig') }}

@@ -13,7 +13,7 @@ use PHPUnit\Framework\Exception;
 
 /**
  * @ORM\Table(name="sistema")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Main\ApplicationRepository")
  */
 class Application
 {
@@ -169,7 +169,7 @@ class Application
             /* @var $option OptionAttribute */
             $option = new OptionAttribute();
             $option->unserialize($value);
-            $options->add($option);
+            $options->set($option->getName(), $option);
         }
         return $options;
     }
@@ -208,11 +208,22 @@ class Application
     public function removeOption(OptionAttribute $option)
     {
         $options = $this->getOptions();
-        if ($options->contains($option)) {
+        if ($options->contains($option) || $options->get($option->getName())) {
             $options->removeElement($option);
             $this->setOptions($options);
         }
         return $this;
+    }
+
+    /**
+     * @param string $optionName
+     * @return OptionAttribute|null
+     */
+    public function getOption(string $optionName)
+    {
+        $options = $this->getOptions();
+        $option = $options->get($optionName);
+        return $option;
     }
 
     /**

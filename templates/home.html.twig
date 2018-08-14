@@ -23,7 +23,7 @@
                                 <a href="{{ path('list-apps') }}">
                                     <div class="card-body text-white">
                                         <div class="card-body-icon">
-                                            <i class="fas fa-code-fork"></i>
+                                            <i class="fas fa-code-branch"></i>
                                         </div>
                                         <h5 class="mr-5 text-center">{{ 'application.list-title'|trans }}</h5>
                                     </div></a>
@@ -39,7 +39,7 @@
                                 <a href="{{ path('list-users') }}">
                                     <div class="card-body text-white">
                                         <div class="card-body-icon">
-                                            <i class="fas fa-group"></i>
+                                            <i class="fas fa-users"></i>
                                         </div>
                                         <h5 class="mr-5 text-center">Gerenciar Usuários</h5>
                                     </div></a>
@@ -49,16 +49,21 @@
                     {% endif %}
 
 {# ROLE_USER permission #}
-                    {% if userapps|length > 0 %}
-                        {% for application in userapps %}
+                    {% if app.user.userapplication|length > 0 %}
+                        {% for ua in app.user.userapplication %}
                             <div class="col-xl-3 col-sm-3 mb-3">
                                 <div class="card bg-apps-{{ loop.index % 4 }} o-hidden h-100">
-                                    <a href="{{ application.uri }}">
+                                    <a href="{{ ua.application.uri }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
-                                                <i class="fas fa-tasks"></i>
+                                                {% if ua.application.getOption('icone') %}
+                                                    <i class="{{ ua.application.getOption('icone') }}"></i>
+                                                {% else %}
+                                                    <i class="fas fa-tasks"></i>
+                                                {% endif %}
+
                                             </div>
-                                            <h5 class="mr-5 text-center">{{ application.name }}</h5>
+                                            <h5 class="mr-5 text-center">{{ ua.application.name }}</h5>
                                         </div>
                                     </a>
                                 </div>

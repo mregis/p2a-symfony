@@ -227,7 +227,7 @@ class Operador implements \Serializable
      */
     public function __toString()
     {
-        return sprintf('[%04d] %s', $this->codigo, $this->nome);
+        return sprintf('[%s] %s', $this->codigo, $this->nome);
     }
 
     /**
