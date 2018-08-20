@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Localidade\RegiaoRepository")
  */
-class Regiao
+class Regiao implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -155,6 +155,29 @@ class Regiao
     public function setAtivo($ativo)
     {
         $this->ativo = $ativo;
+        return $this;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'sigla' => $this->sigla,
+            'ativo' => $this->ativo
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->nome,
+            $this->sigla,
+            $this->ativo
+            ) = unserialize($serialized);
         return $this;
     }
 }

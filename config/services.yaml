@@ -38,9 +38,17 @@ services:
         arguments: ['@doctrine.orm.gefra_entity_manager']
         tags: ['juncao.transformer']
 
+    App\Form\DataTransformer\CidadeToStringTransformer:
+        arguments: ['@doctrine.orm.locais_entity_manager']
+        tags: ['cidade.transformer']
+
     App\Form\Type\AutocompleteJuncaoType:
         arguments: ['@doctrine.orm.gefra_entity_manager']
         tags: ['autocompletejuncao.type']
+
+    App\Form\Type\AutocompleteCidadeType:
+        arguments: ['@doctrine.orm.locais_entity_manager']
+        tags: ['autocompletecidade.type']
 
     App\EventListener\onLoginSuccessSubscriber:
         arguments: ['@doctrine.orm.default_entity_manager']

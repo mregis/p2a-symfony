@@ -2,12 +2,13 @@
 
 namespace App\Entity\Localidade;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Localidade\UFRepository")
  */
-class UF
+class UF implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -46,9 +47,16 @@ class UF
      */
     private $ativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Feriado", mappedBy="uf", orphanRemoval=true)
+     */
+    private $feriados;
+
     public function __construct()
     {
         $this->ativo = true;
+        $this->feriados = new ArrayCollection();
+        $this->cidades = new ArrayCollection();
     }
 
     /**
@@ -124,9 +132,9 @@ class UF
     }
 
     /**
-     * @return Cidade
+     * @return Collection|Cidade[]
      */
-    public function getCidades()
+    public function getCidades(): Collection
     {
         return $this->cidades;
     }
@@ -135,7 +143,7 @@ class UF
      * @param Cidade $cidade
      * @return $this
      */
-    public function addCidade(Cidade $cidade)
+    public function addCidade(Cidade $cidade): self
     {
         if (!$this->cidades->contains($cidade)) {
             $this->cidades[] = $cidade;
@@ -149,7 +157,7 @@ class UF
      * @param Cidade $cidade
      * @return $this
      */
-    public function removeCidade(Cidade $cidade)
+    public function removeCidade(Cidade $cidade): self
     {
         if ($this->cidades->contains($cidade)) {
             $this->cidades->removeElement($cidade);
@@ -173,14 +181,70 @@ class UF
      * @param boolean $ativo
      * @return UF
      */
-    public function setAtivo($ativo)
+    public function setAtivo($ativo): self
     {
         $this->ativo = $ativo;
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getSigla();
+    }
+
+    /**
+     * @return Collection|Feriado[]
+     */
+    public function getFeriados(): ?Collection
+    {
+        return $this->feriados;
+    }
+
+    public function addFeriado(Feriado $feriado): self
+    {
+        if (!$this->feriados->contains($feriado)) {
+            $this->feriados[] = $feriado;
+            $feriado->setTipo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeriado(Feriado $feriado): self
+    {
+        if ($this->feriados->contains($feriado)) {
+            $this->feriados->removeElement($feriado);
+            // set the owning side to null (unless already changed)
+            if ($feriado->getTipo() === $this) {
+                $feriado->setTipo(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'sigla' => $this->sigla,
+            'ativo' => $this->ativo,
+            'regiao' => unserialize($this->getRegiao()->serialize()),
+        ));
+    }
+
+        /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->nome,
+            $this->sigla,
+            $this->ativo,
+            $this->regiao,
+            ) = unserialize($serialized);
     }
 }

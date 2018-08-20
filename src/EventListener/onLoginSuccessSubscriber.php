@@ -11,6 +11,7 @@ namespace App\EventListener;
 
 
 use App\Entity\Main\Application;
+use App\Entity\Main\User as AppUser;
 use App\Entity\Main\UserApplication;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -35,20 +36,21 @@ class onLoginSuccessSubscriber implements EventSubscriberInterface
         $authToken = $event->getAuthenticationToken();
         /* @var $user \App\Entity\Main\User */
         $user = $authToken->getUser();
-        $roles = $user->getRoles();
+        if ($user instanceof AppUser) {
+            $roles = $user->getRoles();
 
-        if (in_array('ROLE_SUPERADMIN', $roles)) {
-            $apps = $this->entityManager->getRepository(Application::class)->findBy(['isActive' => true]);
-            foreach($apps as $app) {
-                $ua = new UserApplication();
-                $ua->setApplication($app)
-                    ->setUser($user);
-                $user->getUserApplication()->add($ua);
+            if (in_array('ROLE_SUPERADMIN', $roles) && $user->getUserApplication()->count() < 1) {
+                $apps = $this->entityManager->getRepository(Application::class)->findBy(['isActive' => true]);
+                foreach ($apps as $app) {
+                    $ua = new UserApplication();
+                    $ua->setApplication($app)
+                        ->setUser($user);
+                    $user->getUserApplication()->add($ua);
+                }
+
+                $authToken->setUser($user);
             }
-
-            $authToken->setUser($user);
         }
-
     }
 
     public static function getSubscribedEvents()

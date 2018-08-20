@@ -3,6 +3,7 @@
 namespace App\Repository\Localidade;
 
 use App\Entity\Localidade\Cidade;
+use App\Entity\Localidade\UF;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -41,6 +42,22 @@ class CidadeRepository extends ServiceEntityRepository
             return $this->findBy([], null, $limit, $offset);
         }
 
+    }
+
+    /**
+     * @param string $nome
+     * @param string $uf
+     * @return \App\Entity\Localidade\Cidade[]|mixed
+     */
+    public function findByNomeAndUf(string $nome, string $uf)
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.nome = :nome AND u.sigla = :uf')
+            ->join(UF::class, 'u')
+            ->setParameter('nome', $nome)
+            ->setParameter('uf', $uf)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /*

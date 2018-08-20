@@ -2,13 +2,15 @@
 
 namespace App\Entity\Localidade;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Localidade\CidadeRepository")
  */
-class Cidade
+class Cidade implements \Serializable
 {
     /**
      * @var int
@@ -56,10 +58,21 @@ class Cidade
      */
     private $ativo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Feriado", mappedBy="local", orphanRemoval=true)
+     */
+    private $feriados;
+
     public function __construct()
     {
         $this->criado_em = new \DateTime('now');
         $this->ativo = true;
+        $this->feriados = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->nome;
     }
 
     /**
@@ -188,4 +201,60 @@ class Cidade
         return $this;
     }
 
+    /**
+     * @return Collection|Feriado[]
+     */
+    public function getFeriados(): Collection
+    {
+        return $this->feriados;
+    }
+
+    public function addFeriado(Feriado $feriado): self
+    {
+        if (!$this->feriados->contains($feriado)) {
+            $this->feriados[] = $feriado;
+            $feriado->setTipo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeriado(Feriado $feriado): self
+    {
+        if ($this->feriados->contains($feriado)) {
+            $this->feriados->removeElement($feriado);
+            // set the owning side to null (unless already changed)
+            if ($feriado->getTipo() === $this) {
+                $feriado->setTipo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'nome' => $this->nome,
+            'abreviacao' => $this->abreviacao,
+            'uf' => unserialize($this->getUf()->serialize()),
+            'ativo' => $this->ativo,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->codigo,
+            $this->nome,
+            $this->abreviacao,
+            $this->uf,
+            $this->ativo,
+            ) = unserialize($serialized);
+    }
 }

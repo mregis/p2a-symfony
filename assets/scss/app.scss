@@ -185,7 +185,7 @@ label span.required {
   background: linear-gradient(to bottom, #ff7f04 0%,#ff7c00 23%,#ffa73d 72%,#ffb76b 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7f04', endColorstr='#ffb76b',GradientType=0 );
 }
-.border-change-pass {
+.border-apps-manager {
   border-color: #ff7f04 !important;
 }
 .bg-custom-nav {
@@ -424,7 +424,9 @@ $custom-hover-color: #fffc67 !default;
         > .nav-item {
           .sidenav-second-level,
           .sidenav-third-level {
-            background: lighten($blue, 10%);;
+            background: lighten($blue, 10%);
+            overflow: auto;
+            max-height: 350px;
           }
         }
       }

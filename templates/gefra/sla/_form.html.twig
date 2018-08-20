@@ -10,8 +10,7 @@
     {{ form_label(form.juncao, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
     <div class="col-6">
         {{ form_errors(form.juncao) }}
-
-                    {{ form_widget(form.juncao, {'attr': {'autocomplete': 'off'}}) }}
+        {{ form_widget(form.juncao, {'attr': {'autocomplete': 'off'}}) }}
 
     </div>
 
@@ -41,7 +40,7 @@
     $typeahedRemoteUrl = '{{ path('gefra_juncao_list_json') }}';
     $typeaheadTemplate = "<small style='color:#999;'>{{ '[{{codigo}}] {{nome}} - {{cidade}}/{{uf}}' }}</small>";
     $typeaheadBackdrop = { "background-color": "#eeeeee" };
-    $typeaheadEmptyTemplate = "{{ 'gefra.juncao.emtpy-list' | trans }}";
+    $typeaheadEmptyTemplate = "{{ 'fields.name.empty-list' | trans }}";
     $typeaheadSource = {
         juncao: {
             display: ["codigo", "nome", "cidade"],

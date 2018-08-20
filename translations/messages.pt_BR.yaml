@@ -17,8 +17,10 @@ fields:
     peso: Peso
     solicitacao: Solicitação
     lote: Lote
-    descricao: Descriação
+    descricao: Descrição
     razao-social: Razão Social
+    empty-list: Não há resultados para o termo pesquisado
+    abreviacao: Abreviação
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -476,7 +478,6 @@ gefra:
     status_entrega: Posição Entrega
     dt-varredura: Data Varredura
   juncao:
-    emtpy-list: Não há resultados para o termo pesquisado
     sample-filename: exemplo-cadastro-juncao.csv
     edit-form-title: Editar informações cadastrais da Junção
                     <span class="btn disabled btn-sm btn-dark">%name%</span>

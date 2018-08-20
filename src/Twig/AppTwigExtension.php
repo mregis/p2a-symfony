@@ -19,6 +19,7 @@ class AppTwigExtension extends AbstractExtension
             new TwigFilter('cnpj', array($this, 'cnpjFilter')),
             new TwigFilter('cpf', array($this, 'cpfFilter')),
             new TwigFilter('cep', array($this, 'cepFilter')),
+            new TwigFilter('localdate', array($this, 'localDate')),
         );
     }
 
@@ -51,5 +52,27 @@ class AppTwigExtension extends AbstractExtension
             $cep = sprintf("%s-%s", $matches[1], $matches[2]);
         }
         return $cep;
+    }
+
+    /**
+     * @param mixed $date
+     * @param string $mask
+     * @return string
+     */
+    public function localDate($date, $args)
+    {
+        $format = isset($args['format']) ? $args['format'] : '%d/%m/%Y [%a]';
+        $locale = isset($args['locale']) ? $args['locale'] : '';
+        if ($date instanceof \DateTime) {
+            /* @var $date \DateTime */
+            $date = strtotime($date->format('Y-m-d'));
+        } elseif(is_string($date)) {
+            $date = strtotime(str_replace("/", "-", $date));
+        }
+        $current_locale = setlocale(LC_TIME, "0");
+        setlocale(LC_TIME, $locale);
+        $formatted_date = strftime($format, $date);
+        setlocale(LC_TIME, $current_locale);
+        return $formatted_date;
     }
 }

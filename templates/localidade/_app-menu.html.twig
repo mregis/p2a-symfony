@@ -1,8 +1,37 @@
+{% set activelink = app.request.attributes.get('_route') %}
 {% if is_granted('ROLE_USER') %}
-<li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'localidade.homepage'|trans }}">
-    <a class="nav-link" href="{{ path('localidade') }}">
-        <i class="fas fa-globe"></i>
-        <span class="nav-link-text">{{ 'localidade.homepage'|trans }}</span>
-    </a>
-</li>
+    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'localidade.homepage'|trans }}">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseLocalidade" data-parent="#Accordion">
+            <i class="fas fa-globe"></i>
+            <span class="nav-link-text">{{ 'localidade.homepage'|trans }}</span>
+        </a>
+
+        <ul class="sidenav-second-level collapse" id="collapseLocalidade">
+            {% if is_granted('ROLE_SUPERADMIN') %}
+            <li class="nav-item">
+                <a href="{{ activelink != 'list-regiao' ? path('list-regiao') : '#' }}"
+                   class="nav-link{{ activelink == 'list-regiao' ? ' active' : '' }}">
+                    <i class="fas fa-globe-americas"></i> {{ 'localidade.regiao.btn-regiao' | trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ activelink != 'list-uf' ? path('list-uf') : '#' }}"
+                   class="nav-link{{ activelink == 'list-uf' ? ' active' : '' }}">
+                    <i class="fas fa-map"></i> {{ 'localidade.uf.btn-uf' | trans }}</a>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_MASTER') %}
+                <li class="nav-item">
+                    <a href="{{ activelink != 'list-cidade' ? path('list-cidade') : '#' }}"
+                       class="nav-link{{ activelink == 'list-cidade' ? ' active' : '' }}">
+                        <i class="fas fa-hotel"></i> {{ 'localidade.cidade.btn-cidade' | trans }}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ activelink != 'localidade_feriado_index' ? path('localidade_feriado_index') : '#' }}"
+                       class="nav-link{{ activelink == 'localidade_feriado_index' ? ' active' : '' }}">
+                        <i class="fas fa-calendar-alt"></i> {{ 'localidade.feriado.index' | trans }}</a>
+                </li>
+            {% endif %}
+        </ul>
+    </li>
 {% endif %}

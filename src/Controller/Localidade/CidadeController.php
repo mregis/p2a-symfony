@@ -31,13 +31,13 @@ class CidadeController extends Controller
      */
     public function listCidade(): Response
     {
-        return $this->render('localidade/cidade/list.html.twig');
+        return $this->render('localidade/cidade/index.html.twig');
     }
 
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/json", name="list-cidades-json", methods="GET|POST")
+     * @Route("/json", name="localidade_cidade_list_json", methods="GET|POST")
      */
     public function getCidades(Request $request): JsonResponse
     {
@@ -58,10 +58,11 @@ class CidadeController extends Controller
             ->orderBy($orderColumn, $sortType);
 
         if ($search_value != null) {
+            $search_value = preg_replace("#[\W]+#", "_", $search_value);
             $qb->orWhere(
-                $qb->expr()->eq('c.codigo', '?1'),
-                $qb->expr()->like('c.nome', '?2')
-            )->setParameters([1=> $search_value, 2 => '%' . $search_value . '%']);
+                $qb->expr()->like('LOWER(c.codigo)', '?1'),
+                $qb->expr()->like('LOWER(c.nome)', '?1')
+            )->setParameters([1 => '%' . strtolower($search_value) . '%']);
         }
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 
@@ -71,13 +72,8 @@ class CidadeController extends Controller
         $data = [];
         /* @var $cidade Cidade */
         foreach ($paginator as $cidade) {
-            $d['nome'] = $cidade->getNome();
-            $d['abreviacao'] = $cidade->getAbreviacao();
-            $d['uf'] = $cidade->getUf()->getSigla();
-            $d['codigo'] = $cidade->getCodigo();
-            $d['ativo'] = $cidade->isAtivo() ? 'Ativo' : 'Inativo';
+            $d['cidade'] = unserialize($cidade->serialize());
             $d['buttons'] = 'BUTTONS';
-            $d['id'] = $cidade->getId();
             $d['deleteToken'] = $tokenProvider->getToken('delete' . $cidade->getId())->getValue();
             $d['editToken'] = $tokenProvider->getToken('put' . $cidade->getId())->getValue();
             $d['changetitle'] = $this->get('translator')

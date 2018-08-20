@@ -65,7 +65,7 @@
 
 <div class="row form-group justify-content-md-center">
     <div class="col-4">
-        <button class="btn btn-primary btn-block " type="submit">
+        <button class="btn btn-primary btn-block" type="submit">
             <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
         </button>
     </div>
@@ -82,7 +82,7 @@
     $typeahedRemoteUrl = '{{ path('gefra_juncao_list_json') }}';
     $typeaheadTemplate = "<small style='color:#999;'>{{ '[{{codigo}}] {{nome}} - {{cidade}}/{{uf}}' }}</small>";
     $typeaheadBackdrop = { "background-color": "#eeeeee" };
-    $typeaheadEmptyTemplate = "{{ 'gefra.juncao.emtpy-list' | trans }}";
+    $typeaheadEmptyTemplate = "{{ 'fields.name.empty-list' | trans }}";
     $typeaheadSource = {
         juncao: {
             display: ["codigo", "nome", "cidade"],
