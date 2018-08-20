@@ -455,6 +455,34 @@ localidade:
     labels:
       codigo: 'Codigo IBGE'
 
+  feriado:
+    index: Feriados
+    index-description: Feriados Cadastrados
+    new: Cadastrar Novo Feriado
+    new-form-title: Formulário de Cadastro de Novo Feriado
+    new-title: Novo Feriado
+    edit-form-title: Alterar informações do Feriado
+                        <span class="btn disabled btn-sm btn-dark">%name%</span>
+    edit-title: Editar Feriado
+    delete-title: Excluir Feriado "%name%"
+    labels:
+      dt-feriado: Data Feriado
+      tipo: Tipo Feriado
+  tipoferiado:
+    index: Tipos de Feriados
+    index-description: Tipos de Feriados Cadastrados
+    new: Adicionar Tipo de Feriado
+    new-form-title: Incluir novo <span class="btn disabled btn-sm btn-dark">Tipo de Feriado</span>
+    new-title: Novo Tipo de Feriado
+    flash:
+      new: Novo Tipo de Feriado criado!
+      no-uf: O Tipo de Feriado indicado requer que ao menos uma UF seja selecionada
+      no-local: O Tipo de Feriado indicado requer que ao menos uma Localidade seja selecionada
+    labels:
+      nacional: NACIONAL
+      estadual: ESTADUAL
+      municipal: MUNICIPAL
+
 gefra:
   name: SisGefra
   home: Início

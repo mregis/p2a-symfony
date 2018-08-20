@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'localidade.feriado.index'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'localidade/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'localidade.feriado.index'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'localidade.feriado.index'|trans }}</h1>
+
+                    <div class="card mb-3 border-apps-5">
+                        <div class="card-header bg-apps-5">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-map-o fa-2x"></i> {{ 'localidade.feriado.index-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('localidade_feriado_new') }}">
+                                            <span class="fas fa-plus-circle"></span> {{ 'localidade.feriado.new'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if feriados|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped"
+                                           width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>{{ 'localidade.feriado.labels.dt-feriado'|trans }}</th>
+                                            <th class="text-center">{{ 'localidade.feriado.labels.tipo'|trans }}</th>
+                                            <th>{{ 'fields.name.descricao'|trans }}</th>
+                                            <th class="text-center">{{ 'fields.name.uf'|trans }}</th>
+                                            <th>{{ 'fields.name.cidade'|trans }}</th>
+                                            <th>{{ 'actions'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for feriado in feriados %}
+                                            <tr>
+                                                <td>{{ feriado.dtFeriado|localdate({'format': '%d/%m/%Y - %A', 'locale': app.request.locale}) }}</td>
+                                                <td class="text-center">{{ feriado.tipo|upper }}</td>
+                                                <td>{{ feriado.descricao }}</td>
+                                                <td class="text-center">{{ feriado.uf ? feriado.uf : '~' }}</td>
+                                                <td>{{ feriado.local }}</td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fas fa-edit"
+                                                       href="{{ path('localidade_feriado_edit', {'id' : feriado.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                        <span class="btn btn-sm btn-danger fas fa-trash-alt "
+                                                              data-target="#delete-Modal"
+                                                              data-tokenid="{{ csrf_token('delete' ~ feriado.id) }}"
+                                                              data-cadastroid="{{ feriado.id }}" role="button"
+                                                              data-cadastro="{{ feriado.descricao }}" data-toggle="modal"
+                                                              title="{{ 'localidade.feriado.delete-title'|trans({'%name%': feriado.descricao}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        <!-- Modal Delete Feriado -->
+        <div class="modal fade" id="delete-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="deleteModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-danger">
+                        <h5 class="modal-title"
+                            id="deleteModalLabel">{{ 'localidade.delete.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'localidade.delete.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary delete-btn" type="button">{{ 'delete'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ parent() }}
+        var $deletePath = '{{ path('localidade_feriado_delete', {id: '_id'}) }}';
+        var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
+        var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
+    {% endif %}
+
+{% endblock js_codes %}

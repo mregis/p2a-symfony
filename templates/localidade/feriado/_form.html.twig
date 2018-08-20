@@ -1,0 +1,129 @@
+{{ form_start(form) }}
+
+<div class="form-group row">
+    {{ form_label(form.dt_feriado, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-4">
+        {{ form_errors(form.dt_feriado) }}
+        {{ form_widget(form.dt_feriado) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.tipo, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-4">
+        {{ form_errors(form.tipo) }}
+        {{ form_widget(form.tipo) }}
+    </div>
+    {#% if is_granted('ROLE_SUPERADMIN') %}
+        <div class="col-5">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myCustomModal">
+                <span class="fas fa-plus-circle"></span> {{ 'localidade.tipoferiado.new'|trans }}
+            </button>
+        </div>
+    {% endif %#}
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.descricao, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-9">
+        {{ form_errors(form.descricao) }}
+        {{ form_widget(form.descricao) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.local, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-5">
+        {{ form_errors(form.local) }}
+        {{ form_widget(form.local, {'attr': {'autocomplete': 'off'}}) }}
+    </div>
+    {{ form_label(form.uf, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.uf) }}
+        {{ form_widget(form.uf) }}
+    </div>
+</div>
+
+{{ form_widget(form) }}
+
+<div class="row form-group justify-content-md-center">
+    <div class="col-4">
+        <button class="btn btn-primary btn-block" type="submit">
+            <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+        </button>
+    </div>
+    <div class="col-4">
+        <a class="btn btn-secondary btn-block" href="{{ path('localidade_feriado_index') }}">
+            <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
+        </a>
+    </div>
+</div>
+{{ form_end(form) }}
+
+{#
+<!-- Modal for New TipoFeriado -->
+<div class="modal fade" id="myCustomModal" tabindex="-1" role="dialog"
+     aria-labelledby="myCustomModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{ 'localidade.tipoferiado.new-form-title'|trans|raw }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'cancel'|trans  }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title"><h4>{{ 'modalProcess.title'|trans }}</h4></div>
+                        <p class="class-text text-center">
+                            <i class="fa fa-spinner fa-spin fa-4x fa-fw"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+#}
+<script type="text/javascript">
+    // ******** Campo Autocompletar Cidade
+    $typeaheadInput = "#feriado_local";
+    $typeahedRemoteUrl = "{{ path('localidade_cidade_list_json') }}";
+    $typeaheadTemplate = "<small style='color:#999;'>{{ '{{nome}}/{{uf.sigla}}' }}</small>";
+    $typeaheadBackdrop = { "background-color": "#eeeeee" };
+    $typeaheadEmptyTemplate = "{{ 'fields.name.empty-list' | trans }}";
+    $typeaheadSource = {
+        cidade: {
+            display: ["nome"],
+            ajax: function (query) {
+                return {
+                    type: "POST",
+                    url: "{{ path('localidade_cidade_list_json') }}",
+                    path: "cidade",
+                    data: {
+                        "search[value]": "{{ '{{query}}' }}",
+                        "length" : "40",
+                    },
+                    callback: {
+                        done: function (res) {
+                            var d = {cidade:[]};
+                            jQuery(res.data).each(function(index, value) {
+                                d.cidade[index] = (value.cidade);
+                            });
+                            return d;
+                        }
+                    }
+                }
+            }
+
+        }
+    };
+    $typeaheadCallback = {
+        onClickAfter: function (node, a, item, event) {
+            event.preventDefault();
+            jQuery(node).val(item.nome + '/' + item.uf.sigla);
+        }
+    };
+    // Campo Autocompletar Cidade ********
+</script>
