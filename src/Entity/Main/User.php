@@ -8,10 +8,12 @@
 
 namespace App\Entity\Main;
 
+use App\Entity\Gefra\EnvioFiles;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Util\StringUtils;
 
 /**
  * @ORM\Table(name="usuario")
@@ -42,6 +44,12 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     /**
      * @var string
+     * @ORM\Column(name="canonical_username", type="string", length=25, unique=true)
+     */
+    private $canonical_username;
+
+    /**
+     * @var string
      * @ORM\Column(name="senha", type="string", length=100)
      */
     private $password;
@@ -51,6 +59,13 @@ class User implements UserInterface, EquatableInterface, \Serializable
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
+
+
+    /**
+     * @var string
+     * @ORM\Column(name="canonical_email", type="string", length=180, unique=true)
+     */
+    private $canonical_email;
 
     /**
      * @var string
@@ -117,6 +132,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
+        $this->canonical_email = StringUtils::slugify($email);
         return $this;
     }
 
@@ -355,6 +371,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+        $this->canonical_username = StringUtils::slugify($username);
         return $this;
     }
 

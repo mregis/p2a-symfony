@@ -148,16 +148,39 @@
     </div>
 {%- endblock submit_row %}
 
-{# #}
+{# #
 
 {% block form_errors -%}
     {%- if errors|length > 0 -%}
-        <div class="alert alert-danger">
-            <ul class="list-unstyled mb-0">
-                {%- for error in errors -%}
-                    <li>{{ error.message }}</li>
-                {%- endfor -%}
-            </ul>
-        </div>
-    {%- endif %}
+        {%- if form is rootform -%}
+            {% for e in errors %}
+                <div class="modal fade" id="myModal" tabindex="{{ (loop.index * -1) - 1 }}"
+                     role="dialog" aria-labelledby="MyModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <h4 class="modal-title" id="MyModalLabel">{{ 'Error'|trans }}</h4>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ e.message|trans }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {%- else -%}
+            <div class="alert alert-danger">
+                <ul class="list-unstyled mb-0">
+                    {%- for error in errors -%}
+                        <li>{{ error.message }}</li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif %}
+    {%- endif -%}
 {%- endblock form_errors %}
+{# #}

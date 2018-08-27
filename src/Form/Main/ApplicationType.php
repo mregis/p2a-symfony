@@ -52,6 +52,7 @@ class ApplicationType extends AbstractType
             ))
             ->add('isActive', Types\CheckboxType::class, array(
                 'label' => 'active',
+                'required' => false,
             ));
 
     }

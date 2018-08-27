@@ -18,7 +18,7 @@
 {#  ROLE_SUPERADMIN permission #}
 
                     {% if is_granted('ROLE_SUPERADMIN') %}
-                        <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                             <div class="card bg-apps-manager o-hidden h-100">
                                 <a href="{{ path('list-apps') }}">
                                     <div class="card-body text-white">
@@ -34,7 +34,7 @@
 
 {#  ROLE_ADMIN permission #}
                     {% if is_granted('ROLE_ADMIN') %}
-                        <div class="col-xl-3 col-sm-3 mb-3">
+                        <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                             <div class="card bg-info o-hidden h-100">
                                 <a href="{{ path('list-users') }}">
                                     <div class="card-body text-white">
@@ -51,8 +51,13 @@
 {# ROLE_USER permission #}
                     {% if app.user.userapplication|length > 0 %}
                         {% for ua in app.user.userapplication %}
-                            <div class="col-xl-3 col-sm-3 mb-3">
-                                <div class="card bg-apps-{{ loop.index % 4 }} o-hidden h-100">
+                            <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
+                                <div class="card
+                                {% if ua.application.getOption('bg-color') %}
+                                {{ ua.application.getOption('bg-color') }}
+                                {% else %}
+                                bg-apps-{{ (loop.index % 5) }}
+                                {% endif %} o-hidden h-100">
                                     <a href="{{ ua.application.uri }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
@@ -70,10 +75,10 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                         <div class="card bg-change-pass o-hidden h-100">
                             <a href="{{ path('change-password') }}">
-                                <div class="card-body text-white">
+                                <div class="card-body text-secondary">
                                     <div class="card-body-icon">
                                         <i class="fas fa-lock"></i>
                                     </div>

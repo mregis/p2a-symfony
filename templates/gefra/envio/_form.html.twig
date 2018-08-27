@@ -15,7 +15,9 @@
         {{ form_widget(form.grm) }}
     </div>
 </div>
+
 <div class="form-group row">
+
     {{ form_label(form.qt_vol, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
     <div class="col-2">
         {{ form_errors(form.qt_vol) }}
@@ -60,9 +62,6 @@
     </div>
 </div>
 
-
-{{ form_widget(form) }}
-
 <div class="row form-group justify-content-md-center">
     <div class="col-4">
         <button class="btn btn-primary btn-block" type="submit">
@@ -75,6 +74,8 @@
         </a>
     </div>
 </div>
+
+
 {{ form_end(form) }}
 
 <script type="text/javascript">
@@ -97,16 +98,16 @@
                     },
                     callback: {
                         done: function (res) {
-                            var d = {juncao:[]};
+                            var d = {};
+                            d.juncao = [];
                             jQuery(res.data).each(function(index, value) {
-                                d.juncao[index] = (value.juncao);
+                                d.juncao.push(value.juncao);
                             });
                             return d;
                         }
                     }
                 }
             }
-
         }
     };
     $typeaheadCallback = {

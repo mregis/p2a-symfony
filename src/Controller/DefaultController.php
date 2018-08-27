@@ -8,15 +8,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Main\Application;
 use App\Entity\Main\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class DefaultController
@@ -29,19 +26,9 @@ class DefaultController extends AbstractController
      * @Route("/", name="home")
      * @return Response
      */
-    public function index(Request $request, AuthorizationCheckerInterface $authChecker)
+    public function index(Request $request)
     {
-        /* @var $user User */
-        $user = $this->getUser();
-        $userapps = new ArrayCollection();
-        foreach ($user->getUserApplication() as $userapp) {
-            $userapps->add($userapp->getApplication());
-        }
-        if ($authChecker->isGranted('ROLE_SUPERADMIN')) {
-            $userapps = $this->getDoctrine()->getRepository(Application::class)->findBy(['isActive' => true]);
-        }
-
-        return $this->render('home.html.twig', array('userapps' => $userapps));
+        return $this->render('home.html.twig');
     }
 
     /**

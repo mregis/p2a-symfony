@@ -1,4 +1,5 @@
 {% set activelink = app.request.attributes.get('_route') %}
+
 {% if is_granted('ROLE_USER') %}
 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'gefra.homepage'|trans }}">
     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseGefraJuncao" data-parent="#Accordion">

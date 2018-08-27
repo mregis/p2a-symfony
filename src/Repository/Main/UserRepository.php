@@ -24,10 +24,10 @@ class UserRepository extends EntityRepository implements UserLoaderInterface
     public function loadUserByUsername($username)
     {
         return $this->createQueryBuilder('u')
-            ->where('u.username = :username OR u.email = :email')
+            ->where('u.canonical_username = :username')
+            ->orWhere('u.canonical_email = :username')
             ->innerJoin('u.profile', 'p')
             ->setParameter('username', $username)
-            ->setParameter('email', $username)
             ->getQuery()
             ->getOneOrNullResult();
     }

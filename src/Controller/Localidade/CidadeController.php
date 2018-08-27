@@ -10,6 +10,7 @@ namespace App\Controller\Localidade;
 
 use App\Entity\Localidade\Cidade;
 use App\Form\Localidade\CidadeType;
+use App\Util\StringUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -58,11 +59,11 @@ class CidadeController extends Controller
             ->orderBy($orderColumn, $sortType);
 
         if ($search_value != null) {
-            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $search_value = StringUtils::slugify($search_value);
             $qb->orWhere(
-                $qb->expr()->like('LOWER(c.codigo)', '?1'),
-                $qb->expr()->like('LOWER(c.nome)', '?1')
-            )->setParameters([1 => '%' . strtolower($search_value) . '%']);
+                $qb->expr()->like('c.codigo', '?1'),
+                $qb->expr()->like('c.canonical_name', '?1')
+            )->setParameters([1 => '%' . $search_value . '%']);
         }
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 

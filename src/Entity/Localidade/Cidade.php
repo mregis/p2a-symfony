@@ -2,6 +2,7 @@
 
 namespace App\Entity\Localidade;
 
+use App\Util\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,6 +26,12 @@ class Cidade implements \Serializable
      * @ORM\Column(type="string", length=100)
      */
     private $nome;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=100)
+     */
+    private $canonical_name;
 
     /**
      * @var string
@@ -108,6 +115,7 @@ class Cidade implements \Serializable
     public function setNome($nome)
     {
         $this->nome = $nome;
+        $this->canonical_name = StringUtils::slugify($nome);
         return $this;
     }
 

@@ -3,8 +3,8 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes:
-        - 'bootstrap_4_horizontal_layout.html.twig'
         - 'form/sb-admin-form-fields.html.twig'
+        - 'bootstrap_4_horizontal_layout.html.twig'
     globals:
         appversion: '%app.version%'
         apptitle: '%app.title%'

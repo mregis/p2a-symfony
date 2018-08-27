@@ -10,12 +10,18 @@ namespace App\Provider;
 
 
 use App\Entity\Main\User;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface
 {
+    /**
+     * @var Connection
+     */
     private $conn;
 
     public function __construct(Connection $conn)
@@ -25,11 +31,12 @@ class UserProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-        $qb = $this->conn->createQueryBuilder();
+        $qb = $this->conn->createQueryBuilder('u');
         $qb->select('*')
-            ->from('usuario', 'u')
-            ->where('username = ?')
-            ->setParameter(0, $username);
+            ->from('User', 'u')
+            ->where('u.canonical_username = :username')
+            ->orWhere('u.canonical_email = :username')
+            ->setParameter('username', strtolower($username));
         $stmt = $qb->execute();
 
         if (!$u = $stmt->fetch()) {
@@ -73,12 +80,12 @@ class UserProvider implements UserProviderInterface
             $rnd = rand(0, count($domain)-1);
             $code .= $domain[$rnd];
         }
-        $this->conn->createQueryBuilder()
-            ->update('usuario')
-            ->set('confirmationtoken', '?')
-            ->where('username = ?')
-            ->setParameter(0, $code)
-            ->setParameter(1, $username)
+        $this->conn->createQueryBuilder('u')
+            ->update('User', 'u')
+            ->set('u.confirmationtoken', ':token')
+            ->where('u.canonical_username = :username')
+            ->setParameter('token', $code)
+            ->setParameter('username', strtolower($username))
             ->execute();
 
         return $code;

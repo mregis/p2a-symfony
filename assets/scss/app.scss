@@ -215,7 +215,7 @@ label span.required {
   border-color: rgba(30, 50, 70, 0.25) !important;
 }
 div.dataTables_wrapper div.dataTables_length select {
-  width: 75px;
+  width: 85px;
   display: inline-block;
 }
 div.dataTables_wrapper div.dataTables_filter input {
@@ -465,6 +465,7 @@ $custom-hover-color: #fffc67 !default;
 
 .card-body-icon {
   font-size: 5.5rem;
+  color: rgba(6, 7, 23, 0.44);
 }
 
 td.details-control {

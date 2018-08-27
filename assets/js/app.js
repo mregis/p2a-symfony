@@ -81,6 +81,32 @@ global.$typeaheadInput = typeof $typeaheadInput == 'undefined' ? "#remote :input
 $(document).ready(function () {
     var myModal = $("#myModal").modal("show");
     oTable = $(".dataTable").DataTable($dataTableOptions);
+    // Custom Sort for Dates in dd/mm/YYYY format
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        "customDateFormat-pre": function ( date ) {
+            date = date.replace(/[^\d\/]/g, '');
+            if ( ! date ) {
+                return 0;
+            }
+
+            var matches = date.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+            if (matches.length > 3) {
+                var year = matches[3];
+                var month = matches[2];
+                var day = matches[1];
+                return (year + month + day) * 1;
+            } else {
+                return 0;
+            }
+        },
+        "customDateFormat-asc": function ( a, b ) {
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+
+        "customDateFormat-desc": function ( a, b ) {
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    });
 
     $('#change-status-Modal').on('hide.bs.modal', function (event) {
         var statusModal = $(this);
@@ -251,7 +277,8 @@ $(document).ready(function () {
         emptyTemplate: $typeaheadEmptyTemplate,
         source: $typeaheadSource,
         callback: $typeaheadCallback,
-        debug: false
+        debug: false,
+        accent: true
     });
 });
 

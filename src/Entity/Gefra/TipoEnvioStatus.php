@@ -119,6 +119,4 @@ class TipoEnvioStatus implements \Serializable
         return $this;
     }
 
-
-
 }

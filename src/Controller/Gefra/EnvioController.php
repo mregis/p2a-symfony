@@ -9,12 +9,14 @@
 namespace App\Controller\Gefra;
 
 use App\Entity\Gefra\Envio;
+use App\Entity\Gefra\EnvioFile;
 use App\Entity\Gefra\Juncao;
 use App\Entity\Gefra\Ocorrencia;
 use App\Entity\Gefra\Operador;
 use App\Entity\Gefra\SLA;
 use App\Entity\Gefra\TipoEnvioStatus;
 use App\Entity\Gefra\Transportadora;
+use App\Form\Gefra\EnvioFileType;
 use App\Form\Gefra\EnvioType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\JuncaoRepository;
@@ -23,6 +25,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,12 +70,52 @@ class EnvioController extends Controller
         ]);
     }
 
+
     /**
      * @param Request $request
      * @return Response
-     * @Route("/carregar-envios", name="gefra_envio_load_xmlfile", methods="GET|POST")
+     * @Route("/carregar-envios", name="gefra_envio_load_xlsfile", methods="GET|POST")
      */
     public function loadEnvioFile(Request $request): Response
+    {
+        $form = $this->createForm(BulkRegistryType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /* @var $file \Symfony\Component\HttpFoundation\File\UploadedFile */
+            $file = $form->get('registry')->getData();
+
+            $file_id = hash_file('crc32b', $file->getPathname());
+
+            $em = $this->getDoctrine()->getManager('gefra');
+            if (!$envio_file = $em->getRepository(EnvioFile::class)->findOneBy(['hashid' => $file_id])) {
+                $envio_file = new EnvioFile();
+                $envio_file->setPath($file->getPathname())
+                    ->setHashId($file_id)
+                    ->setStatus(EnvioFileType::NEW_SEND)
+                    ->setUploadedBy($this->getUser()->getId())
+                    ;
+                $em->persist($envio_file);
+                $em->flush();
+                $this->addFlash('success', 'flash.success.uploaded');
+            } else {
+                // Arquivo já foi enviado anteriormente exatamente como está. Não faz sentido continuar
+                $form->addError(
+                    new FormError($this->get('translator')->trans('flash.error.already-uploaded'))
+                );
+            }
+        }
+        $view = $form->createView();
+        return $this->render('gefra/envio/new-bulk.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/carregar-envios2", name="gefra_envio_load_xmlfile", methods="GET|POST")
+     */
+    public function loadEnvioFile2(Request $request): Response
     {
         $error = null;
         $form = $this->createForm(BulkRegistryType::class);
@@ -625,9 +668,9 @@ class EnvioController extends Controller
         if ($search_value != null) {
             $search_value = preg_replace("#[\W]+#", "_", $search_value);
             $qb->orWhere(
-                $qb->expr()->like('LOWER(e.cte)', '?1'),
-                $qb->expr()->like('LOWER(e.solicitacao)', '?1'),
-                $qb->expr()->like('LOWER(e.grm)', '?1'),
+                $qb->expr()->like('e.cte', '?1'),
+                $qb->expr()->like('e.solicitacao', '?1'),
+                $qb->expr()->like('e.grm', '?1'),
                 $qb->expr()->like('LOWER(j.nome)', '?1'),
                 $qb->expr()->like('LOWER(j.cidade)', '?1')
             )->setParameters([1 => '%' . strtolower($search_value) . '%']);
@@ -717,7 +760,7 @@ class EnvioController extends Controller
         try {
             $filename = $this->getParameter('app.samples.dir') . 'exemplo-arquivo-envio.xlsx';
             $serialized = $filename . '.serialized';
-            $lote = hash_file('crc32', $filename);
+            $lote = hash_file('crc32b', $filename);
 
             if (is_file($serialized)) {
                 $activeSheet = unserialize(file_get_contents($serialized));

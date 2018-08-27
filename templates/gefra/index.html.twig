@@ -1,3 +1,4 @@
+{% set appname = 'gefra.appname'|trans %}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'gefra.homepage'|trans }}{% endblock %}
@@ -28,31 +29,31 @@
             </div>
             <div class="row">
                 {% if is_granted('ROLE_MASTER') %}
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                         <div class="card bg-apps-0 o-hidden h-100">
                             <a href="{{ path('gefra_juncao_index') }}">
                                 <div class="card-body text-white">
+                                    <h5 class="mr-5">{{ 'gefra.juncao.index'|trans }}</h5>
                                     <div class="card-body-icon">
                                         <i class="fas fa-briefcase"></i>
                                     </div>
-                                    <h5 class="mr-5">{{ 'gefra.juncao.index'|trans }}</h5>
                                 </div></a>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                         <div class="card bg-apps-2 o-hidden h-100">
                             <a href="{{ path('gefra_sla_index') }}">
                                 <div class="card-body text-white">
+                                    <h5 class="mr-5">{{ 'gefra.sla.index'|trans }}</h5>
                                     <div class="card-body-icon">
                                         <i class="fas fa-clock"></i>
                                     </div>
-                                    <h5 class="mr-5">{{ 'gefra.sla.index'|trans }}</h5>
                                 </div></a>
                         </div>
                     </div>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                         <div class="card bg-apps-1 o-hidden h-100">
                             <a href="{{ path('gefra_operador_index') }}">
                                 <div class="card-body text-white">
@@ -63,18 +64,19 @@
                                 </div></a>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                         <div class="card bg-apps-5 o-hidden h-100">
                             <a href="{{ path('gefra_transportadora_index') }}">
-                                <div class="card-body">
+                                <div class="card-body text-nowrap">
+                                    <h5 class="mr-5"><small>{{ 'gefra.transportadora.index'|trans }}</small></h5>
                                     <div class="card-body-icon">
                                         <i class="fas fa-truck-moving"></i>
                                     </div>
-                                    <h5 class="mr-5"><small>{{ 'gefra.transportadora.index'|trans }}</small></h5>
+
                                 </div></a>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-3 mb-3">
+                    <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                         <div class="card bg-apps-4 o-hidden h-100">
                             <a href="{{ path('gefra_tipo_envio_status_index') }}">
                                 <div class="card-body text-white">
@@ -86,7 +88,7 @@
                         </div>
                     </div>
                 {% endif %}
-                <div class="col-xl-3 col-sm-3 mb-3">
+                <div class="col-xl-3 col-md-4 col-sm-6 mb-3">
                     <div class="card bg-apps-3 o-hidden h-100">
                         <a href="{{ path('gefra_envio_index') }}">
                             <div class="card-body text-white">

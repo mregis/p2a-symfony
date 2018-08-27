@@ -4,6 +4,7 @@ namespace App\Repository\Localidade;
 
 use App\Entity\Localidade\Feriado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTime;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -47,4 +48,16 @@ class FeriadoRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @return Feriado[]
+     */
+    public function findAll()
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('ABS(DATE_DIFF(f.dt_feriado, CURRENT_DATE()))', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

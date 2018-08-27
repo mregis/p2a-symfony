@@ -472,7 +472,7 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getTransportadora(): Transportadora
+    public function getTransportadora(): ?Transportadora
     {
         return $this->transportadora;
     }

@@ -19,3 +19,4 @@ parameters:
         - 'ROLE_SUPERADMIN'
     app.samples.dir: '%kernel.project_dir%/var/samples/'
     app.bulk.batchsize: 50
+    enviofiles.directory: '%kernel.project_dir%/public/uploads/envios'

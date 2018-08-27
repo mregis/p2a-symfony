@@ -13,8 +13,10 @@ use App\Entity\Gefra\Juncao;
 use App\Entity\Localidade\UF;
 use App\Form\Gefra\JuncaoType;
 use App\Form\Type\BulkRegistryType;
+use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -267,12 +269,12 @@ class JuncaoController extends Controller
 
 
         if ($search_value != null) {
-            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $search_value = StringUtils::slugify($search_value);
             $qb->orWhere(
-                $qb->expr()->like('LOWER(a.codigo)', '?1'),
-                $qb->expr()->like('LOWER(a.nome)', '?1'),
-                $qb->expr()->like('LOWER(a.cidade)', '?1')
-            )->setParameters([1 => '%' . strtolower($search_value) . '%']);
+                $qb->expr()->like('a.codigo', '?1'),
+                $qb->expr()->like('a.canonical_name', '?1'),
+                $qb->expr()->like('a.canonical_city', '?1')
+            )->setParameters([1 => '%' . $search_value . '%']);
         }
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 

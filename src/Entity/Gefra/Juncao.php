@@ -2,6 +2,7 @@
 
 namespace App\Entity\Gefra;
 
+use App\Util\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,11 @@ class Juncao implements \Serializable
     private $nome;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $canonical_name;
+
+    /**
      * @ORM\Column(type="string", length=10)
      */
     private $codigo;
@@ -35,6 +41,11 @@ class Juncao implements \Serializable
      * @ORM\Column(type="string", length=100)
      */
     private $cidade;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $canonical_city;
 
     /**
      * @ORM\Column(type="string", length=2)
@@ -82,7 +93,7 @@ class Juncao implements \Serializable
     public function setNome(string $nome)
     {
         $this->nome = $nome;
-
+        $this->canonical_name = StringUtils::slugify($nome);
         return $this;
     }
 
@@ -109,7 +120,7 @@ class Juncao implements \Serializable
     public function setCidade(string $cidade)
     {
         $this->cidade = $cidade;
-
+        $this->canonical_city = StringUtils::slugify($cidade);
         return $this;
     }
 

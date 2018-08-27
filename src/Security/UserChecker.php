@@ -9,6 +9,7 @@
 namespace App\Security;
 
 use App\Entity\Main\User as AppUser;
+use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,7 +29,7 @@ class UserChecker implements UserCheckerInterface
         }
         // user is deleted, show a generic Account Not Found message.
         if ($user->isDeleted()) {
-            throw new AccountDeletedException('user.account.deleted');
+            throw new AccountExpiredException('user.account.deleted');
         }
     }
 

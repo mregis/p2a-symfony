@@ -45,6 +45,7 @@
                                            width="100%" cellspacing="0">
                                         <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>{{ 'localidade.feriado.labels.dt-feriado'|trans }}</th>
                                             <th class="text-center">{{ 'localidade.feriado.labels.tipo'|trans }}</th>
                                             <th>{{ 'fields.name.descricao'|trans }}</th>
@@ -56,11 +57,12 @@
                                         <tbody>
                                         {% for feriado in feriados %}
                                             <tr>
+                                                <td>{{ loop.index }}</td>
                                                 <td>{{ feriado.dtFeriado|localdate({'format': '%d/%m/%Y - %A', 'locale': app.request.locale}) }}</td>
                                                 <td class="text-center">{{ feriado.tipo|upper }}</td>
                                                 <td>{{ feriado.descricao }}</td>
                                                 <td class="text-center">{{ feriado.uf ? feriado.uf : '~' }}</td>
-                                                <td>{{ feriado.local }}</td>
+                                                <td>{{ feriado.local ? feriado.local :  '~' }}</td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm fas fa-edit"
                                                        href="{{ path('localidade_feriado_edit', {'id' : feriado.id}) }}"
@@ -122,5 +124,11 @@
         var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
         var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
     {% endif %}
+
+    $dataTableOptions.columnDefs = [
+        {    "targets": [ 0 ],    "visible": false,  "searchable": false },
+        {    "targets": [ 1 ],    "type": "customDateFormat"   }
+    ];
+    $dataTableOptions.order = [[ 0, "asc" ]]
 
 {% endblock js_codes %}

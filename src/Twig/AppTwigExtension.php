@@ -63,16 +63,29 @@ class AppTwigExtension extends AbstractExtension
     {
         $format = isset($args['format']) ? $args['format'] : '%d/%m/%Y [%a]';
         $locale = isset($args['locale']) ? $args['locale'] : '';
+
+        if (preg_match("#^(.*?)\.(.*?)$#", $locale, $matches)) {
+            $locale = $matches[1];
+            $charset = $matches[2];
+        } else {
+            $charset = 'UTF-8'; // Fallback to locale.UTF-8
+        }
+
+        isset($args['charset']) && $charset = $args['charset'];
+
+        $lctime_new_locale= $locale . '.' . $charset ;
+
+
         if ($date instanceof \DateTime) {
             /* @var $date \DateTime */
             $date = strtotime($date->format('Y-m-d'));
         } elseif(is_string($date)) {
             $date = strtotime(str_replace("/", "-", $date));
         }
-        $current_locale = setlocale(LC_TIME, "0");
-        setlocale(LC_TIME, $locale);
+        $lctime_locale = setlocale(LC_TIME, "0");
+        setlocale(LC_TIME, $lctime_new_locale);
         $formatted_date = strftime($format, $date);
-        setlocale(LC_TIME, $current_locale);
+        setlocale(LC_TIME, $lctime_locale);
         return $formatted_date;
     }
 }

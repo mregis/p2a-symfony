@@ -41,6 +41,9 @@ flash:
     delete: 'Cadastro excluído!'
     change-status: 'O estado do cadastro foi alterado'
     new-bulk: 'Os cadastros foram criados ou atualizados'
+    uploaded: 'O Arquivo foi carregado para processamento!'
+  error:
+    already-uploaded: 'Este arquivo já foi enviado anteriormente'
 change-status: 'Alterar estado'
 working: 'Executando a operação. Aguarde...'
 page-not-found: 'Página não encontrada!'
@@ -485,6 +488,7 @@ localidade:
 
 gefra:
   name: SisGefra
+  appname: Gestão de Ecomendas Fracionadas
   home: Início
   homepage: Painel
   homepage-description: Gerencie os Envios Fracionados
