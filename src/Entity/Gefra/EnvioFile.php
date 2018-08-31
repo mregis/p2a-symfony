@@ -54,6 +54,12 @@ class EnvioFile
     private $uploaded_by;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Gefra\Transportadora", inversedBy="envioFiles")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $transportadora;
+
+    /**
      *
      */
     public function __construct()
@@ -146,6 +152,18 @@ class EnvioFile
     public function setUploadedBy(?string $uploaded_by): self
     {
         $this->uploaded_by = $uploaded_by;
+
+        return $this;
+    }
+
+    public function getTransportadora(): ?Transportadora
+    {
+        return $this->transportadora;
+    }
+
+    public function setTransportadora(?Transportadora $transportadora): self
+    {
+        $this->transportadora = $transportadora;
 
         return $this;
     }

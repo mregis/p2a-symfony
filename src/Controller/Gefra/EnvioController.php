@@ -16,16 +16,21 @@ use App\Entity\Gefra\Operador;
 use App\Entity\Gefra\SLA;
 use App\Entity\Gefra\TipoEnvioStatus;
 use App\Entity\Gefra\Transportadora;
+use App\Entity\Main\User;
 use App\Form\Gefra\EnvioFileType;
 use App\Form\Gefra\EnvioType;
 use App\Form\Type\BulkRegistryType;
+use App\Repository\Gefra\EnvioFileRepository;
 use App\Repository\Gefra\JuncaoRepository;
+use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,6 +84,12 @@ class EnvioController extends Controller
     public function loadXLSXEnvioFile(Request $request): Response
     {
         $form = $this->createForm(BulkRegistryType::class);
+        $form->add('transportadora', EntityType::class, array(
+            'class' => Transportadora::class,
+            'placeholder' => 'choice-field.placeholder',
+            'label' => 'fields.name.transportadora',
+            'required' => true,
+        ));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /* @var $file \Symfony\Component\HttpFoundation\File\UploadedFile */
@@ -88,18 +99,25 @@ class EnvioController extends Controller
 
             $em = $this->getDoctrine()->getManager('gefra');
             if (!$envio_file = $em->getRepository(EnvioFile::class)->findOneBy(['hashid' => $file_id])) {
+                if ($dest_dir = $this->container->getParameter('enviofiles.directory')) {
+                    $file = $file->move($dest_dir, $file_id . '.' . $file->getClientOriginalExtension());
+                }
+
                 $envio_file = new EnvioFile();
                 $envio_file->setPath($file->getPathname())
                     ->setHashId($file_id)
                     ->setStatus(EnvioFileType::NEW_SEND)
                     ->setUploadedBy($this->getUser()->getId())
+                    ->setTransportadora($form->get('transportadora')->getData())
                     ;
                 $em->persist($envio_file);
                 $em->flush();
                 $this->addFlash('success', 'flash.success.uploaded');
             } else {
                 // Arquivo já foi enviado anteriormente exatamente como está. Não faz sentido continuar
-                $form->addError(
+                $error = new FormError('flash.error.already-uploaded');
+                $form->addError($error);
+                $form->get('registry')->addError(
                     new FormError($this->get('translator')->trans('flash.error.already-uploaded'))
                 );
             }
@@ -665,14 +683,14 @@ class EnvioController extends Controller
             ->orderBy($orderColumn, $sortType);
 
         if ($search_value != null) {
-            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $search_value = StringUtils::slugify($search_value);
             $qb->orWhere(
                 $qb->expr()->like('e.cte', '?1'),
                 $qb->expr()->like('e.solicitacao', '?1'),
                 $qb->expr()->like('e.grm', '?1'),
-                $qb->expr()->like('LOWER(j.nome)', '?1'),
-                $qb->expr()->like('LOWER(j.cidade)', '?1')
-            )->setParameters([1 => '%' . strtolower($search_value) . '%']);
+                $qb->expr()->like('j.canonical_name', '?1'),
+                $qb->expr()->like('j.canonical_city', '?1')
+            )->setParameters([1 => '%' . $search_value . '%']);
         }
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 
@@ -741,11 +759,26 @@ class EnvioController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="get-juncao", methods="GET")
+     * @Route("/{id}", name="gefra_envio_get", methods="GET")
      */
     public function show(Envio $envio): Response
     {
-        return $this->render('gefra_evio_show.html.twig', ['juncao' => $envio]);
+        return $this->render('gefra_evio_show.html.twig', ['envio' => $envio]);
     }
-    
+
+    /**
+     * @return Response
+     * @Route("/arquivos/", name="gefra_envio_files_index")
+     */
+    public function showFiles(EnvioFileRepository $envioFileRepository): Response
+    {
+        $files = $envioFileRepository->findAll();
+        $user_repo = $this->getDoctrine()->getManager()->getRepository(User::class);
+        foreach ($files as $index => $file) {
+            /* @var $file EnvioFile */
+            $file->setUploadedBy($user_repo->find($file->getUploadedBy())->getName());
+        }
+        return $this->render('gefra/envio/files_index.html.twig', ['files' => $files]);
+    }
+
 }

@@ -45,6 +45,11 @@
                class="nav-link{{ activelink == 'gefra_transportadora_index' ? ' active' : '' }}">
                 <i class="fas fa-truck-moving"></i> {{ 'gefra.transportadora.index' | trans }}</a>
         </li>
+        <li class="nav-item">
+            <a href="{{ activelink != 'gefra_envio_files_index' ? path('gefra_envio_files_index') : '#' }}"
+               class="nav-link{{ activelink == 'gefra_envio_files_index' ? ' active' : '' }}">
+                <i class="fas fa-file-excel"></i> {{ 'gefra.envio.files.index' | trans }}</a>
+        </li>
     {% endif %}
     </ul>
 </li>

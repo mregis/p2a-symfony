@@ -249,7 +249,6 @@ $(document).ready(function () {
         "initComplete": function(settings, json) {
             jQuery('.dataTables_filter input').unbind();
             jQuery('.dataTables_filter input').on('keyup', function (e) {
-                console.log(e.keyCode);
                 // If the length is 4 or more characters, or the user pressed ENTER, search
                 if (this.value.length > 3 || e.keyCode == 13 || e.which == 13) {
                     // Call the API search function

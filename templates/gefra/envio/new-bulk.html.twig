@@ -25,6 +25,7 @@
                     <h1>{{ 'gefra.envio.load-xmlfile-title'|trans }}</h1>
 
                     {{ form_start(form) }}
+                    {{ form_errors(form) }}
                     <div class="card mb-3 border-apps-3">
                         <div class="card-header bg-apps-3 text-white">
                             <div class="row">
@@ -44,9 +45,21 @@
                                     </a>
                                 </p>
                             </div>
-                            <fieldset>
-                                {{ form_row(form.registry) }}
-                            </fieldset>
+                            <div class="form-group row">
+                                {{ form_label(form.transportadora, null, {'label_attr': {'class':'col-form-label col-3 text-right'}}) }}
+                                <div class="col-8">
+                                    {{ form_errors(form.transportadora) }}
+                                    {{ form_widget(form.transportadora) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.registry, null, {'label_attr': {'class':'col-form-label col-3 text-right'}}) }}
+                                <div class="col-8">
+                                    {{ form_errors(form.registry) }}
+                                    {{ form_widget(form.registry) }}
+                                </div>
+                            </div>
+
 
                         </div>
                         <div class="card-footer">

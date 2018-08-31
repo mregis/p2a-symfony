@@ -4,3 +4,4 @@ old_password_error: Valor incorreto para sua senha atual
 verify-code:
     error: O código utilizado é inválido!
 invalid_tipoferiado_args: O tipo de feriado "{{ tipoferiado }}" precisa que uma "{{ tipolocal }}" seja indicada
+already-uploaded: Este arquivo já foi enviado anteriormente

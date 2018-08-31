@@ -93,7 +93,7 @@ class Envio implements \Serializable
 
     /**
      * @var float
-     * @ORM\Column(type="decimal", precision=6, scale=3, options={"comment"="Peso total dos volumes em KG"})
+     * @ORM\Column(type="decimal", precision=9, scale=4, options={"comment"="Peso total dos volumes em KG"})
      * @Assert\GreaterThanOrEqual(0.150)
      */
     private $peso;

@@ -85,6 +85,11 @@ class Transportadora implements \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Gefra\EnvioFile", mappedBy="transportadora")
+     */
+    private $envioFiles;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -92,6 +97,7 @@ class Transportadora implements \Serializable
         $this->cidade = 'São Paulo';
         $this->slas = new ArrayCollection();
         $this->envios = new ArrayCollection();
+        $this->envioFiles = new ArrayCollection();
     }
 
     public function getId()
@@ -315,6 +321,37 @@ class Transportadora implements \Serializable
     public function setRazaoSocial(string $razao_social): self
     {
         $this->razao_social = $razao_social;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EnvioFile[]
+     */
+    public function getEnvioFiles(): Collection
+    {
+        return $this->envioFiles;
+    }
+
+    public function addEnvioFile(EnvioFile $envioFile): self
+    {
+        if (!$this->envioFiles->contains($envioFile)) {
+            $this->envioFiles[] = $envioFile;
+            $envioFile->setTransportadora($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnvioFile(EnvioFile $envioFile): self
+    {
+        if ($this->envioFiles->contains($envioFile)) {
+            $this->envioFiles->removeElement($envioFile);
+            // set the owning side to null (unless already changed)
+            if ($envioFile->getTransportadora() === $this) {
+                $envioFile->setTransportadora(null);
+            }
+        }
 
         return $this;
     }

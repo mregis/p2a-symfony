@@ -21,6 +21,7 @@ fields:
     razao-social: Razão Social
     empty-list: Não há resultados para o termo pesquisado
     abreviacao: Abreviação
+    transportadora: Transportadora
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -572,6 +573,22 @@ gefra:
               para novos envios e também
               <strong>CTE, DATA EMISSAO CTE, DATA ENTREGA, NOME RECEBEDOR, DOC RECEBEDOR</strong>
               para atualizações de informações
+    files:
+      index: Arquivos
+      index-description: Arquivos de Envios carregados para processamento
+      labels:
+        created-at: Carregado Em
+        hashid: Chave
+        processing-started-at: Início Processamento
+        processing-ended-at: Fim Processamento
+        uploaded-by: Carregado Por
+      statuses:
+        NEW_SEND: Novo
+        IN_PROGRESS: Em Processamento
+        FINISHED_OK: Processado com Sucesso
+        FINISHED_ERROR: Processado com Falhas
+        ABORTED: Abortado
+
 
   operador:
     sample-filename: exemplo-arquivo-operador.csv

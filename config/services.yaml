@@ -53,5 +53,9 @@ services:
     App\EventListener\onLoginSuccessSubscriber:
         arguments: ['@doctrine.orm.default_entity_manager']
         tags: ['login.success.subscriber']
+
+    App\Command\processEnvioFileCommand:
+        arguments: ['@doctrine.orm.gefra_entity_manager', '@doctrine.orm.locais_entity_manager']
+        tags: ['command.enviofile']
 imports:
     - { resource: 'parameters.yaml' }

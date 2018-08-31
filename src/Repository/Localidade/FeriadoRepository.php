@@ -60,4 +60,41 @@ class FeriadoRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    /**
+     * @param \DateTime $date_from
+     * @param \DateTime $date_to
+     * @param null $cidade
+     * @param null $uf
+     * @return mixed
+     */
+    public function findAllByInterval(\DateTime $date_from, \DateTime $date_to, $cidade = null, $uf = null)
+    {
+
+        $qb = $this->createQueryBuilder('f')
+            ->where('f.dt_feriado BETWEEN :from AND :to AND f.tipo = :tiponacional')
+            ->setParameters(
+                [
+                    'from' => $date_from,
+                    'to' => $date_to,
+                    'tiponacional' => FeriadoType::TIPOFERIADO_NACIONAL]
+            );
+
+        if ($cidade != null) {
+            $qb->orWhere('f.local = :cidade AND f.tipo = :tipomunicial')
+                ->setParameter('cidade', $cidade)
+                ->setParameter('tipomunicial', FeriadoType::TIPOFERIADO_MUNICIPAL);
+
+        }
+
+        if ($uf != null) {
+            $qb->orWhere('f.uf = :uf AND f.tipo = :tipoestadual')
+                ->setParameter('uf', $uf)
+                ->setParameter('tipoestadual', FeriadoType::TIPOFERIADO_ESTADUAL)
+            ;
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
 }
