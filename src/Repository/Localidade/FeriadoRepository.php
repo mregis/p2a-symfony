@@ -4,7 +4,6 @@ namespace App\Repository\Localidade;
 
 use App\Entity\Localidade\Feriado;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use PhpOffice\PhpSpreadsheet\Calculation\DateTime;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -77,20 +76,20 @@ class FeriadoRepository extends ServiceEntityRepository
                 [
                     'from' => $date_from,
                     'to' => $date_to,
-                    'tiponacional' => FeriadoType::TIPOFERIADO_NACIONAL]
+                    'tiponacional' => Feriado::TIPOFERIADO_NACIONAL]
             );
 
         if ($cidade != null) {
             $qb->orWhere('f.local = :cidade AND f.tipo = :tipomunicial')
                 ->setParameter('cidade', $cidade)
-                ->setParameter('tipomunicial', FeriadoType::TIPOFERIADO_MUNICIPAL);
+                ->setParameter('tipomunicial', Feriado::TIPOFERIADO_MUNICIPAL);
 
         }
 
         if ($uf != null) {
             $qb->orWhere('f.uf = :uf AND f.tipo = :tipoestadual')
                 ->setParameter('uf', $uf)
-                ->setParameter('tipoestadual', FeriadoType::TIPOFERIADO_ESTADUAL)
+                ->setParameter('tipoestadual', Feriado::TIPOFERIADO_ESTADUAL)
             ;
         }
 

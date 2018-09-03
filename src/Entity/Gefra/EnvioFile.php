@@ -11,6 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 class EnvioFile
 {
 
+    // EnvioFile Processing Satus
+    const NEW_SEND = 'NEW_SEND';
+    const IN_PROGRESS = 'IN_PROGRESS';
+    const FINISHED_OK = 'FINISHED_OK';
+    const FINISHED_ERROR = 'FINISHED_ERROR';
+    const ABORTED = 'ABORTED';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

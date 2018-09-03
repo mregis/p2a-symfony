@@ -16,7 +16,6 @@ use App\Entity\Gefra\Operador;
 use App\Entity\Gefra\SLA;
 use App\Entity\Gefra\TipoEnvioStatus;
 use App\Entity\Localidade\Feriado;
-use App\Form\Gefra\EnvioFileType;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -102,7 +101,7 @@ class processEnvioFileCommand extends ContainerAwareCommand
     protected function findEnvioFiles()
     {
         $envioFile_repo = $this->envioFileManager->getRepository(EnvioFile::class);
-        return $envioFile_repo->findBy(['status' => EnvioFileType::NEW_SEND]);
+        return $envioFile_repo->findBy(['status' => EnvioFile::NEW_SEND]);
     }
 
     /**
@@ -118,17 +117,17 @@ class processEnvioFileCommand extends ContainerAwareCommand
             if (is_file($filename)) {
                 // Para quando estiver usando linha de comando em Windows no ambiente de desenvolvimento
                 // e o webserver estiver rodando em Linux não se deve usar o mesmo caminho
-                $enviofile->setStatus(EnvioFileType::IN_PROGRESS)
+                $enviofile->setStatus(EnvioFile::IN_PROGRESS)
                     ->setProcessingStartedAt(new \DateTime())
                     ;
                 $this->envioFileManager->persist($enviofile);
                 $this->envioFileManager->flush();
                 $enviofile->setPath($filename);
                 if ($this->processEnvio($enviofile) == true) {
-                    $result = EnvioFileType::FINISHED_OK;
+                    $result = EnvioFile::FINISHED_OK;
                 } else {
                     /* @todo Decidir se desfaz os cadastros de Envios criados */
-                    $result = EnvioFileType::FINISHED_ERROR;
+                    $result = EnvioFile::FINISHED_ERROR;
                 }
                 $enviofile->setStatus($result)
                     ->setProcessingEndedAt(new \DateTime());

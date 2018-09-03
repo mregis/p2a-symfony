@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Feriado
 {
+
+    const TIPOFERIADO_NACIONAL = 'nacional';
+    const TIPOFERIADO_ESTADUAL = 'estadual';
+    const TIPOFERIADO_MUNICIPAL = 'municipal';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

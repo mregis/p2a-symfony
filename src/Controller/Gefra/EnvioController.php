@@ -14,10 +14,8 @@ use App\Entity\Gefra\Juncao;
 use App\Entity\Gefra\Ocorrencia;
 use App\Entity\Gefra\Operador;
 use App\Entity\Gefra\SLA;
-use App\Entity\Gefra\TipoEnvioStatus;
 use App\Entity\Gefra\Transportadora;
 use App\Entity\Main\User;
-use App\Form\Gefra\EnvioFileType;
 use App\Form\Gefra\EnvioType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\EnvioFileRepository;
@@ -25,12 +23,10 @@ use App\Repository\Gefra\JuncaoRepository;
 use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +102,7 @@ class EnvioController extends Controller
                 $envio_file = new EnvioFile();
                 $envio_file->setPath($file->getPathname())
                     ->setHashId($file_id)
-                    ->setStatus(EnvioFileType::NEW_SEND)
+                    ->setStatus(EnvioFile::NEW_SEND)
                     ->setUploadedBy($this->getUser()->getId())
                     ->setTransportadora($form->get('transportadora')->getData())
                     ;

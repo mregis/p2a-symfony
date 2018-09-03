@@ -59,7 +59,7 @@ class UserType extends AbstractType
             /* @var User */
             $user = $event->getData();
             $form = $event->getForm();
-            if ($user && $user->getProfile() && $this->userCaller->getProfile() &&
+            if ($user instanceof User && $user->getProfile() && $this->userCaller->getProfile() &&
                 $this->userCaller->getProfile()->getId() == $user->getProfile()->getId()) {
                 $form->add('profile', EntityType::class, array(
                     'class' => Profile::class,

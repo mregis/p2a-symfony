@@ -5,7 +5,6 @@ namespace App\Form\Localidade;
 use App\Entity\Localidade\Feriado;
 use App\Entity\Localidade\UF;
 use App\Form\DataTransformer\CidadeToStringTransformer;
-use App\Form\DataTransformer\UFtoStringTransformer;
 use App\Form\Type\AutocompleteCidadeType;
 use App\Validator\Constraints\TipoFeriado;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -21,10 +20,6 @@ class FeriadoType extends AbstractType
 {
 
     private $cidadeTransformer;
-
-    const TIPOFERIADO_NACIONAL = 'nacional';
-    const TIPOFERIADO_ESTADUAL = 'estadual';
-    const TIPOFERIADO_MUNICIPAL = 'municipal';
 
     public function __construct(CidadeToStringTransformer $cidadeTransformer)
     {
