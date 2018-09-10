@@ -623,7 +623,7 @@ class EnvioController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('gefra')->flush();
             $this->addFlash('success', 'flash.success.edit');
-            return $this->redirectToRoute('gefra_envio_index', ['id' => $envio->getId()]);
+            return $this->redirectToRoute('gefra_envio_index');
         }
 
         return $this->render('gefra/envio/edit.html.twig', [
@@ -663,7 +663,8 @@ class EnvioController extends Controller
         $search_value = $request->get('search', ['value' => null])['value'];
         $orderNumColumn = $request->get('order', [0 => ['column' => 0]])[0]['column'];
         // somente uma coluna para ordenação aqui
-        $orderColumn = array('e.dt_emissao_cte', 'e.cte', 'o.nome', 'j.nome', 'j.cidade', 'j.uf')[$orderNumColumn];
+        $orderColumn = array('e.dt_emissao_cte', 'e.grm','o.nome', 'j.nome','s.descricao',
+            'e.cte', 'j.cidade', 'j.uf')[$orderNumColumn];
         $sortType = $request->get('order', [0 => ['dir' => 'DESC']])[0]['dir'];
         $cidade_repo = $this->getDoctrine()
             ->getManager('gefra')
@@ -704,7 +705,7 @@ class EnvioController extends Controller
             if ($result['qt_ocorrencias'] > 0) {
                 /* @var $last_ocorrencia Ocorrencia */
                 $last_ocorrencia = $repo_ocorr->findLastByEnvio($envio);
-                $d['envio']['status'] = $last_ocorrencia->getType();
+                $d['envio']['status'] = $last_ocorrencia->getTipo();
             } else {
                 $d['envio']['status'] = 'NOVO';
             }
@@ -775,6 +776,19 @@ class EnvioController extends Controller
             $file->setUploadedBy($user_repo->find($file->getUploadedBy())->getName());
         }
         return $this->render('gefra/envio/files_index.html.twig', ['files' => $files]);
+    }
+
+
+    /**
+     * @param Envio $envio
+     * @return Response
+     * @Route("/ocorrencia-envio/{id}", name="gefra_ocorrencia_list")
+     */
+    public function listOcorrenciaByEnvio(Envio $envio): Response
+    {
+        return new Response($this->renderView('gefra/envio/_ocorrencia_list.html.twig',
+            ['ocorrencias' => $envio->getOcorrencias()])
+        );
     }
 
 }

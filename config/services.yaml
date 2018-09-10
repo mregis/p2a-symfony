@@ -54,6 +54,12 @@ services:
         arguments: ['@doctrine.orm.default_entity_manager']
         tags: ['login.success.subscriber']
 
+    App\EventListener\EnvioListener:
+        arguments: ['@security.token_storage']
+        tags:
+            - {name: 'doctrine.event_listener', event: preUpdate, entity: App\Entity\Gefra\Envio }
+            - {name: 'doctrine.event_listener', event: postFlush, entity: App\Entity\Gefra\Envio }
+
     App\Command\processEnvioFileCommand:
         arguments: ['@doctrine.orm.gefra_entity_manager', '@doctrine.orm.locais_entity_manager']
         tags: ['command.enviofile']

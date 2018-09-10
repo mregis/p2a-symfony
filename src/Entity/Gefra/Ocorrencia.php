@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ocorrencia
 {
+
+    const TIPO_UPDATE = 'ATUALIZACAO';
+    const TIPO_CREATE = 'CRIACAO';
+    const TIPO_CANCEL = 'CANCELAMENTO';
+
     /**
      * @var string
      * @ORM\Id()
@@ -40,10 +45,14 @@ class Ocorrencia
     private $envio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Main\User")
      * @ORM\Column(type="string", length=40, options={"comment"="Usuario autenticado que alterou a ocorrencia"})
      */
     private $usuario;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
 
     public function getId()
     {
@@ -98,12 +107,12 @@ class Ocorrencia
         return $this;
     }
 
-    public function getUsuario(): ?User
+    public function getUsuario(): ?string
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?User $usuario): self
+    public function setUsuario(?string $usuario): self
     {
         $this->usuario = $usuario;
 

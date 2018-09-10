@@ -22,6 +22,9 @@ fields:
     empty-list: Não há resultados para o termo pesquisado
     abreviacao: Abreviação
     transportadora: Transportadora
+    recebedor: Recebedor
+    doc_recebedor: Doc. Recebedor
+    observacao: Observação
 modalProcess:
   title: 'Processando requisição'
   body: Sua requisição está sendo processada.
@@ -648,3 +651,13 @@ gefra:
     edit-form-title: Alterar informações da Transportadora
                         <span class="btn disabled btn-sm btn-dark">%name%</span>
     edit-title: Editar Transportadora
+
+  ocorrencia:
+    title: Ocorrências de Envio
+    title-description: Historico de Alterações de um Envio
+    labels:
+      tipo: Tipo Ocorrência
+      atividade: Atividade
+      criado_por: Efetuado por
+      dt_criacao: Data/Hora Ocorrência
+

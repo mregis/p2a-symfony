@@ -10,6 +10,7 @@ namespace App\Form\Gefra;
 
 use App\Entity\Gefra\Envio;
 use App\Entity\Gefra\Operador;
+use App\Entity\Gefra\TipoEnvioStatus;
 use App\Entity\Gefra\Transportadora;
 use App\Form\DataTransformer\JuncaoToStringTransformer;
 use App\Form\Type\AutocompleteJuncaoType;
@@ -20,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,14 +37,23 @@ class EnvioType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /* @var $envio Envio */
+        $envio = $builder->getData();
         $builder
             ->add('transportadora', EntityType::class, [
                 'class' => Transportadora::class,
-                'placeholder' => 'choice-field.placeholder'])
+                'placeholder' => 'choice-field.placeholder',
+                'attr' => ['readonly' => ($envio->getId() != null)]
+            ])
             ->add('operador', EntityType::class, [
                 'class' => Operador::class,
-                'placeholder' => 'choice-field.placeholder'])
-            ->add('juncao', AutocompleteJuncaoType::class, ['label' => 'gefra.labels.juncao'])
+                'placeholder' => 'choice-field.placeholder',
+                'attr' => ['readonly' => ($envio->getId() != null)]
+            ])
+            ->add('juncao', AutocompleteJuncaoType::class, [
+                    'label' => 'gefra.labels.juncao',
+                    'attr' => ['readonly' => ($envio->getId() != null)]
+            ])
 
             ->add('cte', TextType::class, [
                 'label' => 'fields.name.cte',
@@ -71,7 +82,10 @@ class EnvioType extends AbstractType
                 ])
             ->add('grm', TextType::class, [
                 'label' => 'fields.name.grm',
-                'attr' => ['data-input-mask' => 'int']
+                'attr' => [
+                    'data-input-mask' => 'int',
+                    'readonly' => ($envio->getId() != null)
+                ]
             ])
             ->add('valor', MoneyType::class,
                 [
@@ -79,20 +93,31 @@ class EnvioType extends AbstractType
                     'currency' => 'BRL',
                     'scale' => 2,
                     'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_CEILING,
-                    'attr' => ['data-input-mask' => 'moeda']
+                    'grouping' => 3,
                 ])
-            ->add('qt_vol', IntegerType::class, ['label' => 'fields.name.qt_vol'])
+            ->add('qt_vol', IntegerType::class, [
+                'label' => 'fields.name.qt_vol',
+                'label' => 'fields.name.qt_vol',
+            ])
             ->add('peso', NumberType::class,
                 [
                     'scale' => 3,
                     'label' => 'fields.name.peso',
                     'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_CEILING,
-                    'attr' => ['data-input-mask' => 'peso']
                 ])
             ->add('solicitacao', TextType::class, ['label' => 'fields.name.solicitacao', 'required' => false])
-            ;
+            ->add('recebedor', TextType::class, ['label' => 'fields.name.recebedor', 'required' => false])
+            ->add('doc_recebedor', TextType::class, ['label' => 'fields.name.doc_recebedor', 'required' => false])
+            ->add('status', EntityType::class, [
+                    'class' => TipoEnvioStatus::class,
+                    'placeholder' => 'choice-field.placeholder',
+                    ]
+            )
+            ->add('observacao', TextareaType::class, ['label' => 'fields.name.observacao', 'required' => false])
+        ;
         $builder->get('juncao')
             ->addModelTransformer($this->juncaoTransformer);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

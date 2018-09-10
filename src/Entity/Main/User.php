@@ -117,6 +117,11 @@ class User implements UserInterface, EquatableInterface, \Serializable
         $this->userApplication = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getId();
+    }
+
     /**
      * @return string
      */

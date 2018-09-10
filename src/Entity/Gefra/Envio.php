@@ -141,7 +141,7 @@ class Envio implements \Serializable
 
     /**
      * @var string
-     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"}, nullable=true)
+     * @ORM\Column(type="string", options={"comment"="Numero da Solicitacao"}, nullable=true, length=20)
      */
     private $solicitacao;
 
@@ -150,6 +150,12 @@ class Envio implements \Serializable
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text", options={"comment"="Numero da Solicitacao"}, nullable=true)
+     */
+    private $observacao;
 
     public function __construct()
     {
@@ -188,6 +194,7 @@ class Envio implements \Serializable
             'solicitacao' => $this->solicitacao,
             'lote' => $this->lote,
             'status' => unserialize($this->getStatus()->serialize()),
+            'observacao' => $this->observacao,
         ));
     }
 
@@ -215,6 +222,7 @@ class Envio implements \Serializable
             $this->solicitacao,
             $this->lote,
             $this->status,
+            $this->observacao,
             ) = unserialize($serialized);
     }
 
@@ -516,6 +524,18 @@ class Envio implements \Serializable
     public function setSolicitacao(?string $solicitacao): self
     {
         $this->solicitacao = $solicitacao;
+
+        return $this;
+    }
+
+    public function getObservacao(): ?string
+    {
+        return $this->observacao;
+    }
+
+    public function setObservacao(?string $observacao): self
+    {
+        $this->observacao = $observacao;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repository\Gefra;
 
+use App\Entity\Gefra\Envio;
 use App\Entity\Gefra\Ocorrencia;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -57,7 +58,7 @@ class OcorrenciaRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('o')
             ->andWhere('o.envio = :val')
             ->setParameter('val', $envio)
-            ->orderBy('a.created_at', 'DESC')
+            ->orderBy('o.created_at', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
