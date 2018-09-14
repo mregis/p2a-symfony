@@ -85,9 +85,7 @@ class AppInitCommand extends Command
         foreach ($mns as $mn) {
             // Extraindo o nome do EntityManager
             $mn = strtr($mn, array('doctrine' => '', '.' => '', 'orm' =>'', '_entity_manager' => ''));
-
             $io->writeln(sprintf('<<<<<<comment>%s</comment>>>>>>', $mn));
-
             // Executando comandos de criação de base de dados
             $createDbArguments = array(
                 'command' => 'doctrine:schema:update',
