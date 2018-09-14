@@ -20,7 +20,7 @@ class UserApplication
 
     /**
      * @var string
-     * @ORM\Column(type="guid", columnDefinition="DEFAULT gen_random_uuid()", options={"comment"="Identificador do registro"})
+     * @ORM\Column(type="guid", options={"comment"="Identificador do registro"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      */
