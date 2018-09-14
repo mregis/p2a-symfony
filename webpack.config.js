@@ -4,7 +4,7 @@ Encore
     // the project directory where compiled assets will be stored
     .setOutputPath('public/resources/')
     // the public path used by the web server to access the previous directory
-    .setPublicPath('/auth/resources')
+    .setPublicPath('/painel/resources')
     .setManifestKeyPrefix('resources')
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
