@@ -54,7 +54,7 @@ class AppInitCommand extends Command
         ];
         $io->writeln("====Verificando a existência das bases de dados e respectivas conexões:");
 
-        $dropDbCommand = $this->getApplication()->find('doctrine:database:drop');
+        $dropDbCommand = $this->getApplication()->find('doctrine:schema:drop');
         $createDbCommand = $this->getApplication()->find('doctrine:database:create');
         $updateSchemaCommand = $this->getApplication()->find('doctrine:schema:update');
 
@@ -67,7 +67,7 @@ class AppInitCommand extends Command
             $io->writeln(sprintf('<<<<<<comment>%s</comment>>>>>>', $mn));
             // Executando comandos de remoção de base de dados
             $dropDbArguments = array(
-                'command' => 'doctrine:database:drop',
+                'command' => 'doctrine:schema:drop',
                 '--force' => true,
                 '--em' => $mn,
             );
