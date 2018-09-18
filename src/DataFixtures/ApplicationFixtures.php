@@ -13,44 +13,107 @@ use App\Entity\Main\Application;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Routing\RouterInterface;
 
 class ApplicationFixtures extends Fixture
 {
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
+
     public function load(ObjectManager $oManager)
     {
-        $stringTypes = ['TextType', 'TextareaType', 'EmailType', 'UrlType', 'TelType', 'SearchType',];
-        $numberTypes = ['IntegerType', 'MoneyType', 'NumberType', 'PercentType',];
-        $dateTypes = ['DateType', 'DateTimeType', 'TimeType',];
-        $appsAlias = [1 => 'Facebook', 'Twitter', 'Instagram', 'Tumbler', 'Tinder'];
-        foreach ($appsAlias as $k => $app) {
-            /* @var $application Application */
-            $application = new Application();
-            $application->setName('Application Number ' . $k)
-                ->setIsActive(true)
-                ->setAlias($app)
-                ->setUri("http://www." . strtolower($app) . ".com");
+        #### Criando entrada para Aplicativo de Localidade
+        $application = new Application();
+        $application->setName('Cadastro de Locais e Feriados')
+            ->setAlias('Locais')
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('icone ')
+                    ->setDefaultValue('fas fa-globe')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('bg-color ')
+                    ->setDefaultValue('bg-apps-3')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('border-color ')
+                    ->setDefaultValue('border-apps-3')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->setUri($this->router->generate('localidade_home'));
 
-            // String Attributes
-            foreach (array_rand($stringTypes, 3) as $typesKey) {
-                $optionAttribute = new OptionAttribute();
-                $optionAttribute->setName('Option ' . str_replace('Type', '', $stringTypes[$typesKey]))
-                    ->setDefaultValue('Default Value for Option ' . $typesKey)
-                    ->setRequired(($typesKey % 2 == 1))
-                    ->setType($stringTypes[$typesKey]);
-                $application->addOption($optionAttribute);
-            }
+        $oManager->persist($application);
 
-            foreach (array_rand($numberTypes, 2) as $typesKey) {
-                $optionAttribute = new OptionAttribute();
-                $optionAttribute->setName('Option ' . str_replace('Type', '', $numberTypes[$typesKey]))
-                    ->setDefaultValue(rand(0,100))
-                    ->setRequired(($typesKey % 2 == 1))
-                    ->setType($numberTypes[$typesKey]);
-                $application->addOption($optionAttribute);
-            }
+        #### Criando entrada para Aplicativo de Agência
+        $application = new Application();
+        $application->setName('Cadastro de Agências')
+            ->setAlias('Agências')
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('icone ')
+                    ->setDefaultValue('fas fa-university')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('bg-color ')
+                    ->setDefaultValue('bg-apps-2')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('border-color ')
+                    ->setDefaultValue('border-apps-2')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->setUri($this->router->generate('agencia_home'));
 
-            $oManager->persist($application);
-        }
+        #### Criando entrada para Aplicativo de Espelhos de Malotes
+        $application = new Application();
+        $application->setName('Gestão Entregas Fracionadas')
+            ->setAlias('SISGEFRA')
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('icone ')
+                    ->setDefaultValue('fas fa-road')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('bg-color ')
+                    ->setDefaultValue('bg-apps-0')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('border-color ')
+                    ->setDefaultValue('border-apps-0')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->setUri($this->router->generate('gefra_home'));
+
         $oManager->flush();
     }
 

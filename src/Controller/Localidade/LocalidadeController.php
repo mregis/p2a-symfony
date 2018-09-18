@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LocalidadeController extends Controller
 {
     /**
-     * @Route("/", name="localidade", methods="GET")
+     * @Route("/", name="localidade_home", methods="GET")
      */
     public function index(): Response
     {

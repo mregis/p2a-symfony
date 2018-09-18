@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="gefra-home", methods="GET")
+     * @Route("/", name="gefra_home", methods="GET")
      */
     public function index(): Response
     {

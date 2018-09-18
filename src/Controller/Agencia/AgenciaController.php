@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AgenciaController extends Controller
 {
     /**
-     * @Route("/", name="agencias-home", methods="GET")
+     * @Route("/", name="agencias_home", methods="GET")
      */
     public function index(): Response
     {

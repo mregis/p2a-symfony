@@ -10,6 +10,7 @@ namespace App\Provider;
 
 
 use App\Entity\Main\User;
+use App\Util\StringUtils;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -36,7 +37,7 @@ class UserProvider implements UserProviderInterface
             ->from('User', 'u')
             ->where('u.canonical_username = :username')
             ->orWhere('u.canonical_email = :username')
-            ->setParameter('username', strtolower($username));
+            ->setParameter('username', StringUtils::slugify($username));
         $stmt = $qb->execute();
 
         if (!$u = $stmt->fetch()) {
@@ -85,7 +86,7 @@ class UserProvider implements UserProviderInterface
             ->set('u.confirmationtoken', ':token')
             ->where('u.canonical_username = :username')
             ->setParameter('token', $code)
-            ->setParameter('username', strtolower($username))
+            ->setParameter('username', StringUtils::slugify($username))
             ->execute();
 
         return $code;

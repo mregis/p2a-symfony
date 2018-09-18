@@ -152,6 +152,12 @@ class AppInitCommand extends Command
         $this->io->write('Carregando novos dados ... ');
         $profileBaseFixtures->load($oManager);
         $this->io->writeln('OK.');
+        // ApplicationFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Aplicações</>... ");
+        $profileBaseFixtures = new ApplicationFixtures();
+        $this->io->write('Carregando novos dados ... ');
+        $profileBaseFixtures->load($oManager);
+        $this->io->writeln('OK.');        
         // UserFixtures
         $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Usuario</>... ");
         $userBaseFixtures = new UserFixtures($container->get('security.password_encoder'));
