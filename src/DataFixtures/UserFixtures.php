@@ -35,9 +35,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         if ($profile = $oManager->getRepository(Profile::class)->findOneBy(array('level' => 1))) {
             $user = new User();
             $user->setName('Administrator')
-                ->setEmail('marcos.regis@address.com.br')
-                ->setUsername('marcos.regis')
-                ->setPassword($this->passwordEncoder->encodePassword($user, 'blablabla'))
+                ->setEmail('tecnologia@address.com.br')
+                ->setUsername('admin')
+                ->setPassword($this->passwordEncoder->encodePassword($user, 'admin'))
                 ->setProfile($profile);
 
             $oManager->persist($user);
