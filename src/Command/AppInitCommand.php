@@ -160,7 +160,7 @@ class AppInitCommand extends Command
         $this->io->write('OK.');
 
         $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>agencias</>");
-        $oManager = $doctrine->getManager('agencias');
+        $oManager = $doctrine->getManager('agencia');
         // BancoFixtures
         $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Banco</>... ");
         $bancoBaseFixtures = new BancoFixtures();
