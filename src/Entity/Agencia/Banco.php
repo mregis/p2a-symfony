@@ -41,7 +41,7 @@ class Banco
     /**
      * @ORM\Column(type="boolean", options={"default"=true})
      */
-    private $is_active;
+    private $is_active = true;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Agencia\Agencia", mappedBy="banco", orphanRemoval=true)
