@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\DataFixtures\ApplicationFixtures;
 use App\DataFixtures\BancoFixtures;
 use App\DataFixtures\LocalidadeFixtures;
 use App\DataFixtures\ProfileFixtures;
@@ -157,7 +158,7 @@ class AppInitCommand extends Command
         $profileBaseFixtures = new ApplicationFixtures();
         $this->io->write('Carregando novos dados ... ');
         $profileBaseFixtures->load($oManager);
-        $this->io->writeln('OK.');        
+        $this->io->writeln('OK.');
         // UserFixtures
         $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Usuario</>... ");
         $userBaseFixtures = new UserFixtures($container->get('security.password_encoder'));
