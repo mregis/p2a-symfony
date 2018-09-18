@@ -58,6 +58,23 @@ class AppInitCommand extends Command
         $createDbCommand = $this->getApplication()->find('doctrine:database:create');
         $updateSchemaCommand = $this->getApplication()->find('doctrine:schema:update');
 
+        // Limpando as bases se elas existirem
+        $mns = $doctrine->getManagerNames();
+        $io->writeln("\n==== Removendo os schemas/bases de dados se elas existirem:");
+        foreach ($mns as $mn) {
+            // Extraindo o nome do EntityManager
+            $mn = strtr($mn, array('doctrine' => '', '.' => '', 'orm' =>'', '_entity_manager' => ''));
+            $io->writeln(sprintf('<<<<<<comment>%s</comment>>>>>>', $mn));
+            // Executando comandos de remoção de base de dados
+            $dropDbArguments = array(
+                'command' => 'doctrine:database:drop',
+                '--force' => true,
+                '--em' => $mn,
+            );
+            $dropDbInput = new ArrayInput($dropDbArguments);
+            $returnCode = $dropDbCommand->run($dropDbInput, $output);
+        }
+
         /* @var $em ObjectManager */
         foreach ($mandatories as $connection => $database) {
             $io->writeln(
@@ -77,14 +94,6 @@ class AppInitCommand extends Command
                     $io->note("Bases de dados em SQLite não serão recriadas através deste comando. Ignorando...");
                     continue;
                 }
-                // Executando comandos de remoção de base de dados
-                $dropDbArguments = array(
-                    'command' => 'doctrine:database:drop',
-                    '--force' => true,
-                    '--connection' => $connection,
-                );
-                $dropDbInput = new ArrayInput($dropDbArguments);
-                $returnCode = $dropDbCommand->run($dropDbInput, $output);
 
                 // Executando comandos de criação de base de dados
                 $createDbArguments = array(
@@ -102,7 +111,7 @@ class AppInitCommand extends Command
             }
         }
 
-        $mns = $doctrine->getManagerNames();
+
 
         $io->writeln("\n==== Recriando/Atualizando os schemas das bases de dados indicadas:");
         foreach ($mns as $mn) {
