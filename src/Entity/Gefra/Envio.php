@@ -492,7 +492,7 @@ class Envio implements \Serializable
         return $this;
     }
 
-    public function getStatus(): TipoEnvioStatus
+    public function getStatus(): ?TipoEnvioStatus
     {
         return $this->status;
     }

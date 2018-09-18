@@ -18,8 +18,6 @@ class ApplicationFixtures extends Fixture
 {
     public function load(ObjectManager $oManager)
     {
-        var_dump($oManager);
-        exit;
         $stringTypes = ['TextType', 'TextareaType', 'EmailType', 'UrlType', 'TelType', 'SearchType',];
         $numberTypes = ['IntegerType', 'MoneyType', 'NumberType', 'PercentType',];
         $dateTypes = ['DateType', 'DateTimeType', 'TimeType',];

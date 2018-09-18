@@ -2,6 +2,12 @@
 
 namespace App\Command;
 
+use App\DataFixtures\BancoFixtures;
+use App\DataFixtures\LocalidadeFixtures;
+use App\DataFixtures\ProfileFixtures;
+use App\DataFixtures\TipoEnvioStatusFixtures;
+use App\DataFixtures\TransportadoraFixtures;
+use App\DataFixtures\UserFixtures;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Console\Command\Command;
@@ -10,10 +16,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Security\Core\User\User;
 
 class AppInitCommand extends Command
 {
     protected static $defaultName = 'app:init';
+
+    /**
+     * @var SymfonyStyle
+     */
+    private $io;
 
     protected function configure()
     {
@@ -24,13 +36,14 @@ class AppInitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+        $this->io = $io;
         $io->writeln('<info>Inciando a configuração da aplicação para um novo ambiente</info>');
 
         /* @var $container Container */
         $container = $this->getApplication()->getKernel()->getContainer();
 
         /* @var $doctrine Registry */
-        $doctrine = $doctrine = $container->get('doctrine');
+        $doctrine = $container->get('doctrine');
 
         // Key => Value pair mean connection => db
         $mandatories = [
@@ -41,6 +54,7 @@ class AppInitCommand extends Command
         ];
         $io->writeln("====Verificando a existência das bases de dados e respectivas conexões:");
 
+        $dropDbCommand = $this->getApplication()->find('doctrine:database:drop');
         $createDbCommand = $this->getApplication()->find('doctrine:database:create');
         $updateSchemaCommand = $this->getApplication()->find('doctrine:schema:update');
 
@@ -63,6 +77,15 @@ class AppInitCommand extends Command
                     $io->note("Bases de dados em SQLite não serão recriadas através deste comando. Ignorando...");
                     continue;
                 }
+                // Executando comandos de remoção de base de dados
+                $dropDbArguments = array(
+                    'command' => 'doctrine:database:frop',
+                    '--force' => true,
+                    '--connection' => $connection,
+                );
+                $dropDbInput = new ArrayInput($dropDbArguments);
+                $returnCode = $dropDbCommand->run($dropDbInput, $output);
+
                 // Executando comandos de criação de base de dados
                 $createDbArguments = array(
                     'command' => 'doctrine:database:create',
@@ -96,6 +119,63 @@ class AppInitCommand extends Command
             $returnCode = $updateSchemaCommand->run($updateSchemaInput, $output);
         }
 
+        $this->loadFixtures(); // Carregar
+
         $io->success('Aplicação Iniciada');
+    }
+
+    public function loadFixtures()
+    {
+        /* @var $container Container */
+        $container = $this->getApplication()->getKernel()->getContainer();
+        /* @var $doctrine Registry */
+        $doctrine = $container->get('doctrine');
+
+        $this->io->writeln('<fg=black;bg=cyan>===== Iniciando carga de ' .
+            'dados basicos para funcionamento da aplicação Painel ======</>');
+
+        $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>default</>");
+
+        $oManager = $doctrine->getManager('default');
+        // ProfileFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Perfil</>... ");
+        $profileBaseFixtures = new ProfileFixtures();
+        $this->io->write('Carregando novos dados ... ');
+        $profileBaseFixtures->load($oManager);
+        $this->io->writeln('OK.');
+        // UserFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Usuario</>... ");
+        $userBaseFixtures = new UserFixtures($container->get('security.password_encoder'));
+        $this->io->write('OK. Carregando novos dados ... ');
+        $userBaseFixtures->load($oManager);
+        $this->io->write('OK.');
+
+        $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>agencias</>");
+        $oManager = $doctrine->getManager('agencias');
+        // BancoFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Banco</>... ");
+        $bancoBaseFixtures = new BancoFixtures();
+        $this->io->write('OK. Carregando novos dados ... ');
+        $bancoBaseFixtures->load($oManager);
+        $this->io->write('OK.');
+
+        $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>gefra</>");
+        $oManager = $doctrine->getManager('gefra');
+        // TransportadoraFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>Transportadora</>... ");
+        $transportadoraBaseFixtures = new TransportadoraFixtures();
+        $this->io->write('OK. Carregando novos dados ... ');
+        $transportadoraBaseFixtures->load($oManager);
+        $this->io->write('OK.');
+
+        // TipoEnvioStatusFixtures
+        $this->io->write("\t Trabalhando tabela <fg=green;options=bold>TipoEnvioStatus</>... ");
+        $tipoEnvioBaseFixtures = new TipoEnvioStatusFixtures();
+        $this->io->write('OK. Carregando novos dados ... ');
+        $tipoEnvioBaseFixtures->load($oManager);
+        $this->io->write('OK.');
+
+        $this->io->writeln('<fg=black;bg=cyan>===== Carga de ' .
+            'dados concluída ======</>');
     }
 }

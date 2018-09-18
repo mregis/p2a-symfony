@@ -14,12 +14,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class ProfileFixtures extends Fixture
 {
+    // Order matters
+    private $basicRoles = ['ROLE_SUPERADMIN', 'ROLE_ADMIN', 'ROLE_MASTER', 'ROLE_USER'];
+
     public function load(ObjectManager $oManager)
     {
-        // Order matters
-        $basicRoles = ['ROLE_SUPERADMIN', 'ROLE_ADMIN', 'ROLE_MASTER', 'ROLE_USER'];
 
-        foreach ($basicRoles as $exp => $role)
+        foreach ($this->basicRoles as $exp => $role)
         {
             $profile = new Profile();
             $profile->setName($role)
