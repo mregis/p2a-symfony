@@ -79,7 +79,7 @@ class AppInitCommand extends Command
                 }
                 // Executando comandos de remoção de base de dados
                 $dropDbArguments = array(
-                    'command' => 'doctrine:database:frop',
+                    'command' => 'doctrine:database:drop',
                     '--force' => true,
                     '--connection' => $connection,
                 );
