@@ -18,17 +18,6 @@ use Symfony\Component\Routing\RouterInterface;
 class ApplicationFixtures extends Fixture
 {
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
-
-
     public function load(ObjectManager $oManager)
     {
         #### Criando entrada para Aplicativo de Localidade
@@ -56,7 +45,7 @@ class ApplicationFixtures extends Fixture
                     ->setRequired(true)
                     ->setType('TextType')
             )
-            ->setUri($this->router->generate('localidade_home'));
+            ->setUri('localidade_home');
 
         $oManager->persist($application);
 
@@ -85,7 +74,36 @@ class ApplicationFixtures extends Fixture
                     ->setRequired(true)
                     ->setType('TextType')
             )
-            ->setUri($this->router->generate('agencia_home'));
+            ->setUri('agencia_home');
+
+        /*
+        #### Criando entrada para Aplicativo de Espelhos de Malotes
+        $application = new Application();
+        $application->setName('Espelhos de Malotes')
+            ->setAlias('Malotes')
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('icone ')
+                    ->setDefaultValue('fas fa-briefcase')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('bg-color ')
+                    ->setDefaultValue('bg-apps-4')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->addOption(
+                (new OptionAttribute())
+                    ->setName('border-color ')
+                    ->setDefaultValue('border-apps-4')
+                    ->setRequired(true)
+                    ->setType('TextType')
+            )
+            ->setUri($this->router->generate('malotes_home'));
+        */
 
         #### Criando entrada para Aplicativo de Espelhos de Malotes
         $application = new Application();
@@ -112,7 +130,7 @@ class ApplicationFixtures extends Fixture
                     ->setRequired(true)
                     ->setType('TextType')
             )
-            ->setUri($this->router->generate('gefra_home'));
+            ->setUri('gefra_home');
 
         $oManager->flush();
     }

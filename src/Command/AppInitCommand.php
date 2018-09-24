@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\DataFixtures\ApplicationFixtures;
 use App\DataFixtures\BancoFixtures;
-use App\DataFixtures\LocalidadeFixtures;
 use App\DataFixtures\ProfileFixtures;
 use App\DataFixtures\TipoEnvioStatusFixtures;
 use App\DataFixtures\TransportadoraFixtures;
