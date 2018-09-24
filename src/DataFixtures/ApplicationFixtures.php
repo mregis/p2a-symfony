@@ -76,6 +76,8 @@ class ApplicationFixtures extends Fixture
             )
             ->setUri('agencia_home');
 
+        $oManager->persist($application);
+
         /*
         #### Criando entrada para Aplicativo de Espelhos de Malotes
         $application = new Application();
@@ -131,6 +133,7 @@ class ApplicationFixtures extends Fixture
                     ->setType('TextType')
             )
             ->setUri('gefra_home');
+        $oManager->persist($application);
 
         $oManager->flush();
     }

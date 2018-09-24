@@ -24,7 +24,7 @@
 
                     {% for ua in app.user.userapplication %}
                     <li>
-                        <a href="{{ ua.application.uri }}" target="_blank">
+                        <a href="{{ path(ua.application.uri) }}" target="_blank">
                             {% if ua.application.getOption('icone') %}
                                 <i class="{{ ua.application.getOption('icone') }}"></i>
                             {% endif %}
