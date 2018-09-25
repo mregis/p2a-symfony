@@ -49,10 +49,10 @@ class ApplicationFixtures extends Fixture
 
         $oManager->persist($application);
 
-        #### Criando entrada para Aplicativo de Agência
+        #### Criando entrada para Aplicativo de AgÃªncia
         $application = new Application();
-        $application->setName('Cadastro de Agências')
-            ->setAlias('Agências')
+        $application->setName('Cadastro de AgÃªncias')
+            ->setAlias('AgÃªncias')
             ->addOption(
                 (new OptionAttribute())
                     ->setName('icone ')
@@ -109,7 +109,7 @@ class ApplicationFixtures extends Fixture
 
         #### Criando entrada para Aplicativo de Espelhos de Malotes
         $application = new Application();
-        $application->setName('Gestão Entregas Fracionadas')
+        $application->setName('GestÃ£o Entregas Fracionadas')
             ->setAlias('SISGEFRA')
             ->addOption(
                 (new OptionAttribute())
