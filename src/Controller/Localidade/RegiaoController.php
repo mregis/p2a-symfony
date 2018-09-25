@@ -49,7 +49,7 @@ class RegiaoController extends Controller
             $em->persist($regiao);
             $em->flush();
             $this->addFlash('success', 'flash.success.new');
-            return $this->redirectToRoute('list-regiao');
+            return $this->redirectToRoute('localidade_regiao_index');
         }
 
         return $this->render('localidade/regiao/new.html.twig', [
@@ -76,7 +76,7 @@ class RegiaoController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('locais')->flush();
             $this->addFlash('success', 'regiao.flash.edit-success');
-            return $this->redirectToRoute('list-regiao', ['id' => $regiao->getId()]);
+            return $this->redirectToRoute('localidade_regiao_index');
         }
 
         return $this->render('localidade/regiao/edit.html.twig', [

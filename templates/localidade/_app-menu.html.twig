@@ -9,8 +9,8 @@
         <ul class="sidenav-second-level collapse" id="collapseLocalidade">
             {% if is_granted('ROLE_SUPERADMIN') %}
             <li class="nav-item">
-                <a href="{{ activelink != 'list-regiao' ? path('list-regiao') : '#' }}"
-                   class="nav-link{{ activelink == 'list-regiao' ? ' active' : '' }}">
+                <a href="{{ activelink != 'localidade_regiao_index' ? path('localidade_regiao_index') : '#' }}"
+                   class="nav-link{{ activelink == 'localidade_regiao_index' ? ' active' : '' }}">
                     <i class="fas fa-globe-americas"></i> {{ 'localidade.regiao.btn-regiao' | trans }}</a>
             </li>
             <li class="nav-item">

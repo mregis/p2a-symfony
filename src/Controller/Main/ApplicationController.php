@@ -29,7 +29,7 @@ class ApplicationController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository(Application::class);
         $app_list = $repository->findAll();
-        return $this->render('apps/main_application_index.html.twig', array('app_list' => $app_list));
+        return $this->render('apps/list-apps.html.twig', array('app_list' => $app_list));
     }
 
     /**
