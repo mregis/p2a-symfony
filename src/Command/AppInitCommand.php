@@ -163,7 +163,7 @@ class AppInitCommand extends Command
         $userBaseFixtures = new UserFixtures($container->get('security.password_encoder'));
         $this->io->write('OK. Carregando novos dados ... ');
         $userBaseFixtures->load($oManager);
-        $this->io->write('OK.');
+        $this->io->writeln('OK.');
 
         $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>agencias</>");
         $oManager = $doctrine->getManager('agencia');
@@ -172,7 +172,7 @@ class AppInitCommand extends Command
         $bancoBaseFixtures = new BancoFixtures();
         $this->io->write('OK. Carregando novos dados ... ');
         $bancoBaseFixtures->load($oManager);
-        $this->io->write('OK.');
+        $this->io->writeln('OK.');
 
         $this->io->writeln("\t Usando Banco de Dados <fg=green;options=bold>gefra</>");
         $oManager = $doctrine->getManager('gefra');
@@ -181,14 +181,14 @@ class AppInitCommand extends Command
         $transportadoraBaseFixtures = new TransportadoraFixtures();
         $this->io->write('OK. Carregando novos dados ... ');
         $transportadoraBaseFixtures->load($oManager);
-        $this->io->write('OK.');
+        $this->io->writeln('OK.');
 
         // TipoEnvioStatusFixtures
         $this->io->write("\t Trabalhando tabela <fg=green;options=bold>TipoEnvioStatus</>... ");
         $tipoEnvioBaseFixtures = new TipoEnvioStatusFixtures();
         $this->io->write('OK. Carregando novos dados ... ');
         $tipoEnvioBaseFixtures->load($oManager);
-        $this->io->write('OK.');
+        $this->io->writeln('OK.');
 
         $this->io->writeln('<fg=black;bg=cyan>===== Carga de ' .
             'dados concluída ======</>');
