@@ -38,7 +38,7 @@ class JuncaoController extends Controller
     }
 
     /**
-     * @Route("/nova", name="gefra-juncao-new", methods="GET|POST")
+     * @Route("/nova", name="gefra_juncao_new", methods="GET|POST")
      */
     public function newJuncao(Request $request): Response
     {
@@ -63,7 +63,7 @@ class JuncaoController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cadastro-lote", name="gefra-juncao-new-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="gefra_juncao_loadfile", methods="GET|POST")
      */
     public function newJuncaoBulk(Request $request): Response
     {
@@ -177,7 +177,7 @@ class JuncaoController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="gefra-juncao-edit", methods="GET|POST")
+     * @Route("/edit/{id}", name="gefra_juncao_edit", methods="GET|POST")
      */
     public function edit(Request $request, Juncao $juncao): Response
     {
@@ -197,7 +197,7 @@ class JuncaoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="gefra-juncao-delete", methods="DELETE")
+     * @Route("/{id}", name="gefra_juncao_delete", methods="DELETE")
      */
     public function deleteJuncao(Request $request, Juncao $juncao): Response
     {
@@ -213,7 +213,7 @@ class JuncaoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="gefra-juncao-changestatus", methods="PUT")
+     * @Route("/{id}", name="gefra_juncao_changestatus", methods="PUT")
      */
     public function changeStatus(Request $request, Juncao $juncao): Response
     {
@@ -236,7 +236,7 @@ class JuncaoController extends Controller
 
 
     /**
-     * @Route("/{id}", name="get-juncao", methods="GET")
+     * @Route("/{id}", name="gefra_juncao_show", methods="GET")
      */
     public function show(Juncao $juncao): Response
     {
@@ -295,7 +295,7 @@ class JuncaoController extends Controller
                 ->trans('gefra.juncao.changestatus.title', ['%name%' => $juncao->getNome()]);
             $d['deltitle'] = $this->get('translator')
                 ->trans('gefra.juncao.delete.title', ['%name%' => $juncao->getNome()]);
-            $d['editUrl'] = $this->generateUrl('gefra-juncao-edit', ['id' => $juncao->getId()]);
+            $d['editUrl'] = $this->generateUrl('gefra_juncao_edit', ['id' => $juncao->getId()]);
             $data[] = $d;
         }
 

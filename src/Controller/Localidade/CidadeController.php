@@ -28,7 +28,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 class CidadeController extends Controller
 {
     /**
-     * @Route("/", name="list-cidade", methods="GET")
+     * @Route("/", name="localidade_cidade_index", methods="GET")
      */
     public function listCidade(): Response
     {
@@ -81,7 +81,7 @@ class CidadeController extends Controller
                 ->trans('localidade.change-status.title', ['%name%' => $cidade->getNome()]);
             $d['deltitle'] = $this->get('translator')
                 ->trans('localidade.delete.title', ['%name%' => $cidade->getNome()]);
-            $d['editUrl'] = $this->generateUrl('edit-cidade', ['id' => $cidade->getId()]);
+            $d['editUrl'] = $this->generateUrl('localidade_cidade_edit', ['id' => $cidade->getId()]);
             $data[] = $d;
         }
 
@@ -98,7 +98,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/novo", name="new-cidade", methods="GET|POST")
+     * @Route("/novo", name="localidade_cidade_new", methods="GET|POST")
      */
     public function newCidade(Request $request): Response
     {
@@ -111,7 +111,7 @@ class CidadeController extends Controller
             $em->persist($cidade);
             $em->flush();
             $this->addFlash('success', 'flash.success.new');
-            return $this->redirectToRoute('list-cidade');
+            return $this->redirectToRoute('localidade_cidade_index');
         }
 
         return $this->render('localidade/cidade/new.html.twig', [
@@ -123,7 +123,7 @@ class CidadeController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cadastro-lote", name="new-cidade-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="localidade_cidade_loadfile", methods="GET|POST")
      */
     public function newCidadeBulk(Request $request): Response
     {
@@ -182,7 +182,7 @@ class CidadeController extends Controller
                 }
 
                 $this->addFlash('success', 'flash.success.new-bulk');
-                return $this->redirectToRoute('list-cidade');
+                return $this->redirectToRoute('localidade_cidade_index');
             } catch(Exception $e) {
                 $error = $e->getMessage();
             }
@@ -196,7 +196,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="show-cidade", methods="GET")
+     * @Route("/{id}", name="localidade_cidade_show", methods="GET")
      */
     public function showCidade(Cidade $cidade): Response
     {
@@ -204,7 +204,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/cidade/{id}/editar", name="edit-cidade", methods="GET|POST")
+     * @Route("/cidade/{id}/editar", name="localidade_cidade_edit", methods="GET|POST")
      */
     public function editCidade(Request $request, Cidade $cidade): Response
     {
@@ -214,7 +214,7 @@ class CidadeController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('locais')->flush();
             $this->addFlash('success', 'flash.success.edit');
-            return $this->redirectToRoute('list-cidade', ['id' => $cidade->getId()]);
+            return $this->redirectToRoute('localidade_cidade_index');
         }
 
         return $this->render('localidade/cidade/edit.html.twig', [
@@ -224,7 +224,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="delete-cidade", methods="DELETE")
+     * @Route("/{id}", name="localidade_cidade_delete", methods="DELETE")
      */
     public function deleteCidade(Request $request, Cidade $cidade): JsonResponse
     {
@@ -245,7 +245,7 @@ class CidadeController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="change-status-cidade", methods="PUT")
+     * @Route("/{id}", name="localidade_cidade_changestatus", methods="PUT")
      */
     public function changeStatusCidade(Request $request, Cidade $cidade): JsonResponse
     {

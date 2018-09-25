@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('gefra-juncao-new-bulk') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_juncao_loadfile') }}">
                                             <span class="fas fa-plus-circle"></span> {{ 'gefra.juncao.new-bulk'|trans }}
                                         </a>
                                     {% endif %}

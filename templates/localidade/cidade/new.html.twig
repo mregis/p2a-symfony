@@ -20,7 +20,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-cidade') }}">{{ 'localidade.cidade.list-name'|trans }}</a>
+                <li class="breadcrumb-item"><a href="{{ path('localidade_cidade_index') }}">{{ 'localidade.cidade.list-name'|trans }}</a>
                 </li>
                 <li class="breadcrumb-item">{{ 'new'|trans }}</li>
             </ol>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('new-cidade-bulk') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('localidade_cidade_loadfile') }}">
                                             <span class="fas fa-plus-circle"></span> {{ 'localidade.cidade.new-bulk'|trans }}
                                         </a>
                                     {% endif %}

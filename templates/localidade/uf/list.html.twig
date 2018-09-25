@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                    <a class="btn btn-sm btn-info" href="{{ path('new-uf') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ path('localidade_uf_new') }}">
                                         <span class="fas fa-plus-circle"></span> {{ 'localidade.uf.new'|trans }}
                                     </a>
                                     {% endif %}
@@ -66,7 +66,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm fas fa-edit"
-                                                       href="{{ path('edit-uf', {'id' : uf.id}) }}"
+                                                       href="{{ path('localidade_uf_edit', {'id' : uf.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
 
                                                     {% if is_granted('ROLE_SUPERADMIN') %}
@@ -153,11 +153,11 @@
 {% block js_codes %}
     {% if is_granted('ROLE_SUPERADMIN') %}
         {{ parent() }}
-        var $statusChangePath = '{{ path('change-status-uf', {id: '_id'}) }}';
+        var $statusChangePath = '{{ path('localidade_uf_changestatus', {id: '_id'}) }}';
         var $modalBodyHTML = '{{ 'localidade.change-status.modal-body'|trans|raw }}';
         var $modalTitleText = '{{ 'localidade.change-status.modal-title' | trans }}';
 
-        var $deletePath = '{{ path('delete-uf', {id: '_id'}) }}';
+        var $deletePath = '{{ path('localidade_uf_delete', {id: '_id'}) }}';
         var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
         var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
     {% endif %}

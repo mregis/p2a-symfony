@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('new-cidade') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('localidade_cidade_new') }}">
                                             <span class="fas fa-plus-circle"></span> {{ 'localidade.cidade.new'|trans }}
                                         </a>
                                     {% endif %}
@@ -158,11 +158,11 @@
     {% if is_granted('ROLE_SUPERADMIN') %}
         {{ parent() }}
 
-        var $statusChangePath = '{{ path('change-status-cidade', {id: '_id'}) }}';
+        var $statusChangePath = '{{ path('localidade_cidade_changestatus', {id: '_id'}) }}';
         var $modalBodyHTML = '{{ 'localidade.change-status.modal-body'|trans|raw }}';
         var $modalTitleText = '{{ 'localidade.change-status.modal-title' | trans }}';
 
-        var $deletePath = '{{ path('delete-cidade', {id: '_id'}) }}';
+        var $deletePath = '{{ path('localidade_cidade_delete', {id: '_id'}) }}';
         var $deleteModalBodyHTML = '{{ 'localidade.delete.modal-body'|trans|raw }}';
         var $deleteModalTitleText = '{{ 'localidade.delete.modal-title' | trans }}';
     {% endif %}

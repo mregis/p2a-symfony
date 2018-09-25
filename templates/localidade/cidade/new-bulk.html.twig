@@ -17,7 +17,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('localidade') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-cidade') }}">{{ 'localidade.cidade.list-name'|trans }}</a>
+                <li class="breadcrumb-item"><a href="{{ path('localidade_cidade_index') }}">{{ 'localidade.cidade.list-name'|trans }}</a>
                 </li>
                 <li class="breadcrumb-item active">{{ 'new-bulk'|trans }}</li>
             </ol>
@@ -40,7 +40,7 @@
                                 <p>{{ 'localidade.cidade.bulk-form-description'|trans }}</p>
 
                                 <p>
-                                    <a class="link card-link" href="{{ path('sample-file', {'source': 'cidade'}) }}">
+                                    <a class="link card-link" href="{{ path('localidade_samplefile', {'source': 'cidade'}) }}">
                                         {{ 'localidade.cidade.bulk-example-link'|trans }}
                                     </a>
                                 </p>
@@ -57,7 +57,7 @@
                             <button class="btn btn-primary col-4" type="submit">
                                 <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
                             </button>
-                            <a class="btn btn-secondary col-4" href="{{ path('list-cidade') }}"><i
+                            <a class="btn btn-secondary col-4" href="{{ path('localidade_cidade_index') }}"><i
                                         class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}</a>
                         </div>
                     </div>

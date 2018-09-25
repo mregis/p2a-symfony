@@ -17,7 +17,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('agencias-home') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-agencias') }}">{{ 'agencia.list-name'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('agencias_agencia_index') }}">{{ 'agencia.list-name'|trans }}</a></li>
                 <li class="breadcrumb-item active">{{ 'new-bulk'|trans }}</li>
             </ol>
             <div class="row">
@@ -39,7 +39,7 @@
                                 <p>{{ 'agencia.bulk-form-description'|trans }}</p>
 
                                 <p>
-                                    <a class="link card-link" href="{{ path('agencia-sample-file', {'source': 'agencia'}) }}">
+                                    <a class="link card-link" href="{{ path('agencias_agencia_samplefile', {'source': 'agencia'}) }}">
                                         {{ 'agencia.bulk-example-link'|trans }}
                                     </a>
                                 </p>
@@ -56,7 +56,7 @@
                             <button class="btn btn-primary col-4" type="submit">
                                 <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
                             </button>
-                            <a class="btn btn-secondary col-4" href="{{ path('list-agencias') }}"><i
+                            <a class="btn btn-secondary col-4" href="{{ path('agencias_agencia_index') }}"><i
                                         class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}</a>
                         </div>
                     </div>

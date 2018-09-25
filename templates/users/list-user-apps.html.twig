@@ -8,7 +8,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('main_user_index') }}">{{ 'users.list'|trans }}</a></li>
                 <li class="breadcrumb-item">{{ 'application.list-name'|trans }}</li>
             </ol>
             <div class="row">
@@ -23,7 +23,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     <a class="btn btn-sm btn-success fas fa-plus-circle"
-                                       href="{{ path('new-user-app', {'id' : e_user.id}) }}">{{ 'new'|trans }}</a>
+                                       href="{{ path('main_userapplication_new', {'id' : e_user.id}) }}">{{ 'new'|trans }}</a>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                                 </td>
                                                 <td class="text-nowrap">
                                                     <a class="btn btn-info btn-sm fas fa-edit"
-                                                       href="{{ path('edit-user-app', {'id' : userapp.id}) }}"
+                                                       href="{{ path('main_userapplication_edit', {'id' : userapp.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
                                                 </td>
                                             </tr>

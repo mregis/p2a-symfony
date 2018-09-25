@@ -24,7 +24,7 @@ class LocalidadeController extends Controller
 
     /**
      * @return Response
-     * @Route("/arquivo-modelo/{source}", name="sample-file")
+     * @Route("/arquivo-modelo/{source}", name="localidade_samplefile")
      */
     public function downloadSampleCVS(Request $request, $source): Response
     {

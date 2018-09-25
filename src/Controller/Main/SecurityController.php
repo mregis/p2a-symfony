@@ -53,7 +53,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/esqueci-senha", name="forgot-password")
+     * @Route("/esqueci-senha", name="security_password_recover")
      * @param Request $request
      * @return Response
      */
@@ -99,7 +99,7 @@ class SecurityController extends Controller
                 }
                 // Show Success Message whenever occours
                 $this->addFlash('success', 'forgot-password.flash.success');
-                return $this->redirect($this->generateUrl('login-by-code'), 301);
+                return $this->redirect($this->generateUrl('security_login_by_code'), 301);
             } else {
                 $form->addError(new FormError('general_form_error'));
             }
@@ -108,7 +108,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/autenticar-via-codigo", name="login-by-code")
+     * @Route("/autenticar-via-codigo", name="security_login_by_code")
      */
     public function loginByCode(Request $request)
     {
@@ -142,12 +142,12 @@ class SecurityController extends Controller
                 if ($user && $user->isEnabled()) {
                     if ($user->getLastLogin()) {
                         $this->addFlash('success', 'change-password.flash.success');
-                        return $this->redirect($this->generateUrl('redefine-password'), 301);
+                        return $this->redirect($this->generateUrl('security_password_redefine'), 301);
                     } else {
                         $this->addFlash('success', 'users.first-login');
                         $request->getSession()->set('myUser', $user);
                         // First login
-                        return $this->redirect($this->generateUrl('complete-register'), 301);
+                        return $this->redirect($this->generateUrl('security_complete_register'), 301);
                     }
                 } else {
                     $form->get('code')->addError(new FormError(
@@ -168,7 +168,7 @@ class SecurityController extends Controller
 
 
     /**
-     * @Route("/redefinir-senha", name="redefine-password")
+     * @Route("/redefinir-senha", name="security_password_redefine")
      * @param Request $request
      * @return Response
      */
@@ -213,7 +213,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/completar-cadastro", name="complete-register")
+     * @Route("/completar-cadastro", name="security_complete_register")
      * @param Request $request
      * @return Response
      */
@@ -291,20 +291,20 @@ class SecurityController extends Controller
                     $user->getRoles()
                 );
                 $tokenStorage->setToken($token);
-                $this->addFlash('success', 'users.complete-register.success');
+                $this->addFlash('success', 'users.security_complete_register.success');
                 return $this->redirect($this->generateUrl('home'), 301);
             } else {
                 $error = new FormError('general_form_error');
             }
         }
-        return $this->render('security/complete-register.html.twig', array(
+        return $this->render('security/security_complete_register.html.twig', array(
             'form' => $form->createView(),
             'error' => $error,
         ));
     }
 
     /**
-     * @Route("/alterar-senha", name="change-password")
+     * @Route("/alterar-senha", name="security_change_password")
      * @param Request $request
      * @return Response
      */
@@ -355,7 +355,7 @@ class SecurityController extends Controller
 
     /**
      * @param Request $request
-     * @Route("/check-last-login", name="check_last_login")
+     * @Route("/check-last-login", name="security_check_last_login")
      * @param Request $request
      * @return Response
      *
@@ -368,7 +368,7 @@ class SecurityController extends Controller
         }
         if ($user->getLastLogin() == null) {
             $request->getSession()->set('myUser', $user);
-            return $this->redirectToRoute('complete-register');
+            return $this->redirectToRoute('security_complete_register');
         }
         $user->setLastLogin(new \DateTime());
         $oManager = $this->getDoctrine()->getManager();

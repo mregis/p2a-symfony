@@ -34,7 +34,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia", name="list-agencias", methods="GET")
+     * @Route("/agencia", name="agencias_agencia_index", methods="GET")
      */
     public function listAgencias(): Response
     {
@@ -42,7 +42,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia/nova", name="new-agencia", methods="GET|POST")
+     * @Route("/agencia/nova", name="agencias_agencia_new", methods="GET|POST")
      */
     public function newAgencia(Request $request): Response
     {
@@ -63,7 +63,7 @@ class AgenciaController extends Controller
                 $em->persist($agencium);
                 $em->flush();
                 $this->addFlash('success', 'flash.success.new');
-                return $this->redirectToRoute('list-agencias');
+                return $this->redirectToRoute('agencias_agencia_index');
             } else {
                 $form['dv']->addError(new FormError(
                     $this->get('translator')->trans('agencia.invalid-dv')
@@ -80,7 +80,7 @@ class AgenciaController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/agencia/cadastro-lote", name="new-agencia-bulk", methods="GET|POST")
+     * @Route("/agencia/cadastro-lote", name="agencias_agencia_loadfile", methods="GET|POST")
      */
     public function newAgenciaBulk(Request $request): Response
     {
@@ -207,7 +207,7 @@ class AgenciaController extends Controller
                     $em->flush();
 
                 $this->addFlash('success', 'flash.success.new-bulk');
-                return $this->redirectToRoute('list-agencias');
+                return $this->redirectToRoute('agencias_agencia_index');
             } catch(Exception $e) {
                 $error = new FormError('Arquivo inválido! ' . $e->getMessage());
             }
@@ -221,7 +221,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia/{id}/editar", name="edit-agencia", methods="GET|POST")
+     * @Route("/agencia/{id}/editar", name="agencias_agencia_edit", methods="GET|POST")
      */
     public function edit(Request $request, Agencia $agencium): Response
     {
@@ -231,7 +231,7 @@ class AgenciaController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('agencia')->flush();
             $this->addFlash('success', 'flash.success.edit');
-            return $this->redirectToRoute('list-agencias', ['id' => $agencium->getId()]);
+            return $this->redirectToRoute('agencias_agencia_index');
         }
 
         return $this->render('agencias/agencia/edit.html.twig', [
@@ -241,7 +241,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia/{id}", name="delete-agencia", methods="DELETE")
+     * @Route("/agencia/{id}", name="agencias_agencia_delete", methods="DELETE")
      */
     public function deleteAgencia(Request $request, Agencia $agencium): Response
     {
@@ -257,7 +257,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia/{id}", name="change-status-agencia", methods="PUT")
+     * @Route("/agencia/{id}", name="agencias_agencia_changestatus", methods="PUT")
      */
     public function changeStatus(Request $request, Agencia $agencia): Response
     {
@@ -278,7 +278,7 @@ class AgenciaController extends Controller
 
     /**
      * @return Response
-     * @Route("/arquivo-modelo/{source}", name="agencia-sample-file")
+     * @Route("/arquivo-modelo/{source}", name="agencias_agencia_samplefile")
      */
     public function downloadSampleCVS(Request $request, $source): Response
     {
@@ -296,7 +296,7 @@ class AgenciaController extends Controller
     }
 
     /**
-     * @Route("/agencia/{id}", name="get-agencia", methods="GET")
+     * @Route("/agencia/{id}", name="agencias_agencia_show", methods="GET")
      */
     public function show(Agencia $agencium): Response
     {
@@ -306,7 +306,7 @@ class AgenciaController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/agencia/json", name="list-agencias-json", methods="GET|POST")
+     * @Route("/agencia/json", name="agencias_agencia_json", methods="GET|POST")
      */
     public function getAgencias(Request $request): JsonResponse
     {
@@ -356,7 +356,7 @@ class AgenciaController extends Controller
                 ->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
             $d['deltitle'] = $this->get('translator')
                 ->trans('agencia.delete.title', ['%name%' => $agencia->getNome()]);
-            $d['editUrl'] = $this->generateUrl('edit-agencia', ['id' => $agencia->getId()]);
+            $d['editUrl'] = $this->generateUrl('agencias_agencia_edit', ['id' => $agencia->getId()]);
             $data[] = $d;
         }
 

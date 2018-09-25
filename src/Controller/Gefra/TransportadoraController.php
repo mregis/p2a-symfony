@@ -178,7 +178,7 @@ class TransportadoraController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cadastro-lote", name="gefra_transportadora_new-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="gefra_transportadora_loadfile", methods="GET|POST")
      */
     public function newTransportadoraBulk(Request $request): Response
     {

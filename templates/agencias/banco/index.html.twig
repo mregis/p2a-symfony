@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                    <a class="btn btn-sm btn-info" href="{{ path('new-banco') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ path('agencias_banco_new') }}">
                                         <span class="fas fa-plus-circle"></span> {{ 'banco.new'|trans }}
                                     </a>
                                     {% endif %}
@@ -64,7 +64,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm fas fa-edit"
-                                                       href="{{ path('edit-banco', {'id' : banco.id}) }}"
+                                                       href="{{ path('agencias_banco_edit', {'id' : banco.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
 
                                                     {% if is_granted('ROLE_SUPERADMIN') %}
@@ -122,7 +122,7 @@
 {% block js_codes %}
     {% if is_granted('ROLE_SUPERADMIN') %}
         var $workinText = '{{ 'working' | trans }}';
-        var $statusChangePath = '{{ path('change-status-banco', {id: '_id'}) }}';
+        var $statusChangePath = '{{ path('agencias_banco_changestatus', {id: '_id'}) }}';
         var $closeText = '{{ 'close'|trans }}';
         var $modalBodyHTML = '{{ 'banco.change-status.modal-body'|trans|raw }}';
         var $activeText = '{{ 'active'|trans }}';

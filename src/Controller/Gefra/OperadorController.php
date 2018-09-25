@@ -179,7 +179,7 @@ class OperadorController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cadastro-lote", name="gefra_operador_new-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="gefra_operador_loadfile", methods="GET|POST")
      */
     public function newOperadorBulk(Request $request): Response
     {

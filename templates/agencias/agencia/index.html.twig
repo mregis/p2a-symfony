@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('new-agencia') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('agencias_agencia_new') }}">
                                             <span class="fas fa-plus-circle"></span> {{ 'agencia.new'|trans }}
                                         </a>
                                     {% endif %}
@@ -117,7 +117,7 @@
 {% block js_codes %}
 {% if is_granted('ROLE_MASTER') %}
     {{ parent() }}
-    $paginatedDataTablesSource = '{{ path('list-agencias-json') }}';
+    $paginatedDataTablesSource = '{{ path('agencias_agencia_json') }}';
     $paginatedDataTablesColumns = [
         { "data": "agencia.banco.nome" },
         { "data": "agencia.nome" },
@@ -173,12 +173,12 @@
         );
     };
 {% endif %}
-        $statusChangePath = '{{ path('change-status-agencia', {id: '_id'}) }}';
+        $statusChangePath = '{{ path('agencias_agencia_changestatus', {id: '_id'}) }}';
         $modalBodyHTML = '{{ 'agencia.change-status.modal-body'|trans|raw }}';
         $modalTitleText = '{{ 'agencia.change-status.modal-title' | trans }}';
 
     {% if is_granted('ROLE_ADMIN') %}
-        $deletePath = '{{ path('delete-agencia', {id: '_id'}) }}';
+        $deletePath = '{{ path('agencias_agencia_delete', {id: '_id'}) }}';
         $deleteModalBodyHTML = '{{ 'agencia.delete.modal-body'|trans|raw }}';
         $deleteModalTitleText = '{{ 'agencia.delete.modal-title' | trans }}';
     {% endif %}

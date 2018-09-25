@@ -26,7 +26,7 @@ class OptionAttributeController extends Controller
 
 
     /**
-     * @Route("/novo", name="new-option-attribute")
+     * @Route("/novo", name="main_optionattribute_new")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -36,7 +36,7 @@ class OptionAttributeController extends Controller
         $form = $this->createForm(OptionAttributeType::class, $optionAttribute);
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
-                return $this->forward($this->generateUrl('list-apps'), 301);
+                return $this->forward($this->generateUrl('main_application_index'), 301);
             }
         }
 

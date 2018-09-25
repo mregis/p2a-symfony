@@ -23,7 +23,7 @@ security:
                 login_path: login
                 check_path: login
                 always_use_default_target_path: true
-                default_target_path: check_last_login
+                default_target_path: security_check_last_login
                 csrf_token_generator: security.csrf.token_manager
 
             logout:       true

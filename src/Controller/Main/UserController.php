@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends Controller
 {
     /**
-     * @Route("/", name="list-users")
+     * @Route("/", name="main_user_index")
      */
     public function listUsers(Request $request)
     {
@@ -34,7 +34,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-user")
+     * @Route("/{id}/editar", name="main_user_edit")
      */
     public function editUser($id, Request $request)
     {
@@ -53,18 +53,18 @@ class UserController extends Controller
                 $objManager->persist($e_user);
                 $objManager->flush();
                 $this->addFlash('success', 'users.edit-flash.success');
-                return $this->redirect($this->generateUrl('list-users'), 301);
+                return $this->redirect($this->generateUrl('main_user_index'), 301);
             } else {
                 $error = new FormError('general_form_error');
             }
         }
 
-        return $this->render('users/edit-user.html.twig', array('user' => $e_user, 'form' => $form->createView(), 'error' => $error));
+        return $this->render('users/main_user_edit.html.twig', array('user' => $e_user, 'form' => $form->createView(), 'error' => $error));
     }
 
 
     /**
-     * @Route("/novo", name="new-user")
+     * @Route("/novo", name="main_user_new")
      * @param Request $request
      * @return Response
      */
@@ -81,7 +81,7 @@ class UserController extends Controller
                 $objManager->persist($e_user);
                 $objManager->flush();
                 $this->addFlash('success', 'users.new-flash.success');
-                return $this->redirect($this->generateUrl('list-users'), 301);
+                return $this->redirect($this->generateUrl('main_user_index'), 301);
             }
         }
 
@@ -91,7 +91,7 @@ class UserController extends Controller
 
     /**
      * Send a redefine password message to an User
-     * @Route("/email-redefinir-senha", name="send-redefine-password-email")
+     * @Route("/email-redefinir-senha", name="main_user_password_redefiine_email")
      * @param Request $request
      * @return array
      */

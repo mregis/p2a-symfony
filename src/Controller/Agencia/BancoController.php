@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class BancoController extends Controller
 {
     /**
-     * @Route("/", name="list-bancos", methods="GET")
+     * @Route("/", name="agencias_banco_index", methods="GET")
      */
     public function index(): Response
     {
@@ -29,7 +29,7 @@ class BancoController extends Controller
     }
 
     /**
-     * @Route("/novo", name="new-banco", methods="GET|POST")
+     * @Route("/novo", name="agencias_banco_new", methods="GET|POST")
      */
     public function newBanco(Request $request): Response
     {
@@ -43,7 +43,7 @@ class BancoController extends Controller
             $em->persist($banco);
             $em->flush();
             $this->addFlash('success', 'flash.success.new');
-            return $this->redirectToRoute('list-bancos');
+            return $this->redirectToRoute('agencias_banco_index');
         }
 
         return $this->render('agencias/banco/new.html.twig', [
@@ -61,23 +61,23 @@ class BancoController extends Controller
     }
 
     /**
-     * @Route("/{id}/excluir", name="del-banco", methods="DELETE")
+     * @Route("/{id}/excluir", name="agencias_banco_delete", methods="DELETE")
      */
     public function delete(Request $request, Banco $banco): Response
     {
         if (!$this->isCsrfTokenValid('delete'.$banco->getId(), $request->request->get('_token'))) {
-            return $this->redirectToRoute('list-bancos');
+            return $this->redirectToRoute('agencias_banco_index');
         }
 
         $em = $this->getDoctrine()->getManager('agencia');
         $em->remove($banco);
         $em->flush();
 
-        return $this->redirectToRoute('list-bancos');
+        return $this->redirectToRoute('agencias_banco_index');
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-banco", methods="GET|POST")
+     * @Route("/{id}/editar", name="agencias_banco_edit", methods="GET|POST")
      */
     public function edit(Request $request, Banco $banco, AuthorizationCheckerInterface $authChecker): Response
     {
@@ -100,7 +100,7 @@ class BancoController extends Controller
             $banco->setCnpj(preg_replace('#\D#', '', $banco->getCnpj()));
             $this->getDoctrine()->getManager('agencia')->flush();
             $this->addFlash('success', 'banco.flash.edit-success');
-            return $this->redirectToRoute('edit-banco', ['id' => $banco->getId()]);
+            return $this->redirectToRoute('agencias_banco_edit', ['id' => $banco->getId()]);
         }
 
         return $this->render('agencias/banco/edit.html.twig', [
@@ -110,7 +110,7 @@ class BancoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="change-status-banco", methods="PUT")
+     * @Route("/{id}", name="agencias_banco_changestatus", methods="PUT")
      */
     public function changeStatus(Request $request, Banco $banco): Response
     {

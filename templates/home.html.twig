@@ -20,7 +20,7 @@
                     {% if is_granted('ROLE_SUPERADMIN') %}
                         <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                             <div class="card bg-apps-manager o-hidden h-100">
-                                <a href="{{ path('list-apps') }}">
+                                <a href="{{ path('main_application_index') }}">
                                     <div class="card-body text-white">
                                         <div class="card-body-icon">
                                             <i class="fas fa-code-branch"></i>
@@ -36,7 +36,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                             <div class="card bg-info o-hidden h-100">
-                                <a href="{{ path('list-users') }}">
+                                <a href="{{ path('main_user_index') }}">
                                     <div class="card-body text-white">
                                         <div class="card-body-icon">
                                             <i class="fas fa-users"></i>
@@ -77,7 +77,7 @@
                     {% endif %}
                     <div class="col-xl-3 col-md-4 col-sm-5  mb-3">
                         <div class="card bg-change-pass o-hidden h-100">
-                            <a href="{{ path('change-password') }}">
+                            <a href="{{ path('security_change_password') }}">
                                 <div class="card-body text-secondary">
                                     <div class="card-body-icon">
                                         <i class="fas fa-lock"></i>

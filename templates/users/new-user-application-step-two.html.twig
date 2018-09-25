@@ -21,9 +21,9 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('list-users') }}">{{ 'users.list'|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('main_user_index') }}">{{ 'users.list'|trans }}</a></li>
                 <li class="breadcrumb-item"><a
-                            href="{{ path('list-user-apps', {'id': e_user.id}) }}">{{ 'application.list-name'|trans }}</a>
+                            href="{{ path('main_userapplication_index', {'id': e_user.id}) }}">{{ 'application.list-name'|trans }}</a>
                 </li>
                 <li class="breadcrumb-item">{{ 'new'|trans }}</li>
                 <li class="breadcrumb-item">{{ 'application.options-name'|trans }}</li>

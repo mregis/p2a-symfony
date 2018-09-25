@@ -25,7 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class RegiaoController extends Controller
 {
     /**
-     * @Route("/", name="list-regiao", methods="GET")
+     * @Route("/", name="localidade_regiao_index", methods="GET")
      */
     public function listRegiao(): Response
     {
@@ -36,7 +36,7 @@ class RegiaoController extends Controller
     }
 
     /**
-     * @Route("/novo", name="new-regiao", methods="GET|POST")
+     * @Route("/novo", name="localidade_regiao_new", methods="GET|POST")
      */
     public function newRegiao(Request $request): Response
     {
@@ -59,7 +59,7 @@ class RegiaoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="show-regiao", methods="GET")
+     * @Route("/{id}", name="localidade_regiao_show", methods="GET")
      */
     public function showRegiao(Regiao $regiao): Response
     {
@@ -67,7 +67,7 @@ class RegiaoController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-regiao", methods="GET|POST")
+     * @Route("/{id}/editar", name="localidade_regiao_edit", methods="GET|POST")
      */
     public function editRegiao(Request $request, Regiao $regiao): Response
     {
@@ -86,7 +86,7 @@ class RegiaoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="delete-regiao", methods="DELETE")
+     * @Route("/{id}", name="localidade_regiao_delete", methods="DELETE")
      */
     public function deleteRegiao(Request $request, Regiao $regiao): JsonResponse
     {
@@ -107,7 +107,7 @@ class RegiaoController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="change-status-regiao", methods="PUT")
+     * @Route("/{id}", name="localidade_regiao_changestatus", methods="PUT")
      */
     public function changeStatusRegiao(Request $request, Regiao $regiao): JsonResponse
     {

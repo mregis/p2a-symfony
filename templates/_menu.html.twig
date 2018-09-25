@@ -19,7 +19,7 @@
                 <ul class="sidenav-second-level collapse" id="collapseMulti">
                     {# ROLE_USER permission #}
                     <li>
-                        <a href="{{ path('list-apps') }}"><i class="fas fa-code-branch"></i> {{ 'application.index' | trans }}</a>
+                        <a href="{{ path('main_application_index') }}"><i class="fas fa-code-branch"></i> {{ 'application.index' | trans }}</a>
                     </li>
 
                     {% for ua in app.user.userapplication %}
@@ -43,7 +43,7 @@
                 {# ROLE_USER permission #}
                 <ul class="sidenav-second-level collapse" id="collapseComponents">
                     <li>
-                        <a href="{{ path('change-password') }}">{{ 'reset-password.title'|trans }}</a>
+                        <a href="{{ path('security_change_password') }}">{{ 'reset-password.title'|trans }}</a>
                     </li>
 
                 </ul>
@@ -59,11 +59,11 @@
                 <ul class="sidenav-second-level collapse" id="collapseManager">
 
                     <li>
-                        <a href="{{ path('list-users') }}">{{ 'users.list' | trans }}</a>
+                        <a href="{{ path('main_user_index') }}">{{ 'users.list' | trans }}</a>
                     </li>
                     {% if is_granted('ROLE_SUPERADMIN') %}
                     <li>
-                        <a href="{{ path('list-apps') }}">{{ 'application.list-name'|trans }}</a>
+                        <a href="{{ path('main_application_index') }}">{{ 'application.list-name'|trans }}</a>
                     </li>
                     {% endif %}
                 </ul>

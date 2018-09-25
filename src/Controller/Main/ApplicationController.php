@@ -23,17 +23,17 @@ class ApplicationController extends Controller
 {
 
     /**
-     * @Route("/", name="list-apps")
+     * @Route("/", name="main_application_index")
      */
     public function listApplications(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository(Application::class);
         $app_list = $repository->findAll();
-        return $this->render('apps/list-apps.html.twig', array('app_list' => $app_list));
+        return $this->render('apps/main_application_index.html.twig', array('app_list' => $app_list));
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-app")
+     * @Route("/{id}/editar", name="main_application_edit")
      */
     public function editApplication($id, Request $request)
     {
@@ -52,17 +52,17 @@ class ApplicationController extends Controller
                 $objManager->persist($e_app);
                 $objManager->flush();
                 $this->addFlash('success', 'application.edit-flash.success');
-                return $this->redirect($this->generateUrl('list-apps'), 301);
+                return $this->redirect($this->generateUrl('main_application_index'), 301);
             } else {
                 $error = new FormError('general_form_error');
             }
         }
 
-        return $this->render('apps/edit-app.html.twig', array('myapp' => $e_app, 'form' => $form->createView(), 'error' => $error));
+        return $this->render('apps/main_application_edit.html.twig', array('myapp' => $e_app, 'form' => $form->createView(), 'error' => $error));
     }
 
     /**
-     * @Route("/novo", name="new-app")
+     * @Route("/novo", name="main_application_new")
      * @param Request $request
      * @return Response
      */
@@ -76,7 +76,7 @@ class ApplicationController extends Controller
                 $objManager->persist($e_app);
                 $objManager->flush();
                 $this->addFlash('success', 'application.new-flash.success');
-                return $this->redirect($this->generateUrl('list-apps'), 301);
+                return $this->redirect($this->generateUrl('main_application_index'), 301);
             }
         }
 

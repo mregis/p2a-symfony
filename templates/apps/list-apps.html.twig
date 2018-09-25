@@ -21,7 +21,7 @@
                                     <i class="fa fa-tasks fa-2x"></i> {{ 'application.list-description'|trans }}
                                 </div>
                                 <div class="col-sm-auto text-right">
-                                    <a class="btn btn-sm btn-info" href="{{ path('new-app') }}">
+                                    <a class="btn btn-sm btn-info" href="{{ path('main_application_new') }}">
                                         <span class="fas fa-plus-circle"></span> {{ 'application.new'|trans }}
                                     </a>
                                 </div>
@@ -67,7 +67,7 @@
                                                 <td>{{ (myapp.isActive == true ? 'active' : 'inactive')|trans }}</td>
                                                 <td class="text-nowrap">
                                                     <a class="btn btn-info btn-sm fas fa-edit"
-                                                       href="{{ path('edit-app', {'id' : myapp.id}) }}"
+                                                       href="{{ path('main_application_edit', {'id' : myapp.id}) }}"
                                                        title="{{ 'edit'|trans }}"></a>
 
                                                 </td>

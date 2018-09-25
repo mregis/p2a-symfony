@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-sm-auto text-right">
                                     {% if is_granted('ROLE_MASTER') %}
-                                        <a class="btn btn-sm btn-info" href="{{ path('gefra-juncao-new') }}">
+                                        <a class="btn btn-sm btn-info" href="{{ path('gefra_juncao_new') }}">
                                             <span class="fas fa-plus-circle"></span> {{ 'gefra.juncao.new'|trans }}
                                         </a>
                                     {% endif %}
@@ -132,7 +132,7 @@
         );
     };
 {% endif %}
-        $statusChangePath = '{{ path('gefra-juncao-changestatus', {id: '_id'}) }}';
+        $statusChangePath = '{{ path('gefra_juncao_changestatus', {id: '_id'}) }}';
         $modalBodyHTML = '{{ 'gefra.juncao.changestatus.modalbody'|trans|raw }}';
         $modalTitleText = '{{ 'gefra.juncao.changestatus.modaltitle' | trans }}';
 {% endblock js_codes %}

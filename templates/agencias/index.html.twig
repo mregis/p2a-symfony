@@ -29,7 +29,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="col-xl-3 col-sm-3 mb-3">
                                 <div class="card bg-apps-2 o-hidden h-100">
-                                    <a href="{{ path('list-bancos') }}">
+                                    <a href="{{ path('agencias_banco_index') }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
                                                 <i class="fas fa-university"></i>
@@ -43,7 +43,7 @@
                         {% if is_granted('ROLE_USER') %}
                             <div class="col-xl-3 col-sm-3 mb-3">
                                 <div class="card bg-apps-1 o-hidden h-100">
-                                    <a href="{{ path('list-agencias') }}">
+                                    <a href="{{ path('agencias_agencia_index') }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
                                                 <i class="fas fa-briefcase"></i>

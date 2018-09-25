@@ -32,7 +32,7 @@ class UserApplicationController extends Controller
 
 
     /**
-     * @Route("/{id}/opcoes/novo", name="new-user-app-option-attribute")
+     * @Route("/{id}/opcoes/novo", name="main_userapplication_optionattribute_new")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -42,7 +42,7 @@ class UserApplicationController extends Controller
         $form = $this->createForm(OptionAttributeType::class, $optionAttribute);
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
-                return $this->forward($this->generateUrl('list-apps'), 301);
+                return $this->forward($this->generateUrl('main_application_index'), 301);
             }
         }
 
@@ -50,7 +50,7 @@ class UserApplicationController extends Controller
     }
 
     /**
-     * @Route("/{id}/apps", name="list-user-apps")
+     * @Route("/{id}/apps", name="main_userapplication_index")
      * @param $id
      * @param Request $request
      * @return Response
@@ -63,12 +63,12 @@ class UserApplicationController extends Controller
         }
 
         $app_list = $e_user->getUserApplication();
-        return $this->render('users/list-user-apps.html.twig', array('app_list' => $app_list, 'e_user' => $e_user));
+        return $this->render('users/main_userapplication_index.html.twig', array('app_list' => $app_list, 'e_user' => $e_user));
     }
 
 
     /**
-     * @Route("/{id}/app/novo", name="new-user-app")
+     * @Route("/{id}/app/novo", name="main_userapplication_new")
      * @param $id
      * @param Request $request
      * @return Response
@@ -82,25 +82,25 @@ class UserApplicationController extends Controller
         $userApplication = new UserApplication();
         $userApplication->setUser($e_user);
         $form = $this->createForm(UserApplicationType::class, $userApplication,
-            array('cancel_url' => $this->generateUrl('list-user-apps', array('id' => $id)))
+            array('cancel_url' => $this->generateUrl('main_userapplication_index', array('id' => $id)))
         );
 
         if ($form->handleRequest($request)->isSubmitted()) {
             if ($form->isValid()) {
                 // There's a new Application to be asserted, go to Config definitions
-                return $this->redirectToRoute('new-user-app-step-two',
+                return $this->redirectToRoute('main_userapplication_new_step_two',
                     array('id' => $id, 'application' => $form->getData()->getApplication()->getId())
                 );
             }
         }
 
-        return $this->render('users/new-user-application.html.twig',
+        return $this->render('users/main_user_new-application.html.twig',
             array('form' => $form->createView(), 'e_user' => $e_user));
     }
 
 
     /**
-     * @Route("/{id}/{application}/opcoes", name="new-user-app-step-two")
+     * @Route("/{id}/{application}/opcoes", name="main_userapplication_new_step_two")
      * @param $id
      * @param Request $request
      * @return Response
@@ -123,7 +123,7 @@ class UserApplicationController extends Controller
         $userApplication->setOptions($e_app->getOptions());
 
         $form = $this->createForm(UserApplicationType::class, $userApplication,
-            array('cancel_url' => $this->generateUrl('list-user-apps', array('id' => $id)))
+            array('cancel_url' => $this->generateUrl('main_userapplication_index', array('id' => $id)))
         );
 
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -132,7 +132,7 @@ class UserApplicationController extends Controller
                 $objManager->persist($userApplication);
                 $objManager->flush();
                 $this->addFlash('success', 'user-application.new-flash.success');
-                return $this->redirect($this->generateUrl('list-user-apps', array('id'=>$id)), 301);
+                return $this->redirect($this->generateUrl('main_userapplication_index', array('id'=>$id)), 301);
             }
         }
 
@@ -142,7 +142,7 @@ class UserApplicationController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-user-app")
+     * @Route("/{id}/editar", name="main_userapplication_edit")
      * @param Request $request
      * @return RedirectResponse|Response
      */
@@ -158,7 +158,7 @@ class UserApplicationController extends Controller
         $e_app = $userApplication->getApplication();
         $userApplication->addOptions($e_app->getOptions());
         $form = $this->createForm(UserApplicationType::class, $userApplication,
-            array('cancel_url' => $this->generateUrl('list-user-apps', array('id' => $e_user->getId())))
+            array('cancel_url' => $this->generateUrl('main_userapplication_index', array('id' => $e_user->getId())))
         );
 
         if ($form->handleRequest($request)->isSubmitted()) {
@@ -167,7 +167,7 @@ class UserApplicationController extends Controller
                 $objManager->persist($userApplication);
                 $objManager->flush();
                 $this->addFlash('success', 'user-application.edit-flash.success');
-                return $this->redirect($this->generateUrl('list-user-apps', array('id'=>$e_user->getId())), 301);
+                return $this->redirect($this->generateUrl('main_userapplication_index', array('id'=>$e_user->getId())), 301);
             }
         }
 

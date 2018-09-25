@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UFController extends Controller
 {
     /**
-     * @Route("/", name="list-uf", methods="GET")
+     * @Route("/", name="localidade_uf_index", methods="GET")
      */
     public function listUF(): Response
     {
@@ -37,7 +37,7 @@ class UFController extends Controller
     }
 
     /**
-     * @Route("/novo", name="new-uf", methods="GET|POST")
+     * @Route("/novo", name="localidade_uf_new", methods="GET|POST")
      */
     public function newUf(Request $request): Response
     {
@@ -50,7 +50,7 @@ class UFController extends Controller
             $em->persist($uf);
             $em->flush();
             $this->addFlash('success', 'flash.success.new');
-            return $this->redirectToRoute('list-uf');
+            return $this->redirectToRoute('localidade_uf_index');
         }
 
         return $this->render('localidade/uf/new.html.twig', [
@@ -62,7 +62,7 @@ class UFController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/cadastro-lote", name="new-uf-bulk", methods="GET|POST")
+     * @Route("/cadastro-lote", name="localidade_uf_loadfile", methods="GET|POST")
      */
     public function newUFBulk(Request $request): Response
     {
@@ -113,7 +113,7 @@ class UFController extends Controller
                 }
 
                 $this->addFlash('success', 'flash.success.new-bulk');
-                return $this->redirectToRoute('list-uf');
+                return $this->redirectToRoute('localidade_uf_index');
             } catch(Exception $e) {
                 $error = $e->getMessage();
             }
@@ -127,7 +127,7 @@ class UFController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="show-uf", methods="GET")
+     * @Route("/{id}", name="localidade_uf_show", methods="GET")
      */
     public function showUf(UF $uf): Response
     {
@@ -135,7 +135,7 @@ class UFController extends Controller
     }
 
     /**
-     * @Route("/{id}/editar", name="edit-uf", methods="GET|POST")
+     * @Route("/{id}/editar", name="localidade_uf_edit", methods="GET|POST")
      */
     public function editUF(Request $request, UF $uf): Response
     {
@@ -145,7 +145,7 @@ class UFController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('locais')->flush();
             $this->addFlash('success', 'uf.flash.edit-success');
-            return $this->redirectToRoute('list-uf', ['id' => $uf->getId()]);
+            return $this->redirectToRoute('localidade_uf_index');
         }
 
         return $this->render('localidade/uf/edit.html.twig', [
@@ -155,7 +155,7 @@ class UFController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="delete-uf", methods="DELETE")
+     * @Route("/{id}", name="localidade_uf_delete", methods="DELETE")
      */
     public function deleteUF(Request $request, UF $uf): JsonResponse
     {
@@ -173,7 +173,7 @@ class UFController extends Controller
     }
 
     /**
-     * @Route("/{id}", name="change-status-uf", methods="PUT")
+     * @Route("/{id}", name="localidade_uf_changestatus", methods="PUT")
      */
     public function changeStatusUF(Request $request, UF $uf): JsonResponse
     {

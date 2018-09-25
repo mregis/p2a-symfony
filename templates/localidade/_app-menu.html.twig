@@ -14,15 +14,15 @@
                     <i class="fas fa-globe-americas"></i> {{ 'localidade.regiao.btn-regiao' | trans }}</a>
             </li>
             <li class="nav-item">
-                <a href="{{ activelink != 'list-uf' ? path('list-uf') : '#' }}"
-                   class="nav-link{{ activelink == 'list-uf' ? ' active' : '' }}">
+                <a href="{{ activelink != 'localidade_uf_index' ? path('localidade_uf_index') : '#' }}"
+                   class="nav-link{{ activelink == 'localidade_uf_index' ? ' active' : '' }}">
                     <i class="fas fa-map"></i> {{ 'localidade.uf.btn-uf' | trans }}</a>
             </li>
             {% endif %}
             {% if is_granted('ROLE_MASTER') %}
                 <li class="nav-item">
-                    <a href="{{ activelink != 'list-cidade' ? path('list-cidade') : '#' }}"
-                       class="nav-link{{ activelink == 'list-cidade' ? ' active' : '' }}">
+                    <a href="{{ activelink != 'localidade_cidade_index' ? path('localidade_cidade_index') : '#' }}"
+                       class="nav-link{{ activelink == 'localidade_cidade_index' ? ' active' : '' }}">
                         <i class="fas fa-hotel"></i> {{ 'localidade.cidade.btn-cidade' | trans }}</a>
                 </li>
 
