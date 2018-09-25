@@ -74,7 +74,7 @@ class ApplicationFixtures extends Fixture
                     ->setRequired(true)
                     ->setType('TextType')
             )
-            ->setUri('agencia_home');
+            ->setUri('agencias_home');
 
         $oManager->persist($application);
 
