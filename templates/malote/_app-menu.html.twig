@@ -1,0 +1,8 @@
+{% if is_granted('ROLE_USER') %}
+<li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ 'malote.homepage'|trans }}">
+    <a class="nav-link" href="{{ path('malote_home') }}">
+        <i class="fas fa-tag"></i>
+        <span class="nav-link-text">{{ 'malote.homepage'|trans }}</span>
+    </a>
+</li>
+{% endif %}

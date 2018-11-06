@@ -15,6 +15,7 @@ class CNPJValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
+        if ($constraint->allowempty == true && $value == '') return;
         if (!$this->checkCNPJ($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)

@@ -1,0 +1,127 @@
+malote:
+    form-btns:
+        new-agencia: Nova Agência
+        new-unidade: Nova Unidade
+        new-transportadora: Nova Transportadora
+        new-malha: Nova Malha
+    edit-title: Editar %name%
+    edit-form-title: Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>
+    new: Adicionar Novo Malote
+    new-title: Novo Malote
+    new-form-title: Formulario de cadastro de Novo Malote
+    list-description: Exibindo a lista de malotes cadastrados
+    list-name: Malotes
+    list-title: Malotes cadastradas
+    btn-malote: Gerenciar Malotes
+    btn-malha: Gerenciar Malhas
+    btn-roteiro: Gerenciar Roteiros
+    btn-transportadora: Gerenciar Transportadoras
+    homepage: Espelhos de Malotes
+    homepage-description: Abaixo estão as tarefas que você pode executar
+    new-bulk: Carregar arquivo de Malotes
+    new-bulk-title: Cadastro de Malotes em Lote através de arquivo
+    new-bulk-form-title: Formulario de Cadastro de Malotes em lote
+    bulk-form-description: |
+                  O arquivo a ser submetido deve conter um registro em cada linha,
+                  sendo que cada linha deve conter as seguintes informações:
+                  Codigo do Banco, Nome da Agencia, Codigo da Agencia,
+                    CEP, UF, Cidade, Bairro, Endereco, Numero, Complemento do Endereco
+                    e status do cadastrado (1 ou 0).
+                  O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
+                    BANCO,NOME,CODIGO,CEP,UF,CIDADE,BAIRRO,LOGRADOURO,NUMERAL,COMPLEMENTO,ATIVO.
+                  Quando não houver a informação para COMPLEMENTO, apenas inclua o separador (virgula).
+                    Os demais campos são obrigatórios.
+
+    bulk-example-link: Você pode usar este arquivo como exemplo,
+        substituindo as informações existentes
+    sample-filename: exemplo-cadastro-malotes
+    labels:
+        status: Estado
+    change-status:
+        send: Alterar Estado
+        title: Alterar estado do cadastro de %name%
+        modal-title: Alterar estado do cadastro de uma Agência
+        modal-body: Tem certeza que deseja alterar o estado do cadastro de
+            <span class="text-dark modal-body-placeholder">%name%</span>?
+            <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas os Malotes vinculadas
+            são exibidos em todos os sistemas dependentes.</small></h4>
+        success: O cadastro de %name% foi alterado
+    delete:
+        title: Excluir cadastro de %name%
+        modal-title: Exclusão de cadastro
+        modal-body: Tem certeza que deseja excluir o cadastro de
+                            <span class="text-dark modal-body-placeholder">%name%</span>?
+                            <h4 class="text-warning">ATENÇÃO! <small>Esta ação não pode ser desfeita.</small></h4>
+    malha:
+        homepage: Malhas
+        homepage-description: Lista de Malhas cadastradas
+        list-name: Malhas
+        list-title: Malhas cadastradas
+        list-description: Exibindo a lista de Malhas cadastrados
+        new: Adicionar Nova Malha
+        new-title: Nova Malha
+        new-form-title: Formulario de cadastro de Nova Malha
+        labels:
+            nome: Nome Malha
+            malha: Malha
+        change-status:
+            send: Alterar Estado
+            title: Alterar estado do cadastro de %name%
+            modal-title: Alterar estado do cadastro de uma Malha
+            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                <span class="text-dark modal-body-placeholder">%name%</span>?
+                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Malhas vinculadas
+                são exibidos em todos os sistemas dependentes.</small></h4>
+            success: O cadastro de %name% foi alterado
+        edit-title: Editar Malha %name%
+        edit-form-title: Editar informações cadastrais da Malha <span class="btn disabled btn-sm btn-dark">%name%</span>
+    malote:
+        homepage: Malotes
+        homepage-description: Lista de Malotes cadastrados
+        list-name: Malotes
+        list-title: Malotes cadastrados
+        list-description: Exibindo a lista de Malotes cadastrados
+        new: Adicionar Novo Malote
+        new-title: Novo Malote
+        new-form-title: Formulario de cadastro de Novo Malote
+        labels:
+            numero: Número Malote
+            tipo: Tipo Malote
+        change-status:
+            send: Alterar Estado
+            title: Alterar estado do cadastro de %name%
+            modal-title: Alterar estado do cadastro de umo Malote
+            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                <span class="text-dark modal-body-placeholder">%name%</span>?
+                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Malotes vinculados
+                são exibidos em todos os sistemas dependentes.</small></h4>
+            success: O cadastro de %name% foi alterado
+        edit-title: Editar Malote %name%
+        edit-form-title: Editar informações cadastrais do Malote <span class="btn disabled btn-sm btn-dark">%name%</span>
+    roteiro:
+        homepage: Roteiros
+        homepage-description: Lista de Roteiros cadastrados
+        list-name: Roteiros
+        list-title: Roteiros cadastrados
+        list-description: Exibindo a lista de Roteiros cadastrados
+        new: Adicionar Novo Roteiro
+        new-title: Novo Roteiro
+        new-form-title: Formulario de cadastro de Novo Roteiro
+        labels:
+            numero: Número Roteiro
+            tipo: Tipo Roteiro
+            agencia: Agência/PA/Junção
+            rota: Rota (A/B)
+            unidade: Unidade Address
+            frequencia: Frequência
+        change-status:
+            send: Alterar Estado
+            title: Alterar estado do cadastro de %name%
+            modal-title: Alterar estado do cadastro de umo Roteiro
+            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                <span class="text-dark modal-body-placeholder">%name%</span>?
+                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Roteiros vinculados
+                são exibidos em todos os sistemas dependentes.</small></h4>
+            success: O cadastro de %name% foi alterado
+        edit-title: Editar Roteiro %name%
+        edit-form-title: Editar informações cadastrais do Roteiro <span class="btn disabled btn-sm btn-dark">%name%</span>

@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'main.unidade.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'main/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'main.unidade.list-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'main.unidade.list-title'|trans }}</h1>
+
+                    <div class="card mb-3 border-apps-1">
+                        <div class="card-header bg-apps-1">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-bank fa-2x"></i> {{ 'main.unidade.list-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('main_unidade_new') }}">
+                                            <span class="fas fa-plus-circle"></span> {{ 'main.unidade.new'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if unidades|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                           width="100%" cellspacing="0">
+                                        <thead class="bg-dark text-white">
+                                            <tr>
+                                                <th>{{ 'fields.name.codigo'|trans }}</th>
+                                                <th>{{ 'fields.name.nome'|trans }}</th>
+                                                <th>{{ 'fields.name.cnpj'|trans }}</th>
+                                                <th>{{ 'fields.name.endereco'|trans }}</th>
+                                                <th>{{ 'fields.name.cep'|trans }}</th>
+                                                <th>{{ 'fields.name.status'|trans }}</th>
+                                                <th>{{ 'actions'|trans }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for unidade in unidades %}
+                                            <tr>
+                                                <td>{{ unidade.codigo }}</td>
+                                                <td>{{ unidade.nome }}</td>
+                                                <td>{{ unidade.cnpj|cnpj }}</td>
+                                                <td>{{ unidade.endereco }} - {{ unidade.bairro }} {{ unidade.cidade }}/{{ unidade.uf }}</td>
+                                                <td>{{ unidade.cep|cep }}</td>
+                                                <td><span class="text-success{{ unidade.ativo ? '' : ' text-danger' }} cadastro"
+                                                          data-cadastroid="{{ unidade.id }}">{{ (unidade.ativo ? 'active' : 'inactive')|trans }}</span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fas fa-edit"
+                                                       href="{{ path('main_unidade_edit', {'id' : unidade.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+
+                                                    {% if is_granted('ROLE_SUPERADMIN') %}
+                                                        <span class="btn btn-sm fa {{ unidade.ativo ?
+                                                        'fa-minus-circle btn-danger' :
+                                                        'fa-plus-circle btn-success' }}"
+                                                              data-target="#change-status-Modal"
+                                                              data-tokenid="{{ csrf_token('put' ~ unidade.id) }}"
+                                                              data-cadastroid="{{ unidade.id }}" role="button"
+                                                              data-cadastro="{{ unidade.nome }}" data-toggle="modal"
+                                                              title="{{ 'main.unidade.change-status.title'|trans({'%name%': unidade.nome}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        <!-- Modal Inativar Unidade -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-status-ModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-status-ModalLabel">{{ 'main.unidade.change-status.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'main.unidade.change-status.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'main.unidade.change-status.send'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        var $workinText = '{{ 'working' | trans }}';
+        var $statusChangePath = '{{ path('main_unidade_changestatus', {id: '_id'}) }}';
+        var $closeText = '{{ 'close'|trans }}';
+        var $modalBodyHTML = '{{ 'main.unidade.change-status.modal-body'|trans|raw }}';
+        var $activeText = '{{ 'active'|trans }}';
+        var $inactiveText = '{{ 'inactive'|trans }}';
+        var $modalTitleText = '{{ 'main.unidade.change-status.modal-title' | trans }}';
+    {% endif %}
+
+{% endblock js_codes %}

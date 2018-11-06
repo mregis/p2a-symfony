@@ -76,7 +76,7 @@ class RegiaoController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager('locais')->flush();
             $this->addFlash('success', 'regiao.flash.edit-success');
-            return $this->redirectToRoute('localidade_regiao_index');
+            return $this->redirectToRoute('localidade_regiao_index', ['id' => $regiao->getId()]);
         }
 
         return $this->render('localidade/regiao/edit.html.twig', [

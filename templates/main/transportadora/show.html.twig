@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transportadora{% endblock %}
+
+{% block body %}
+    <h1>Transportadora</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ transportadora.id }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ transportadora.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ transportadora.nome }}</td>
+            </tr>
+            <tr>
+                <th>Razao_social</th>
+                <td>{{ transportadora.razaoSocial }}</td>
+            </tr>
+            <tr>
+                <th>Cnpj</th>
+                <td>{{ transportadora.cnpj }}</td>
+            </tr>
+            <tr>
+                <th>Ativo</th>
+                <td>{{ transportadora.ativo ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Logradouro</th>
+                <td>{{ transportadora.logradouro }}</td>
+            </tr>
+            <tr>
+                <th>Bairro</th>
+                <td>{{ transportadora.bairro }}</td>
+            </tr>
+            <tr>
+                <th>Cidade</th>
+                <td>{{ transportadora.cidade }}</td>
+            </tr>
+            <tr>
+                <th>Uf</th>
+                <td>{{ transportadora.uf }}</td>
+            </tr>
+            <tr>
+                <th>Cep</th>
+                <td>{{ transportadora.cep }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('main_transportadora_index') }}">back to list</a>
+
+    <a href="{{ path('main_transportadora_edit', {'id': transportadora.id}) }}">edit</a>
+
+    {{ include('main_transportadora/_delete_form.html.twig') }}
+{% endblock %}

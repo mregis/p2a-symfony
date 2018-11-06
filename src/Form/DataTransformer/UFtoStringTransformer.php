@@ -30,11 +30,11 @@ class UFtoStringTransformer implements DataTransformerInterface
      * @return UF|null
      * @throws TransformationFailedException if object (UF) is not found.
      */
-    public function transform($sigla)
+    public function transform($sigla): ?UF
     {
         // no sigla? It's optional, so that's ok
         if (!$sigla) {
-            return;
+            return null;
         }
 
         $repo = $this->entityManager

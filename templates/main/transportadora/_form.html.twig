@@ -1,0 +1,79 @@
+{{ form_start(form) }}
+
+<div class="form-group row">
+    {{ form_label(form.codigo, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-4">
+        {{ form_errors(form.codigo) }}
+        {{ form_widget(form.codigo) }}
+    </div>
+
+    {{ form_label(form.cnpj, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-4">
+        {{ form_errors(form.cnpj) }}
+        {{ form_widget(form.cnpj) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.nome, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-9">
+        {{ form_errors(form.nome) }}
+        {{ form_widget(form.nome) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.razao_social, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-9">
+        {{ form_errors(form.razao_social) }}
+        {{ form_widget(form.razao_social) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ form_label(form.endereco, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-9">
+        {{ form_errors(form.endereco) }}
+        {{ form_widget(form.endereco) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.cidade, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-5">
+        {{ form_errors(form.cidade) }}
+        {{ form_widget(form.cidade) }}
+    </div>
+
+    {{ form_label(form.uf, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.uf) }}
+        {{ form_widget(form.uf) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ form_label(form.bairro, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
+    <div class="col-5">
+        {{ form_errors(form.bairro) }}
+        {{ form_widget(form.bairro) }}
+    </div>
+
+    {{ form_label(form.cep, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-3">
+        {{ form_errors(form.cep) }}
+        {{ form_widget(form.cep) }}
+    </div>
+</div>
+
+{{ form_widget(form) }}
+<div class="row form-group justify-content-md-center">
+    <div class="col-4">
+        <button class="btn btn-primary btn-block " type="submit">
+            <i class="fa fa-save"></i> {{ button_label|default('save')|trans }}
+        </button>
+    </div>
+    <div class="col-4">
+        <a class="btn btn-secondary btn-block" href="{{ path('gefra_operador_index') }}">
+            <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
+        </a>
+    </div>
+</div>
+{{ form_end(form) }}

@@ -16,4 +16,6 @@ use Symfony\Component\Validator\Constraint;
 class CNPJ extends Constraint
 {
     public $message = '"{{ string }}" não é um CNPJ válido.';
+
+    public $allowempty = false;
 }

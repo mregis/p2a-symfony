@@ -1,0 +1,61 @@
+main:
+    edit-title: Editar %name%
+    edit-form-title: Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>
+    new: Adicionar Novo Malote
+    new-title: Novo Malote
+    new-form-title: Formulario de cadastro de Novo Malote
+    list-description: Exibindo a lista de malotes cadastrados
+    list-name: Malotes
+    list-title: Malotes cadastradas
+    btn-unidade: Gerenciar Unidades
+    homepage: Painel Administrativo
+    homepage-description: Abaixo estão as tarefas que você pode executar
+    new-bulk: Carregar arquivo de Malotes
+    new-bulk-title: Cadastro de Malotes em Lote através de arquivo
+    new-bulk-form-title: Formulario de Cadastro de Malotes em lote
+    bulk-form-description: |
+                  O arquivo a ser submetido deve conter um registro em cada linha,
+                  sendo que cada linha deve conter as seguintes informações:
+                  Codigo do Banco, Nome da Agencia, Codigo da Agencia,
+                    CEP, UF, Cidade, Bairro, Endereco, Numero, Complemento do Endereco
+                    e status do cadastrado (1 ou 0).
+                  O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
+                    BANCO,NOME,CODIGO,CEP,UF,CIDADE,BAIRRO,LOGRADOURO,NUMERAL,COMPLEMENTO,ATIVO.
+                  Quando não houver a informação para COMPLEMENTO, apenas inclua o separador (virgula).
+                    Os demais campos são obrigatórios.
+    unidade:
+        homepage: Unidades
+        homepage-description: Lista de Unidades cadastradas
+        list-name: Unidades
+        list-title: Unidades cadastradas
+        list-description: Exibindo a lista de Unidades cadastradas
+        new: Adicionar Nova Unidade
+        new-title: Nova Unidade
+        new-form-title: Formulario de cadastro de Nova Unidade
+        labels:
+            numero: Número Unidade
+            tipo: Tipo Unidade
+            agencia: Agência/PA/Junção
+            rota: Rota (A/B)
+            unidade: Unidade Address
+            frequencia: Frequência
+        change-status:
+            send: Alterar Estado
+            title: Alterar estado do cadastro de %name%
+            modal-title: Alterar estado do cadastro de uma Unidade
+            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                <span class="text-dark modal-body-placeholder">%name%</span>?
+                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Unidades vinculadas
+                são exibidas em todos os sistemas dependentes.</small></h4>
+            success: O cadastro de %name% foi alterado
+        edit-title: Editar Unidade %name%
+        edit-form-title: Editar informações cadastrais da Unidade <span class="btn disabled btn-sm btn-dark">%name%</span>
+
+    transportadora:
+        index: Transportadoras
+        index-description: Transportadoras Cadastradas
+        new: Nova Transportadora
+        new-form-title: Cadastrar Nova Transportadora
+        edit-form-title: Alterar informações da Transportadora
+                            <span class="btn disabled btn-sm btn-dark">%name%</span>
+        edit-title: Editar Transportadora

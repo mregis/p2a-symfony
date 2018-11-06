@@ -1,53 +1,54 @@
 fields:
-  name:
-    cep: CEP
-    cnpj: CNPJ
-    banco: Banco
-    nome: Nome
-    codigo: Código
-    endereco: Endereço
-    bairro: Bairro
-    cidade: Cidade
-    uf: UF
-    status: Estado
-    cte: C.T.E.
-    grm: G.R.M.
-    valor: Valor
-    qt_vol: Volumes
-    peso: Peso
-    solicitacao: Solicitação
-    lote: Lote
-    descricao: Descrição
-    razao-social: Razão Social
-    empty-list: Não há resultados para o termo pesquisado
-    abreviacao: Abreviação
-    transportadora: Transportadora
-    recebedor: Recebedor
-    doc_recebedor: Doc. Recebedor
-    observacao: Observação
+    name:
+        agencia: Agência
+        cep: CEP
+        cnpj: CNPJ
+        banco: Banco
+        nome: Nome
+        codigo: Código
+        endereco: Endereço
+        bairro: Bairro
+        cidade: Cidade
+        uf: UF
+        status: Estado
+        cte: C.T.E.
+        grm: G.R.M.
+        valor: Valor
+        qt_vol: Volumes
+        peso: Peso
+        solicitacao: Solicitação
+        lote: Lote
+        descricao: Descrição
+        razao-social: Razão Social
+        empty-list: Não há resultados para o termo pesquisado
+        abreviacao: Abreviação
+        transportadora: Transportadora
+        recebedor: Recebedor
+        doc_recebedor: Doc. Recebedor
+        observacao: Observação
 modalProcess:
-  title: 'Processando requisição'
-  body: Sua requisição está sendo processada.
-        Este processo pode levar alguns instantes.
-         Por favor aguarde.
+    title: 'Processando requisição'
+    body: Sua requisição está sendo processada.
+          Este processo pode levar alguns instantes.
+           Por favor aguarde.
 fail:
-  title: 'Falha ao processar requisição'
-  message: Ocorreu um erro ao tentar processar a requisição. Por favor tente novamente.
-           Se o erro persistir entre em contato com o suporte técnico
+    title: 'Falha ao processar requisição'
+    message: Ocorreu um erro ao tentar processar a requisição. Por favor tente novamente.
+             Se o erro persistir entre em contato com o suporte técnico
 new-bulk: 'Cadastro em lote'
 registry:
-  file-field:
-    label: 'Arquivo de Registros'
+    file-field:
+        label: 'Arquivo de Registros'
 flash:
-  success:
-    new: 'Cadastro criado!'
-    edit: 'Cadastro alterado!'
-    delete: 'Cadastro excluído!'
-    change-status: 'O estado do cadastro foi alterado'
-    new-bulk: 'Os cadastros foram criados ou atualizados'
-    uploaded: 'O Arquivo foi carregado para processamento!'
-  error:
-    already-uploaded: 'Este arquivo já foi enviado anteriormente'
+    success:
+        new: 'Cadastro criado!'
+        edit: 'Cadastro alterado!'
+        delete: 'Cadastro excluído!'
+        change-status: 'O estado do cadastro foi alterado'
+        new-bulk: 'Os cadastros foram criados ou atualizados'
+        uploaded: 'O Arquivo foi carregado para processamento!'
+    error:
+        already-uploaded: 'Este arquivo já foi enviado anteriormente'
 change-status: 'Alterar estado'
 working: 'Executando a operação. Aguarde...'
 page-not-found: 'Página não encontrada!'
@@ -151,39 +152,39 @@ forgot-password:
                  Consulte sua caixa de mensagens. Se a mensagem não chegar em até 10 minutos verifique sua caixa de
                  SPAM ou tente novamente.
 users:
-  edit-title: 'Editar %name%'
-  edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
-  new-title: 'Novo Utilizador'
-  new-form-title: 'Formulário de cadastro de novo utilizador'
-  edit: 'Editar dados cadastrais'
-  name: 'Nome'
-  email: 'E-mail'
-  status: 'Estado'
-  username: 'Nome utilizador'
-  profile: 'Perfil'
-  add: 'Novo Utilizador'
-  list: 'Usuários'
-  list-title: 'Lista de usuários cadastrados'
-  apps: 'Aplicativos'
-  created-at-title: 'Data da criação do cadastro'
-  edit-flash:
-      success: 'Dados atualizados'
-  create: 'Inserir'
-  new-flash:
-      success: 'Cadastrao criado com sucesso'
-  complete-register:
-      title: Conclua seu cadastro
-      success: Obrigado! Suas informações estão completas.
-  finished-register: Cadastro concluido com sucesso!
-  new-password-field: Nova Senha
-  re-password-label: Repita a Nova Senha
-  re-password-field: Redigite a Nova Senha
-  register-submit: Atualizar informações
-  first-login: Bem-vindo! Por gentileza complete suas informações no formulário abaixo
-  add-info: |
-      Para criar um novo acesso, preencha os campos abaixo e clique no botão Inserir.
-      Uma mensagem de boas vindas será enviada para o endereço do cadastro com as
-      instruções para o primeiro acesso.
+    edit-title: 'Editar %name%'
+    edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
+    new-title: 'Novo Utilizador'
+    new-form-title: 'Formulário de cadastro de novo utilizador'
+    edit: 'Editar dados cadastrais'
+    name: 'Nome'
+    email: 'E-mail'
+    status: 'Estado'
+    username: 'Nome utilizador'
+    profile: 'Perfil'
+    add: 'Novo Utilizador'
+    list: 'Usuários'
+    list-title: 'Lista de usuários cadastrados'
+    apps: 'Aplicativos'
+    created-at-title: 'Data da criação do cadastro'
+    edit-flash:
+        success: 'Dados atualizados'
+    create: 'Inserir'
+    new-flash:
+        success: 'Cadastrao criado com sucesso'
+    complete-register:
+        title: Conclua seu cadastro
+        success: Obrigado! Suas informações estão completas.
+    finished-register: Cadastro concluido com sucesso!
+    new-password-field: Nova Senha
+    re-password-label: Repita a Nova Senha
+    re-password-field: Redigite a Nova Senha
+    register-submit: Atualizar informações
+    first-login: Bem-vindo! Por gentileza complete suas informações no formulário abaixo
+    add-info: |
+        Para criar um novo acesso, preencha os campos abaixo e clique no botão Inserir.
+        Uma mensagem de boas vindas será enviada para o endereço do cadastro com as
+        instruções para o primeiro acesso.
 
 
 reset-password:
@@ -193,9 +194,9 @@ reset-password:
         success: 'A senha foi redefinida com sucesso.'
         error: 'Não foi possível iniciar o processo de recuperação. Verifique as informações.'
 login:
-  forgot-password: Esqueceu a senha? Clique aqui
-  form:
-    title: Autenticação
+    forgot-password: Esqueceu a senha? Clique aqui
+    form:
+        title: Autenticação
 
 logout:
     message: Selecione "Sair" abaixo se você estiver pronto para finalizar a sessão atual.
@@ -306,7 +307,7 @@ agencia:
     homepage: 'Painel'
     homepage-description: 'Abaixo estão as tarefas que você pode executar'
     new-bulk: 'Carregar arquivo de Agências'
-    new-bulk-title: 'Cadastro de Cidades em Lote através de arquivo'
+    new-bulk-title: 'Cadastro de Agências em Lote através de arquivo'
     new-bulk-form-title: 'Formulario de Cadastro de Agências em lote'
     bulk-form-description: |
                   O arquivo a ser submetido deve conter um registro em cada linha,
@@ -335,12 +336,12 @@ agencia:
     change-status:
       send: 'Alterar Estado'
       title: 'Alterar estado do cadastro de %name%'
-      modal-title: 'Alterar estado do cadastro de um Banco'
+      modal-title: 'Alterar estado do cadastro de uma Agência'
       modal-body: Tem certeza que deseja alterar o estado do cadastro de
           <span class="text-dark modal-body-placeholder">%name%</span>?
           <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Agências vinculadas
           são exibidas em todos os sistemas dependentes.</small></h4>
-      success: 'O cadastro de %banco% foi alterado'
+      success: 'O cadastro de %name% foi alterado'
     delete:
       title: 'Excluir cadastro de %name%'
       modal-title: 'Exclusão de cadastro'
@@ -376,288 +377,116 @@ banco:
         codigo: 'Codigo'
 
 localidade:
-  homepage: Localidades
-  homepage-description: Gerencie os cadastros de Locais
-  labels:
-    sigla: Sigla
-    regiao: Região
-    abreviacao: Abreviação
-  edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
-  edit-title: 'Editar informações cadastrais'
-  delete:
-    title: 'Excluir cadastro de %name%'
-    modal-title: 'Exclusão de cadastro'
-    modal-body: Tem certeza que deseja excluir o cadastro de
-                          <span class="text-dark modal-body-placeholder">%name%</span>?
-                          <h4 class="text-warning">ATENÇÃO! <small>Esta ação não pode ser desfeita.</small></h4>
-
-  change-status:
-    modal-title: 'Alterar estado do cadastro'
-    modal-body: Tem certeza que deseja alterar o estado do cadastro de
-                          <span class="text-dark modal-body-placeholder">%name%</span>?
-                          <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
-                          as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
-    title: 'Alterar o estado do cadastro de %name%'
-
-  regiao:
-    homepage: 'Regiões cadastradas'
-    btn-regiao: 'Cadastro de Regiões'
-    list-name: 'Regiões'
-    list-title: 'Regiões'
-    list-description: 'Exibindo as regiões cadastradas'
-    new: 'Nova Região'
-    new-title: 'Nova Região'
-    new-form-title: 'Formulario de cadastro de nova Região'
-    change-status:
-      modal-title: 'Alterar estado do cadastro de uma Região'
-      modal-body: Tem certeza que deseja alterar o estado do cadastro de
-                            <span class="text-dark modal-body-placeholder">%regiao%</span>?
-                            <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
-                            as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
-      success: 'O cadastro de %regiao% foi alterado'
-    send: 'Alterar'
-  uf:
-    sample-filename: 'exemplo-cadastro-estados'
-    btn-uf: 'Cadastro de Estados (UF)'
-    list-name: 'Estados'
-    list-title: 'Estado'
-    list-description: 'Exibindo os estados (ufs) cadastrados'
-    new: 'Cadastrar Nova UF'
-    new-bulk: 'Carregar arquivo de UFs'
-    homepage: 'Estados cadastrados'
-    new-form-title: 'Formulario de cadastro de nova UF'
-    new-bulk-form-title: 'Formulario de Cadastro de UFs em lote'
-    new-title: 'Novo Estado'
-    new-bulk-title: 'Cadastro de Estados em Lote através de arquivo'
-    bulk-form-description: |
-                  O arquivo a ser submetido deve conter um registro em cada linha,
-                  sendo que cada linha deve conter as seguintes informações:
-                  Sigla da Região (S, N, SE, NE, CO), Nome do Estado, Sigla do Estado e status do cadastrado (1 ou 0).
-                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
-                  O conteudo da primeira linha deve obrigatoriamente ser: REGIAO,NOME,SIGLA,ATIVO
-    bulk-example-link: Você pode usar este arquivo como exemplo, substituindo as informações existentes
-  cidade:
-    sample-filename: 'exemplo-cadastro-cidades'
-    btn-cidade: 'Cadastro de Municípios'
-    list-name: 'Municípios'
-    list-title: 'Municípios'
-    list-description: 'Exibindo os municipios cadastrados'
-    new: 'Cadastrar Novo Município'
-    new-bulk: 'Carregar arquivo de Cidades'
-    new-bulk-title: 'Cadastro de Cidades em Lote através de arquivo'
-    new-bulk-form-title: 'Formulario de Cadastro de Cidades em lote'
-    bulk-form-description: |
-                  O arquivo a ser submetido deve conter um registro em cada linha,
-                  sendo que cada linha deve conter as seguintes informações:
-                  Sigla da UF, Nome da Cidade, Abreviação do Nome da Cidade,
-                    Codigo do IBGE e status do cadastrado (1 ou 0).
-                  O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
-                    UF,NOME,ABREVIACAO,CODIGO,ATIVO
-                  A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
-    bulk-example-link: Você pode usar este arquivo como exemplo,
-        substituindo as informações existentes
-    homepage: 'Cidades cadastradas'
-    new-form-title: 'Formulario de cadastro de Nova Cidade'
-    new-title: 'Novo Munícipio'
+    homepage: Localidades
+    homepage-description: Gerencie os cadastros de Locais
     labels:
-      codigo: 'Codigo IBGE'
-
-  feriado:
-    index: Feriados
-    index-description: Feriados Cadastrados
-    new: Cadastrar Novo Feriado
-    new-form-title: Formulário de Cadastro de Novo Feriado
-    new-title: Novo Feriado
-    edit-form-title: Alterar informações do Feriado
-                        <span class="btn disabled btn-sm btn-dark">%name%</span>
-    edit-title: Editar Feriado
-    delete-title: Excluir Feriado "%name%"
-    labels:
-      dt-feriado: Data Feriado
-      tipo: Tipo Feriado
-  tipoferiado:
-    index: Tipos de Feriados
-    index-description: Tipos de Feriados Cadastrados
-    new: Adicionar Tipo de Feriado
-    new-form-title: Incluir novo <span class="btn disabled btn-sm btn-dark">Tipo de Feriado</span>
-    new-title: Novo Tipo de Feriado
-    flash:
-      new: Novo Tipo de Feriado criado!
-      no-uf: O Tipo de Feriado indicado requer que ao menos uma UF seja selecionada
-      no-local: O Tipo de Feriado indicado requer que ao menos uma Localidade seja selecionada
-    labels:
-      nacional: NACIONAL
-      estadual: ESTADUAL
-      municipal: MUNICIPAL
-
-gefra:
-  name: SisGefra
-  appname: Gestão de Ecomendas Fracionadas
-  home: Início
-  homepage: Painel
-  homepage-description: Gerencie os Envios Fracionados
-  labels:
-    sla: SLA
-    operador: Operador
-    juncao: Junção
-    cte: Conhecimento de Transporte Eletrônico
-    destino: Junção de Destino
-    prazo: Prazo (em dias)
-    status-envio: Estado atual
-    dt-emissao-cte: Emissão CTE
-    dt-previsao-coleta: Previsão Coleta
-    dt-coleta: Data Coleta
-    dt-previsao-entrega: Previsão Entrega
-    dt-entrega: Data Entrega
-    ocorrencias: Ocorrências
-    criado_em: Criado em
-    status_entrega: Posição Entrega
-    dt-varredura: Data Varredura
-  juncao:
-    sample-filename: exemplo-cadastro-juncao.csv
-    edit-form-title: Editar informações cadastrais da Junção
-                    <span class="btn disabled btn-sm btn-dark">%name%</span>
+        sigla: Sigla
+        regiao: Região
+        abreviacao: Abreviação
+    edit-form-title: 'Editar informações cadastrais de <span class="btn disabled btn-sm btn-dark">%name%</span>'
     edit-title: 'Editar informações cadastrais'
-    new: Adicionar Junção
-    new-form-title: Cadastrar Nova Junção
-    index: Junções e Agências
-    index-description: Junções Cadastradas
-    changestatus:
-      title: 'Alterar estado do cadastro da Junção %name%'
-      modaltitle: 'Alterar estado do cadastro de uma Junção'
-      modalbody: Tem certeza que deseja alterar o estado do cadastro da Junção
-                  <span class="text-dark modal-body-placeholder">Nome Junção</span>?
-                  <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere
-                  na exibição de todas as informações vinculadas .
-                  </small></h4>
-      success: O cadastro da Junção %name% foi alterado
-    new-bulk: Carregar arquivo de Junções
-    new-bulk-form-title: Formulario de Cadastro de Junções em lote
-    new-bulk-title: Cadastro de Junções em Lote através de arquivo
-    bulk-example-link: Você pode usar este arquivo como exemplo,
-                        substituindo as informações existentes
-    bulk-form-description: >
-            O arquivo a ser submetido deve conter um registro em cada linha,
-            sendo que cada linha deve conter as seguintes informações:
-            <em>Codigo do Banco, Codigo da Junção, Nome da Junção, UF, Cidade, Estado do Cadastro</em><br>
-            O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
-            <strong>BANCO,CONDIGO,NOME,UF,CIDADE,ATIVO</strong><br>
-  envio:
-    sample-filename: exemplo-arquivo-envio.xls
-    edit-form-title: Alterar informações do Envio
-                    <span class="btn disabled btn-sm btn-dark">%name%</span>
-    edit-title: 'Editar Envio'
-    new: Criar Envio
-    new-form-title: Criar Novo Envio
-    index: Envios
-    index-description: Envios Cadastrados
-    load-xmlfile: Carregar arquivo de Envios
-    load-xmlfile-form-title: Formulario de carga de Envios em lote
-    load-xmlfile-title: Cadastro de Envios em Lote através de arquivo
-    load-xmlfile-example-link: Você pode usar este arquivo como exemplo,
-                        substituindo as informações existentes
-    load-xmlfile-form-description: >
-            O arquivo a ser submetido deve ser um XML valido de acordo com a
-             documentação do sistema sendo que cada linha deve conter
-             as seguintes informações:
-              <strong>DOCUMENTO, DATA DE ENTREGA, VALOR, DATA EMISSÃO,
-              VOLUME, PESO, FORNECEDOR, LOCALIZAÇÃO, SOLICITAÇÃO</strong>
+    delete:
+        title: 'Excluir cadastro de %name%'
+        modal-title: 'Exclusão de cadastro'
+        modal-body: Tem certeza que deseja excluir o cadastro de
+                              <span class="text-dark modal-body-placeholder">%name%</span>?
+                              <h4 class="text-warning">ATENÇÃO! <small>Esta ação não pode ser desfeita.</small></h4>
 
-    load-xlsfile: Carregar Planilha de Envios
-    load-xlsfile-form-title: Formulario de envio de Planilha de Envios
-    load-xlsfile-title: Cadastro/Alteração de Envios através de planilha
-    load-xlsfile-example-link: Você pode usar este arquivo como exemplo,
-                          substituindo as informações existentes
-    load-xlsfile-form-description: >
-              O arquivo a ser submetido deve ser um XLS valido de acordo com a
-              documentação do sistema sendo que cada linha deve conter
-              as seguintes informações:
-              <strong>GRM, JUNÇÃO, VALOR, OPERADOR LOGÍSTICO, VOLUME, PESO, DATA COLETA, DATA VARREDURA, FORNECEDOR</strong>
-              para novos envios e também
-              <strong>CTE, DATA EMISSAO CTE, DATA ENTREGA, NOME RECEBEDOR, DOC RECEBEDOR</strong>
-              para atualizações de informações
-    files:
-      index: Arquivos
-      index-description: Arquivos de Envios carregados para processamento
-      labels:
-        created-at: Carregado Em
-        hashid: Chave
-        processing-started-at: Início Processamento
-        processing-ended-at: Fim Processamento
-        uploaded-by: Carregado Por
-      statuses:
-        NEW_SEND: Novo
-        IN_PROGRESS: Em Processamento
-        FINISHED_OK: Processado com Sucesso
-        FINISHED_ERROR: Processado com Falhas
-        ABORTED: Abortado
+    change-status:
+        modal-title: 'Alterar estado do cadastro'
+        modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                              <span class="text-dark modal-body-placeholder">%name%</span>?
+                              <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
+                              as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
+        title: 'Alterar o estado do cadastro de %name%'
 
+    regiao:
+        homepage: 'Regiões cadastradas'
+        btn-regiao: 'Cadastro de Regiões'
+        list-name: 'Regiões'
+        list-title: 'Regiões'
+        list-description: 'Exibindo as regiões cadastradas'
+        new: 'Nova Região'
+        new-title: 'Nova Região'
+        new-form-title: 'Formulario de cadastro de nova Região'
+        change-status:
+            modal-title: 'Alterar estado do cadastro de uma Região'
+            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+                                  <span class="text-dark modal-body-placeholder">%regiao%</span>?
+                                  <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas
+                                  as Localidades vinculadas são exibidas em todos os sistemas dependentes.</small></h4>
+            success: 'O cadastro de %regiao% foi alterado'
+        send: 'Alterar'
+    uf:
+        sample-filename: 'exemplo-cadastro-estados'
+        btn-uf: 'Cadastro de Estados (UF)'
+        list-name: 'Estados'
+        list-title: 'Estado'
+        list-description: 'Exibindo os estados (ufs) cadastrados'
+        new: 'Cadastrar Nova UF'
+        new-bulk: 'Carregar arquivo de UFs'
+        homepage: 'Estados cadastrados'
+        new-form-title: 'Formulario de cadastro de nova UF'
+        new-bulk-form-title: 'Formulario de Cadastro de UFs em lote'
+        new-title: 'Novo Estado'
+        new-bulk-title: 'Cadastro de Estados em Lote através de arquivo'
+        bulk-form-description: |
+                      O arquivo a ser submetido deve conter um registro em cada linha,
+                      sendo que cada linha deve conter as seguintes informações:
+                      Sigla da Região (S, N, SE, NE, CO), Nome do Estado, Sigla do Estado e status do cadastrado (1 ou 0).
+                      A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
+                      O conteudo da primeira linha deve obrigatoriamente ser: REGIAO,NOME,SIGLA,ATIVO
+        bulk-example-link: Você pode usar este arquivo como exemplo, substituindo as informações existentes
+    cidade:
+        sample-filename: 'exemplo-cadastro-cidades'
+        btn-cidade: 'Cadastro de Municípios'
+        list-name: 'Municípios'
+        list-title: 'Municípios'
+        list-description: 'Exibindo os municipios cadastrados'
+        new: 'Cadastrar Novo Município'
+        new-bulk: 'Carregar arquivo de Cidades'
+        new-bulk-title: 'Cadastro de Cidades em Lote através de arquivo'
+        new-bulk-form-title: 'Formulario de Cadastro de Cidades em lote'
+        bulk-form-description: |
+                      O arquivo a ser submetido deve conter um registro em cada linha,
+                      sendo que cada linha deve conter as seguintes informações:
+                      Sigla da UF, Nome da Cidade, Abreviação do Nome da Cidade,
+                        Codigo do IBGE e status do cadastrado (1 ou 0).
+                      O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
+                        UF,NOME,ABREVIACAO,CODIGO,ATIVO
+                      A primeira linha será ignorada, pois será tratada como cabeçalho das colunas.
+        bulk-example-link: Você pode usar este arquivo como exemplo,
+            substituindo as informações existentes
+        homepage: 'Cidades cadastradas'
+        new-form-title: 'Formulario de cadastro de Nova Cidade'
+        new-title: 'Novo Munícipio'
+        labels:
+            codigo: 'Codigo IBGE'
 
-  operador:
-    sample-filename: exemplo-arquivo-operador.csv
-    edit-form-title: Alterar informações do Operador
-                    <span class="btn disabled btn-sm btn-dark">%name%</span>
-    edit-title: 'Editar Operador'
-    new: Novo Operador
-    new-form-title: Cadastrar Novo Operador
-    index: Operadores
-    index-description: Operadores Cadastrados
-    new-bulk: Cadastrar Operadores em Lote
-    new-bulk-form-title: Formulario de cadastro de Operadores em lote
-    new-bulk-title: Cadastro de Operadores em Lote através de arquivo
-    bulk-example-link: Você pode usar este arquivo como exemplo,
-                        substituindo as informações existentes
-    bulk-form-description: >
-            O arquivo a ser submetido deve ser um Arquivo de Valores Separador por Virgula
-             (CSV). Pode-se delimitar o conteúdo usando aspas duplas (opcional). <br>
-             A primeira linha obrigatoriamente deve conter os cabeçalhos a seguir:
-              <strong>CODIGO, NOME, ENDERECO, CIDADE, BAIRRO, UF, CEP, CNPJ, ATIVO</strong><br>
-            O conteúdo de BAIRRO é opcional e ATIVO deve ser 0 ou 1.
-    changestatus:
-      title: Alterar estado do cadastro do Operador %name%'
-      modaltitle: Alterar estado do cadastro de um Operador
-      modalbody: Tem certeza que deseja alterar o estado do cadastro do Operador
-                  <span class="text-dark modal-body-placeholder">Nome Operador</span>?
-                  <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere
-                  na exibição de todas as informações vinculadas.
-                  </small></h4>
-  sla:
-    invalid-juncao: Junção inválida
-    index: Prazos
-    index-description: Prazos de Atendimentos Cadastrados
-    new: Novo Prazo de Atendimento
-    new-form-title: Cadastrar Novo Prazo
-    load-file: Carregar Arquivo de Prazos
-    load-file-title: Cadastro de Prazos em Lote através de arquivo
-    load-file-example-link: Você pode usar este arquivo como exemplo,
-                        substituindo as informações existentes
-    bulk-form-description: >
-            O arquivo a ser submetido deve ser um Arquivo de Valores Separador por Virgula
-             (CSV). Pode-se delimitar o conteúdo usando aspas duplas (opcional). <br>
-             A primeira linha obrigatoriamente deve conter os cabeçalhos a seguir:
-              <strong>OPERADOR, DESTINO, PRAZO</strong><br>
-
-  tipo-envio-status:
-    index: Status de Envio
-    index-description: Status de Envio Existentes
-    new: Novo Status de Envio
-    new-form-title: Cadastrar Novo Status de Envio
-
-  transportadora:
-    index: Transportadoras
-    index-description: Transportadoras Cadastradas
-    new: Nova Transportadora
-    new-form-title: Cadastrar Nova Transportadora
-    edit-form-title: Alterar informações da Transportadora
-                        <span class="btn disabled btn-sm btn-dark">%name%</span>
-    edit-title: Editar Transportadora
-
-  ocorrencia:
-    title: Ocorrências de Envio
-    title-description: Historico de Alterações de um Envio
-    labels:
-      tipo: Tipo Ocorrência
-      atividade: Atividade
-      criado_por: Efetuado por
-      dt_criacao: Data/Hora Ocorrência
-
+    feriado:
+        index: Feriados
+        index-description: Feriados Cadastrados
+        new: Cadastrar Novo Feriado
+        new-form-title: Formulário de Cadastro de Novo Feriado
+        new-title: Novo Feriado
+        edit-form-title: Alterar informações do Feriado
+                            <span class="btn disabled btn-sm btn-dark">%name%</span>
+        edit-title: Editar Feriado
+        delete-title: Excluir Feriado "%name%"
+        labels:
+            dt-feriado: Data Feriado
+            tipo: Tipo Feriado
+    tipoferiado:
+        index: Tipos de Feriados
+        index-description: Tipos de Feriados Cadastrados
+        new: Adicionar Tipo de Feriado
+        new-form-title: Incluir novo <span class="btn disabled btn-sm btn-dark">Tipo de Feriado</span>
+        new-title: Novo Tipo de Feriado
+        flash:
+            new: Novo Tipo de Feriado criado!
+            no-uf: O Tipo de Feriado indicado requer que ao menos uma UF seja selecionada
+            no-local: O Tipo de Feriado indicado requer que ao menos uma Localidade seja selecionada
+        labels:
+            nacional: NACIONAL
+            estadual: ESTADUAL
+            municipal: MUNICIPAL

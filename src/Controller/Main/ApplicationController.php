@@ -58,7 +58,7 @@ class ApplicationController extends Controller
             }
         }
 
-        return $this->render('apps/main_application_edit.html.twig', array('myapp' => $e_app, 'form' => $form->createView(), 'error' => $error));
+        return $this->render('apps/edit-app.html.twig', array('myapp' => $e_app, 'form' => $form->createView(), 'error' => $error));
     }
 
     /**

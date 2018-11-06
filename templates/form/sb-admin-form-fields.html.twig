@@ -1,3 +1,26 @@
+{% block autocomplete_malha_widget %}
+    {% spaceless %}
+        <div class="typeahead__container bg-gradient-danger">
+            <div class="typeahead__field">
+                <div class="typeahead__query">
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block autocomplete_unidade_widget %}
+    {% spaceless %}
+        <div class="typeahead__container bg-gradient-danger">
+            <div class="typeahead__field">
+                <div class="typeahead__query">
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock %}
 
 {% block autocomplete_cidade_widget %}
     {% spaceless %}

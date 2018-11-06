@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'malote.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'malote/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">/{{ 'malote.homepage'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'malote.homepage'|trans }}</h1>
+
+                    <p>{{ 'malote.homepage-description' |trans }}</p>
+
+                    <div class="row">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-0 o-hidden h-100">
+                                    <a href="{{ path('agencias_agencia_index') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fas fa-university"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'agencia.btn-agencia'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-1 o-hidden h-100">
+                                    <a href="{{ path('malote_malha_index') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'malote.btn-malha'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-2 o-hidden h-100">
+                                    <a href="{{ path('malote_roteiro_index') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fas fa-map-marked"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'malote.btn-roteiro'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-5 o-hidden h-100">
+                                    <a href="{{ path('main_transportadora_index') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fas fa-truck-moving"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center"><small>{{ 'malote.btn-transportadora'|trans }}</small></h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <div class="col-xl-3 col-sm-3 mb-3">
+                                <div class="card bg-apps-3 o-hidden h-100">
+                                    <a href="{{ path('malote_home') }}">
+                                        <div class="card-body text-white">
+                                            <div class="card-body-icon">
+                                                <i class="fas fa-briefcase"></i>
+                                            </div>
+                                            <h5 class="mr-5 text-center">{{ 'malote.btn-malote'|trans }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock user_content %}
+

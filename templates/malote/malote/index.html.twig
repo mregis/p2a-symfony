@@ -1,0 +1,166 @@
+
+{% block body %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Ativo</th>
+                <th>Tipo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for malote in malotes %}
+            <tr>
+                <td>{{ malote.id }}</td>
+                <td>{{ malote.numero }}</td>
+                <td>{{ malote.ativo ? 'Yes' : 'No' }}</td>
+                <td>{{ malote.tipo }}</td>
+                <td>
+                    <a href="{{ path('malote_malote_show', {'id': malote.id}) }}">show</a>
+                    <a href="{{ path('malote_malote_edit', {'id': malote.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('malote_malote_new') }}">Create new</a>
+{% endblock %}
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'malote.malote.homepage'|trans }}{% endblock %}
+
+{% block menu %}
+    {% embed '_menu.html.twig' %}
+        {% block app_panel %}
+            {% include 'malote/_app-menu.html.twig' %}
+        {% endblock %}
+    {% endembed %}
+{% endblock menu %}
+{% block user_content %}
+    <div class="content-wrapper">
+        {{ parent() }} {# Printing Messages inside Wrapper Content #}
+        <div class="container">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('malote_home') }}">{{ 'home'|trans }}</a></li>
+                <li class="breadcrumb-item active">{{ 'malote.malote.list-name'|trans }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{ 'malote.malote.list-title'|trans }}</h1>
+
+                    <div class="card mb-3 border-apps-1">
+                        <div class="card-header bg-apps-1">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <i class="fa fa-bank fa-2x"></i> {{ 'malote.malote.list-description'|trans }}
+                                </div>
+                                <div class="col-sm-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('malote_malote_new') }}">
+                                            <span class="fas fa-plus-circle"></span> {{ 'malote.malote.new'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if malotes|length > 0 %}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered dataTable table-striped compact form-group"
+                                           width="100%" cellspacing="0">
+                                        <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th>{{ 'malote.malote.labels.nome'|trans }}</th>
+                                            <th>{{ 'malote.malote.labels.tipo'|trans }}</th>
+                                            <th>{{ 'fields.name.status'|trans }}</th>
+                                            <th>{{ 'actions'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for malote in malotes %}
+                                            <tr>
+                                                <td>{{ malote.numero }}</td>
+                                                <td><span class="text-success{{ malote.ativo ? '' : ' text-danger' }} cadastro"
+                                                          data-cadastroid="{{ malote.id }}">{{ (malote.ativo ? 'active' : 'inactive')|trans }}</span>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-info btn-sm fas fa-edit"
+                                                       href="{{ path('malote_malote_edit', {'id' : malote.id}) }}"
+                                                       title="{{ 'edit'|trans }}"></a>
+
+                                                    {% if is_granted('ROLE_SUPERADMIN') %}
+                                                        <span class="btn btn-sm fa {{ malote.ativo ?
+                                                        'fa-minus-circle btn-danger' :
+                                                        'fa-plus-circle btn-success' }}"
+                                                              data-target="#change-status-Modal"
+                                                              data-tokenid="{{ csrf_token('put' ~ malote.id) }}"
+                                                              data-cadastroid="{{ malote.id }}" role="button"
+                                                              data-cadastro="{{ malote.numero }}" data-toggle="modal"
+                                                              title="{{ 'malote.malote.change-status.title'|trans({'%name%': malote.numero}) }}">
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        <!-- Modal Inativar Malote -->
+        <div class="modal fade" id="change-status-Modal" tabindex="-1" role="dialog"
+             aria-labelledby="change-status-ModalLabel"
+             aria-hidden="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-warning">
+                        <h5 class="modal-title"
+                            id="change-status-ModalLabel">{{ 'malote.malote.change-status.modal-title' | trans }}</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">{{ 'malote.malote.change-status.modal-body'|trans|raw }}</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary cancel-btn" type="button"
+                                data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                        <button class="btn btn-primary resend-btn" type="button">{{ 'malote.malote.change-status.send'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock user_content %}
+{% block js_codes %}
+    {% if is_granted('ROLE_SUPERADMIN') %}
+        var $workinText = '{{ 'working' | trans }}';
+        var $statusChangePath = '{{ path('malote_malote_changestatus', {id: '_id'}) }}';
+        var $closeText = '{{ 'close'|trans }}';
+        var $modalBodyHTML = '{{ 'malote.malote.change-status.modal-body'|trans|raw }}';
+        var $activeText = '{{ 'active'|trans }}';
+        var $inactiveText = '{{ 'inactive'|trans }}';
+        var $modalTitleText = '{{ 'malote.malote.change-status.modal-title' | trans }}';
+    {% endif %}
+
+{% endblock js_codes %}

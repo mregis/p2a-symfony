@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Malote{% endblock %}
+
+{% block body %}
+    <h1>Create new Malote</h1>
+
+    {{ include('malote_malote/_form.html.twig') }}
+
+    <a href="{{ path('malote_malote_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,159 @@
+gefra:
+  name: SisGefra
+  appname: Gestão de Ecomendas Fracionadas
+  home: Início
+  homepage: Painel
+  homepage-description: Gerencie os Envios Fracionados
+  labels:
+    sla: SLA
+    operador: Operador
+    juncao: Junção
+    cte: Conhecimento de Transporte Eletrônico
+    destino: Junção de Destino
+    prazo: Prazo (em dias)
+    status-envio: Estado atual
+    dt-emissao-cte: Emissão CTE
+    dt-previsao-coleta: Previsão Coleta
+    dt-coleta: Data Coleta
+    dt-previsao-entrega: Previsão Entrega
+    dt-entrega: Data Entrega
+    ocorrencias: Ocorrências
+    criado_em: Criado em
+    status_entrega: Posição Entrega
+    dt-varredura: Data Varredura
+  juncao:
+    sample-filename: exemplo-cadastro-juncao.csv
+    edit-form-title: Editar informações cadastrais da Junção
+                    <span class="btn disabled btn-sm btn-dark">%name%</span>
+    edit-title: 'Editar informações cadastrais'
+    new: Adicionar Junção
+    new-form-title: Cadastrar Nova Junção
+    index: Junções e Agências
+    index-description: Junções Cadastradas
+    changestatus:
+      title: 'Alterar estado do cadastro da Junção %name%'
+      modaltitle: 'Alterar estado do cadastro de uma Junção'
+      modalbody: Tem certeza que deseja alterar o estado do cadastro da Junção
+                  <span class="text-dark modal-body-placeholder">Nome Junção</span>?
+                  <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere
+                  na exibição de todas as informações vinculadas .
+                  </small></h4>
+      success: O cadastro da Junção %name% foi alterado
+    new-bulk: Carregar arquivo de Junções
+    new-bulk-form-title: Formulario de Cadastro de Junções em lote
+    new-bulk-title: Cadastro de Junções em Lote através de arquivo
+    bulk-example-link: Você pode usar este arquivo como exemplo,
+                        substituindo as informações existentes
+    bulk-form-description: >
+            O arquivo a ser submetido deve conter um registro em cada linha,
+            sendo que cada linha deve conter as seguintes informações:
+            <em>Codigo do Banco, Codigo da Junção, Nome da Junção, UF, Cidade, Estado do Cadastro</em><br>
+            O conteudo da primeira linha deve obrigatoriamente ter os cabeçalhos:
+            <strong>BANCO,CONDIGO,NOME,UF,CIDADE,ATIVO</strong><br>
+  envio:
+    sample-filename: exemplo-arquivo-envio.xls
+    edit-form-title: Alterar informações do Envio
+                    <span class="btn disabled btn-sm btn-dark">%name%</span>
+    edit-title: 'Editar Envio'
+    new: Criar Envio
+    new-form-title: Criar Novo Envio
+    index: Envios
+    index-description: Envios Cadastrados
+    load-xmlfile: Carregar arquivo de Envios
+    load-xmlfile-form-title: Formulario de carga de Envios em lote
+    load-xmlfile-title: Cadastro de Envios em Lote através de arquivo
+    load-xmlfile-example-link: Você pode usar este arquivo como exemplo,
+                        substituindo as informações existentes
+    load-xmlfile-form-description: >
+            O arquivo a ser submetido deve ser um XML valido de acordo com a
+             documentação do sistema sendo que cada linha deve conter
+             as seguintes informações:
+              <strong>DOCUMENTO, DATA DE ENTREGA, VALOR, DATA EMISSÃO,
+              VOLUME, PESO, FORNECEDOR, LOCALIZAÇÃO, SOLICITAÇÃO</strong>
+
+    load-xlsfile: Carregar Planilha de Envios
+    load-xlsfile-form-title: Formulario de envio de Planilha de Envios
+    load-xlsfile-title: Cadastro/Alteração de Envios através de planilha
+    load-xlsfile-example-link: Você pode usar este arquivo como exemplo,
+                          substituindo as informações existentes
+    load-xlsfile-form-description: >
+              O arquivo a ser submetido deve ser um XLS valido de acordo com a
+              documentação do sistema sendo que cada linha deve conter
+              as seguintes informações:
+              <strong>GRM, JUNÇÃO, VALOR, OPERADOR LOGÍSTICO, VOLUME, PESO, DATA COLETA, DATA VARREDURA, FORNECEDOR</strong>
+              para novos envios e também
+              <strong>CTE, DATA EMISSAO CTE, DATA ENTREGA, NOME RECEBEDOR, DOC RECEBEDOR</strong>
+              para atualizações de informações
+    files:
+      index: Arquivos
+      index-description: Arquivos de Envios carregados para processamento
+      labels:
+        created-at: Carregado Em
+        hashid: Chave
+        processing-started-at: Início Processamento
+        processing-ended-at: Fim Processamento
+        uploaded-by: Carregado Por
+      statuses:
+        NEW_SEND: Novo
+        IN_PROGRESS: Em Processamento
+        FINISHED_OK: Processado com Sucesso
+        FINISHED_ERROR: Processado com Falhas
+        ABORTED: Abortado
+  operador:
+    sample-filename: exemplo-arquivo-operador.csv
+    edit-form-title: Alterar informações do Operador
+                    <span class="btn disabled btn-sm btn-dark">%name%</span>
+    edit-title: 'Editar Operador'
+    new: Novo Operador
+    new-form-title: Cadastrar Novo Operador
+    index: Operadores
+    index-description: Operadores Cadastrados
+    new-bulk: Cadastrar Operadores em Lote
+    new-bulk-form-title: Formulario de cadastro de Operadores em lote
+    new-bulk-title: Cadastro de Operadores em Lote através de arquivo
+    bulk-example-link: Você pode usar este arquivo como exemplo,
+                        substituindo as informações existentes
+    bulk-form-description: >
+            O arquivo a ser submetido deve ser um Arquivo de Valores Separador por Virgula
+             (CSV). Pode-se delimitar o conteúdo usando aspas duplas (opcional). <br>
+             A primeira linha obrigatoriamente deve conter os cabeçalhos a seguir:
+              <strong>CODIGO, NOME, ENDERECO, CIDADE, BAIRRO, UF, CEP, CNPJ, ATIVO</strong><br>
+            O conteúdo de BAIRRO é opcional e ATIVO deve ser 0 ou 1.
+    changestatus:
+      title: Alterar estado do cadastro do Operador %name%'
+      modaltitle: Alterar estado do cadastro de um Operador
+      modalbody: Tem certeza que deseja alterar o estado do cadastro do Operador
+                  <span class="text-dark modal-body-placeholder">Nome Operador</span>?
+                  <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere
+                  na exibição de todas as informações vinculadas.
+                  </small></h4>
+  sla:
+    invalid-juncao: Junção inválida
+    index: Prazos
+    index-description: Prazos de Atendimentos Cadastrados
+    new: Novo Prazo de Atendimento
+    new-form-title: Cadastrar Novo Prazo
+    load-file: Carregar Arquivo de Prazos
+    load-file-title: Cadastro de Prazos em Lote através de arquivo
+    load-file-example-link: Você pode usar este arquivo como exemplo,
+                        substituindo as informações existentes
+    bulk-form-description: >
+            O arquivo a ser submetido deve ser um Arquivo de Valores Separador por Virgula
+             (CSV). Pode-se delimitar o conteúdo usando aspas duplas (opcional). <br>
+             A primeira linha obrigatoriamente deve conter os cabeçalhos a seguir:
+              <strong>OPERADOR, DESTINO, PRAZO</strong><br>
+
+  tipo-envio-status:
+    index: Status de Envio
+    index-description: Status de Envio Existentes
+    new: Novo Status de Envio
+    new-form-title: Cadastrar Novo Status de Envio
+
+  ocorrencia:
+    title: Ocorrências de Envio
+    title-description: Historico de Alterações de um Envio
+    labels:
+      tipo: Tipo Ocorrência
+      atividade: Atividade
+      criado_por: Efetuado por
+      dt_criacao: Data/Hora Ocorrência

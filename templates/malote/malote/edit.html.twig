@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Malote{% endblock %}
+
+{% block body %}
+    <h1>Edit Malote</h1>
+
+    {{ include('malote_malote/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('malote_malote_index') }}">back to list</a>
+
+    {{ include('malote_malote/_delete_form.html.twig') }}
+{% endblock %}

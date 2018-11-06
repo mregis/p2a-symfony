@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Malha{% endblock %}
+
+{% block body %}
+    <h1>Malha</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ malha.id }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ malha.nome }}</td>
+            </tr>
+            <tr>
+                <th>Ativo</th>
+                <td>{{ malha.ativo ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('malote_malha_index') }}">back to list</a>
+
+    <a href="{{ path('malote_malha_edit', {'id': malha.id}) }}">edit</a>
+
+    {{ include('malote_malha/_delete_form.html.twig') }}
+{% endblock %}

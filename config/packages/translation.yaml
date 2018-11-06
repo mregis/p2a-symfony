@@ -3,5 +3,8 @@ framework:
     translator:
         paths:
             - '%kernel.project_dir%/translations'
+            - '%kernel.project_dir%/translations/main'
+            - '%kernel.project_dir%/translations/malote'
+            - '%kernel.project_dir%/translations/gefra'
         fallbacks:
             - '%locale%'

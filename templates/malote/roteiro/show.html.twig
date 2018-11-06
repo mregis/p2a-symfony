@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Roteiro{% endblock %}
+
+{% block body %}
+    <h1>Roteiro</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ roteiro.id }}</td>
+            </tr>
+            <tr>
+                <th>Agencia</th>
+                <td>{{ roteiro.agencia }}</td>
+            </tr>
+            <tr>
+                <th>Rota</th>
+                <td>{{ roteiro.rota }}</td>
+            </tr>
+            <tr>
+                <th>Transportadora</th>
+                <td>{{ roteiro.transportadora }}</td>
+            </tr>
+            <tr>
+                <th>Unidade</th>
+                <td>{{ roteiro.unidade }}</td>
+            </tr>
+            <tr>
+                <th>Frequencia</th>
+                <td>{{ roteiro.frequencia }}</td>
+            </tr>
+            <tr>
+                <th>Criado_em</th>
+                <td>{{ roteiro.criadoEm ? roteiro.criadoEm|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Lote</th>
+                <td>{{ roteiro.lote }}</td>
+            </tr>
+            <tr>
+                <th>Ativo</th>
+                <td>{{ roteiro.ativo ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('malote_roteiro_index') }}">back to list</a>
+
+    <a href="{{ path('malote_roteiro_edit', {'id': roteiro.id}) }}">edit</a>
+
+    {{ include('malote_roteiro/_delete_form.html.twig') }}
+{% endblock %}

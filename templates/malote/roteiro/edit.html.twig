@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Roteiro{% endblock %}
+
+{% block body %}
+    <h1>Edit Roteiro</h1>
+
+    {{ include('malote_roteiro/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('malote_roteiro_index') }}">back to list</a>
+
+    {{ include('malote_roteiro/_delete_form.html.twig') }}
+{% endblock %}

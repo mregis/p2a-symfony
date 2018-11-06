@@ -35,8 +35,8 @@ class ApplicationType extends AbstractType
                 'constraints' => array(new Assert\NotBlank()),
                 'label' => 'application.alias',
             ))
-            ->add('uri', Types\UrlType::class, array(
-                'constraints' => array(new Assert\NotBlank(), new Assert\Url()),
+            ->add('uri', TextType::class, array(
+                'constraints' => array(new Assert\NotBlank()),
                 'label' => 'application.uri',
             ))
             ->add('options', Types\CollectionType::class, array(
