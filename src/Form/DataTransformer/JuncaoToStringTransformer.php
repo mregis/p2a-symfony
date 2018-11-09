@@ -57,7 +57,7 @@ class JuncaoToStringTransformer implements DataTransformerInterface
             return;
         }
 
-        $codigo = preg_replace('#^\[(.*?)\].*?$#', '$1', $juncaoNome);
+        $codigo = preg_replace('#^\[(\d+)\].*?$#', '$1', $juncaoNome);
         $juncao = $this->entityManager
             ->getRepository(Juncao::class)
             // query for the issue with this id

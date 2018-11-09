@@ -52,10 +52,10 @@ class TransportadoraToStringTransformer implements DataTransformerInterface
     {
         // no transportadora? It's optional, so that's ok
         if (!$transportadoraNome) {
-            return;
+            return '';
         }
 
-        $codigo = preg_replace('#^\[(.*?)\].*?$#', '$1', $transportadoraNome);
+        $codigo = preg_replace('#^\[(\d+)\].*?$#', '$1', $transportadoraNome);
         $transportadora = $this->entityManager
             ->getRepository(Transportadora::class)
             // query for the issue with this id

@@ -9,11 +9,11 @@
         {% endblock %}
     {% endembed %}
 {% endblock menu %}
+
 {% block user_content %}
     <div class="content-wrapper">
         {{ parent() }} {# Printing Messages inside Wrapper Content #}
         <div class="container">
-
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ path('malote_home') }}">{{ 'home'|trans }}</a></li>
@@ -22,9 +22,8 @@
             <div class="row">
                 <div class="col-12">
                     <h1>{{ 'malote.roteiro.list-title'|trans }}</h1>
-
-                    <div class="card mb-3 border-apps-1">
-                        <div class="card-header bg-apps-1">
+                    <div class="card mb-3 border-apps-2">
+                        <div class="card-header bg-apps-2">
                             <div class="row">
                                 <div class="col-sm-8">
                                     <i class="fa fa-bank fa-2x"></i> {{ 'malote.roteiro.list-description'|trans }}
@@ -39,67 +38,30 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            {% if roteiros|length > 0 %}
-                                <div class="table-responsive">
-                                    <table class="table table-bordered dataTable table-striped compact form-group"
-                                           width="100%" cellspacing="0">
-                                        <thead class="bg-dark text-white">
-                                            <tr>
-                                                <th>{{ 'malote.roteiro.labels.agencia'|trans }}</th>
-                                                <th>{{ 'malote.roteiro.labels.rota'|trans }}</th>
-                                                <th>{{ 'fields.name.transportadora'|trans }}</th>
-                                                <th>{{ 'malote.roteiro.labels.unidade'|trans }}</th>
-                                                <th>{{ 'malote.roteiro.labels.frequencia'|trans }}</th>
-                                                <th>{{ 'created-at'|trans }}</th>
-                                                <th>{{ 'fields.name.lote'|trans }}</th>
-                                                <th>{{ 'fields.name.status'|trans }}</th>
-                                                <th>{{ 'actions'|trans }}</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for roteiro in roteiros %}
-                                            <tr>
-                                                <td>{{ roteiro.agencia.nome }}</td>
-                                                <td>{{ roteiro.rota }}</td>
-                                                <td>{{ roteiro.transportadora.nome }}</td>
-                                                <td>{{ roteiro.unidade.nome }}</td>
-                                                <td>{{ roteiro.frequencia }}</td>
-                                                <td>{{ roteiro.criado_em }}</td>
-                                                <td>{{ roteiro.lote }}</td>
-                                                <td><span class="text-success{{ roteiro.ativo ? '' : ' text-danger' }} cadastro"
-                                                          data-cadastroid="{{ roteiro.id }}">{{ (roteiro.ativo ? 'active' : 'inactive')|trans }}</span>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-info btn-sm fas fa-edit"
-                                                       href="{{ path('malote_roteiro_edit', {'id' : roteiro.id}) }}"
-                                                       title="{{ 'edit'|trans }}"></a>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped compact"
+                                       width="100%" cellspacing="0" data-role="paginatedDataTable">
+                                    <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th>{{ 'malote.roteiro.labels.agencia'|trans }}</th>
+                                        <th>{{ 'malote.roteiro.labels.rota'|trans }}</th>
+                                        <th>{{ 'fields.name.transportadora'|trans }}</th>
+                                        <th>{{ 'malote.roteiro.labels.unidade'|trans }}</th>
+                                        <th>{{ 'malote.roteiro.labels.frequencia'|trans }}</th>
+                                        <th>{{ 'malote.roteiro.labels.malha'|trans }}</th>
+                                        <th>{{ 'fields.name.lote'|trans }}</th>
+                                        <th>{{ 'fields.name.status'|trans }}</th>
+                                        <th>{{ 'actions'|trans }}</th>
+                                    </tr>
+                                    </thead>
 
-                                                    {% if is_granted('ROLE_SUPERADMIN') %}
-                                                        <span class="btn btn-sm fa {{ roteiro.ativo ?
-                                                        'fa-minus-circle btn-danger' :
-                                                        'fa-plus-circle btn-success' }}"
-                                                              data-target="#change-status-Modal"
-                                                              data-tokenid="{{ csrf_token('put' ~ roteiro.id) }}"
-                                                              data-cadastroid="{{ roteiro.id }}" role="button"
-                                                              data-cadastro="{{ roteiro.nome }}" data-toggle="modal"
-                                                              title="{{ 'malote.roteiro.change-status.title'|trans({'%name%': roteiro.nome}) }}">
-                                                        </span>
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% else %}
-                                <div class="alert-warning">{{ 'empty-result'|trans }}</div>
-                            {% endif %}
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
     {% if is_granted('ROLE_SUPERADMIN') %}
         <!-- Modal Inativar Roteiro -->
@@ -112,7 +74,7 @@
                         <h5 class="modal-title"
                             id="change-status-ModalLabel">{{ 'malote.roteiro.change-status.modal-title' | trans }}</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="{{ 'cancel'|trans }}">
-                            <span aria-hidden="true">�</span>
+                            <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">{{ 'malote.roteiro.change-status.modal-body'|trans|raw }}</div>
@@ -127,14 +89,57 @@
     {% endif %}
 {% endblock user_content %}
 {% block js_codes %}
+    {{ parent() }}
+    $paginatedDataTablesSource = '{{ path('malote_roteiro_json') }}';
+    $paginatedDataTablesColumns = [
+        { "data": "roteiro.agencia" },
+        { "data": "roteiro.rota" },
+        { "data": "roteiro.transportadora"},
+        { "data": "roteiro.unidade"},
+        { "data": "roteiro.frequencia"},
+        { "data": "roteiro.malha.nome"},
+        { "data": "roteiro.lote", "searchable": false},
+        { "data": "roteiro.ativo", "searchable": false},
+        { "data": "buttons", "searchable": false, "orderable": false, className: 'text-nowrap' }
+    ];
+
+    $fnRowCallback = function( row, data) {
+        // Coluna Banco
+        // Cor do texto da coluna ESTADO
+        if ( data.roteiro.ativo) {
+            $('td:eq(7)', row)
+            .html('Ativo')
+            .addClass( 'text-success');
+        } else {
+            $('td:eq(7)', row)
+            .html('Inativo')
+            .addClass( 'text-danger');
+        }
+
+    {% if is_granted('ROLE_MASTER') %}
+        // Adicionando botões de edição e de exclusão
+        $('td:eq(8)', row).html('<a class="btn btn-info btn-sm fas fa-edit"' +
+            ' href="' + data.editUrl + '"' +
+            ' title="{{ 'edit'|trans }}"></a>'
+        {% if is_granted('ROLE_ADMIN') %}
+            +
+            '<span class="btn btn-sm fas fa-sync ' +
+            ( data.roteiro.ativo ? 'btn-warning' : 'btn-success' ) +
+            '" data-target="#change-status-Modal" data-tokenid="' + data.editToken +
+            '" data-cadastroid="'+ data.roteiro.id + '" role="button"' +
+            ' data-cadastro="' + data.roteiro.nome + '" data-toggle="modal"' +
+            ' title="' + data.changetitle + '"></span>'
+        {% endif %}
+            );
+        };
+    {% endif %}
     {% if is_granted('ROLE_SUPERADMIN') %}
         var $workinText = '{{ 'working' | trans }}';
         var $statusChangePath = '{{ path('malote_roteiro_changestatus', {id: '_id'}) }}';
-        var $closeText = '{{ 'close'|trans }}';
         var $modalBodyHTML = '{{ 'malote.roteiro.change-status.modal-body'|trans|raw }}';
+        var $modalTitleText = '{{ 'malote.roteiro.change-status.modal-title' | trans }}';        
+        var $closeText = '{{ 'close'|trans }}';        
         var $activeText = '{{ 'active'|trans }}';
-        var $inactiveText = '{{ 'inactive'|trans }}';
-        var $modalTitleText = '{{ 'malote.roteiro.change-status.modal-title' | trans }}';
-    {% endif %}
-
+        var $inactiveText = '{{ 'inactive'|trans }}';        
+    {% endif %}    
 {% endblock js_codes %}

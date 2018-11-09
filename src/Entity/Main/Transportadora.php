@@ -2,6 +2,7 @@
 
 namespace App\Entity\Main;
 
+use App\Util\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,9 +26,14 @@ class Transportadora implements \Serializable
     private $codigo;
 
     /**
-     * @ORM\Column(type="string", length=100, unique=true)
+     * @ORM\Column(type="string", length=50)
      */
     private $nome;
+
+    /**
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private $nome_canonico;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -99,6 +105,7 @@ class Transportadora implements \Serializable
     public function setNome(string $nome): self
     {
         $this->nome = $nome;
+        $this->nome_canonico = StringUtils::slugify($nome);
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Repository\Malote;
 
 use App\Entity\Malote\Malha;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,11 +15,31 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class MalhaRepository extends ServiceEntityRepository
 {
+
+    /**
+     * @var ArrayCollection;
+     */
+    private $malhas;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Malha::class);
+        $this->malhas = new ArrayCollection();
     }
 
+    /**
+     * @param $nome string
+     * @return Malha
+     */
+    public function findOneByNomeCanonico($nome)
+    {
+        if (!$malha = $this->malhas->get($nome) ) {
+            $malha = $this->findOneBy(array('nome_canonico' => $nome));
+            $this->malhas->set($nome, $malha);
+        }
+
+        return $malha;
+    }
 //    /**
 //     * @return Malha[] Returns an array of Malha objects
 //     */

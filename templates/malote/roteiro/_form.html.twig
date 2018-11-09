@@ -49,7 +49,7 @@
 </div>
 <div class="form-group row">
     {{ form_label(form.frequencia, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
-    <div class="col-3">
+    <div class="col-2">
         {{ form_errors(form.frequencia) }}
         {{ form_widget(form.frequencia) }}
     </div>
@@ -58,11 +58,16 @@
         {{ form_errors(form.lote) }}
         {{ form_widget(form.lote) }}
     </div>
+    {{ form_label(form.cd, null, {'label_attr': {'class':'col-form-label col-1 text-right'}}) }}
+    <div class="col-2">
+        {{ form_errors(form.cd) }}
+        {{ form_widget(form.cd) }}
+    </div>
 </div>
 
 <div class="form-group row">
     {{ form_label(form.rota, null, {'label_attr': {'class':'col-form-label col-2 text-right'}}) }}
-    <div class="col-3">
+    <div class="col-2">
         {{ form_errors(form.rota) }}
         {{ form_widget(form.rota) }}
     </div>
@@ -92,7 +97,7 @@
         </button>
     </div>
     <div class="col-4">
-        <a class="btn btn-secondary btn-block" href="{{ path('gefra_envio_index') }}">
+        <a class="btn btn-secondary btn-block" href="{{ path('malote_roteiro_index') }}">
             <i class="fa fa-close"></i> {{ button_label|default('cancel')|trans }}
         </a>
     </div>
@@ -136,7 +141,7 @@
     $typeaheadCallback = {
         onClickAfter: function (node, a, item, event) {
             event.preventDefault();
-            jQuery(node).val("[" + item.codigo + "] " + item.nome + ' - ' + item.cidade + '/' + item.uf);
+            jQuery(node).val("[" + item.codigo + "] " + item.nome);
         }
     };
 </script>

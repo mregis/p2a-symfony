@@ -29,7 +29,7 @@ class UnidadeType extends AbstractType
         $builder
             ->add('codigo', TextType::class, ['label' => 'fields.name.codigo'])
             ->add('nome')
-            ->add('endereco', TextType::class, ['label' => 'fields.name.endereco'])
+            ->add('endereco', TextType::class, ['label' => 'fields.name.endereco', 'required' => false])
             ->add('bairro')
             ->add('cidade')
             ->add('uf', EntityType::class,
@@ -42,12 +42,16 @@ class UnidadeType extends AbstractType
                     'choice_value' => 'sigla',
                     'placeholder' => 'choice-field.placeholder',
                 ))
-            ->add('cep', TextType::class, ['label' => 'fields.name.cep', 'attr' => array('data-input-mask' => 'cep')])
+            ->add('cep', TextType::class, [
+                'label' => 'fields.name.cep', 'attr' => array('data-input-mask' => 'cep'),
+                'required' => false,
+            ])
             ->add('cnpj', TextType::class,
                 [
                     'label' => 'fields.name.cnpj',
                     'attr' => array('data-input-mask' => 'cnpj'),
-                    'constraints' => [new CNPJ()]
+                    'constraints' => [new CNPJ(['allowempty' => true])],
+                    'required' => false,
                 ])
             ->add('ativo')
         ;

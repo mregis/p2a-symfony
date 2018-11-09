@@ -23,9 +23,19 @@ class Roteiro implements \Serializable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, options={"comment"="Codigo e Nome da Juncao/Agencia"})
      */
     private $agencia;
+
+    /**
+     * @ORM\Column(type="string", length=100, options={"comment"="Nome da Unidade"})
+     */
+    private $unidade;
+
+    /**
+     * @ORM\Column(type="string", length=100, options={"comment"="Nome da Transportadora"})
+     */
+    private $transportadora;
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -33,14 +43,9 @@ class Roteiro implements \Serializable
     private $rota;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=10)
      */
-    private $transportadora;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $unidade;
+    private $cd;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -72,7 +77,7 @@ class Roteiro implements \Serializable
      * @ORM\Column(type="boolean")
      */
     private $ativo;
-    
+
     public function __construct()
     {
         $this->malotes = new ArrayCollection();
@@ -127,8 +132,13 @@ class Roteiro implements \Serializable
     {
         return serialize(array(
             'id' => $this->id,
+            'agencia' => $this->agencia,
             'rota' => $this->rota,
+            'transportadora' => $this->transportadora,
+            'unidade' => $this->unidade,
             'frequencia' => $this->frequencia,
+            'malha' => unserialize($this->getMalha()->serialize()),
+            'lote' => $this->lote,
             'criado_em' => $this->criado_em,
             'ativo' => $this->ativo,
         ));
@@ -139,8 +149,13 @@ class Roteiro implements \Serializable
     {
         list (
             $this->id,
+            $this->agencia,
             $this->rota,
+            $this->transportadora,
+            $this->unidade,
             $this->frequencia,
+            $this->malha,
+            $this->lote,
             $this->criado_em,
             $this->ativo,
             ) = unserialize($serialized);
@@ -247,5 +262,22 @@ class Roteiro implements \Serializable
         $this->unidade = $unidade;
 
         return $this;
+    }
+
+    public function getCd(): ?string
+    {
+        return $this->cd;
+    }
+
+    public function setCd(string $cd): self
+    {
+        $this->cd = $cd;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->agencia . ' x ' . $this->unidade;
     }
 }

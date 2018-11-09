@@ -1,3 +1,36 @@
+change-status: 'Alterar estado'
+working: 'Executando a operação. Aguarde...'
+page-not-found: 'Página não encontrada!'
+Bad credentials.: 'Credenciais inválidas.'
+This field is required: 'Este campo é obrigatório'
+required: 'Campo obrigatório'
+general_form_error: 'Verifique as informações do formulário e tente novamente'
+Error: 'Erro'
+home: 'Início'
+empty-result: 'Não há informações a serem exibidas'
+oops-error: 'Oops. Algo saiu errado!'
+basic-error: Com certeza você não deveria estar vendo essa mensagem.
+             Se a estiver vendo muitas vezes entre em contato com o administrador do sistema.
+created-at: 'Criado em'
+actions: 'Ações'
+new: 'Novo'
+active: 'Ativo'
+inactive: 'Inativo'
+edit: 'Editar'
+delete: 'Excluir'
+add: 'Inserir'
+not-found-error: 'Dados inválidos'
+options: 'Opções'
+save: 'Salvar'
+submit: 'Enviar'
+cancel: 'Cancelar'
+go: 'Avançar'
+name: 'Nome'
+value: 'Valor'
+send: 'Enviar'
+close: 'Fechar'
+alternado: ALTERNADO
+diario: DIÁRIO
 fields:
     name:
         agencia: Agência
@@ -49,37 +82,7 @@ flash:
         uploaded: 'O Arquivo foi carregado para processamento!'
     error:
         already-uploaded: 'Este arquivo já foi enviado anteriormente'
-change-status: 'Alterar estado'
-working: 'Executando a operação. Aguarde...'
-page-not-found: 'Página não encontrada!'
-Bad credentials.: 'Credenciais inválidas.'
-This field is required: 'Este campo é obrigatório'
-required: 'Campo obrigatório'
-general_form_error: 'Verifique as informações do formulário e tente novamente'
-Error: 'Erro'
-home: 'Início'
-empty-result: 'Não há informações a serem exibidas'
-oops-error: 'Oops. Algo saiu errado!'
-basic-error: Com certeza você não deveria estar vendo essa mensagem.
-             Se a estiver vendo muitas vezes entre em contato com o administrador do sistema.
-created-at: 'Criado em'
-actions: 'Ações'
-new: 'Novo'
-active: 'Ativo'
-inactive: 'Inativo'
-edit: 'Editar'
-delete: 'Excluir'
-add: 'Inserir'
-not-found-error: 'Dados inválidos'
-options: 'Opções'
-save: 'Salvar'
-submit: 'Enviar'
-cancel: 'Cancelar'
-go: 'Avançar'
-name: 'Nome'
-value: 'Valor'
-send: 'Enviar'
-close: 'Fechar'
+
 search-field:
     placeholder: 'Buscar por...'
 choice-field:

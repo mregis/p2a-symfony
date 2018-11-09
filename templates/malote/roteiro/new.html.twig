@@ -26,10 +26,24 @@
                 <div class="col-12">
                     <h1>{{ 'malote.roteiro.new-title'|trans }}</h1>
 
-                    <div class="card mb-3 border-apps-1">
-                        <div class="card-header bg-apps-1">
-                            <i class="fa fa-2x fa-plus-circle fa-2x"></i> {{ 'malote.roteiro.new-form-title'|trans }}
+                    <div class="card mb-3 border-apps-2">
+                        <div class="card-header bg-apps-2">
+                            <div class="row">
+                                <div class="col-8">
+                                    <i class="fa fa-2x fa-plus-circle fa-2x"></i>
+                                    {{ 'malote.roteiro.new-form-title'|trans }}
+                                </div>
+                                <div class="col-auto text-right">
+                                    {% if is_granted('ROLE_MASTER') %}
+                                        <a class="btn btn-sm btn-info" href="{{ path('malote_roteiro_load_xlsfile') }}">
+                                            <span class="fas fa-plus-circle"></span>
+                                            {{ 'malote.roteiro.load-xlsfile'|trans }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
+
                         <div class="card-body form-with-cols">
                             {{ include('malote/roteiro/_form.html.twig') }}
                         </div>

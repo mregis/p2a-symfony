@@ -64,7 +64,7 @@ class UFtoStringTransformer implements DataTransformerInterface
      * @param  UF|null $uf
      * @return string
      */
-    public function reverseTransform($uf)
+    public function reverseTransform($uf): string
     {
         if (null === $uf) {
             return '';

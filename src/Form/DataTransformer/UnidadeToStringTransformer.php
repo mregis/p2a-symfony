@@ -10,6 +10,7 @@ namespace App\Form\DataTransformer;
 
 
 use App\Entity\Main\Unidade;
+use App\Util\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -55,11 +56,12 @@ class UnidadeToStringTransformer implements DataTransformerInterface
             return;
         }
 
-        $codigo = preg_replace('#^\[(.*?)\].*?$#', '$1', $unidadeNome);
+        // $codigo = preg_replace('#^\[(.*?)\].*?$#', '$1', $unidadeNome);
+        $unidadeNome = StringUtils::slugify($unidadeNome);
         $unidade = $this->entityManager
             ->getRepository(Unidade::class)
             // query for the issue with this id
-            ->findOneBy(['codigo' => $codigo])
+            ->findOneByNomeCanonico($unidadeNome)
         ;
 
         if (null === $unidade) {

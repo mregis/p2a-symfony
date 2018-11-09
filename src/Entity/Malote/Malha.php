@@ -82,6 +82,7 @@ class Malha implements \Serializable
         return serialize(array(
             'id' => $this->id,
             'nome' => $this->nome,
+            'nome_canonico', $this->nome_canonico,
             'ativo' => $this->ativo,
         ));
     }
@@ -92,6 +93,7 @@ class Malha implements \Serializable
         list (
             $this->id,
             $this->nome,
+            $this->nome_canonico,
             $this->ativo,
             ) = unserialize($serialized);
     }

@@ -107,6 +107,17 @@ malote:
         new: Adicionar Novo Roteiro
         new-title: Novo Roteiro
         new-form-title: Formulario de cadastro de Novo Roteiro
+        load-xlsfile: Carregar planilha de Roteiros
+        load-xlsfile-form-title: Formulario de carga de Planilha de Roteiros
+        load-xlsfile-title: Cadastro/Alteração de Roteiros através de planilha
+        load-xlsfile-example-link: Você pode usar este arquivo como exemplo,
+                              substituindo as informações existentes
+        load-xlsfile-form-description: >
+                  O arquivo a ser submetido deve ser um XLS valido de acordo com a
+                  documentação do sistema sendo que cada linha deve conter
+                  as seguintes informações:
+                  <strong>JUNÇÃO, UNIDADE, TRANSPORTADORA, FREQUENCIA, LOTE, CD, ROTA, MALHA</strong>
+        sample-filename: exemplo-arquivo-roteiro.xls
         labels:
             numero: Número Roteiro
             tipo: Tipo Roteiro
@@ -114,13 +125,14 @@ malote:
             rota: Rota (A/B)
             unidade: Unidade Address
             frequencia: Frequência
+            malha: Malha
         change-status:
             send: Alterar Estado
-            title: Alterar estado do cadastro de %name%
-            modal-title: Alterar estado do cadastro de umo Roteiro
-            modal-body: Tem certeza que deseja alterar o estado do cadastro de
+            title: Alterar estado do Roteiro %name%
+            modal-title: Alterar estado do cadastro de um Roteiro
+            modal-body: Tem certeza que deseja alterar o estado do roteiro
                 <span class="text-dark modal-body-placeholder">%name%</span>?
-                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas as Roteiros vinculados
+                <h4 class="text-warning">ATENÇÃO! <small>Esta ação interfere na forma como todas os Roteiros vinculados
                 são exibidos em todos os sistemas dependentes.</small></h4>
             success: O cadastro de %name% foi alterado
         edit-title: Editar Roteiro %name%

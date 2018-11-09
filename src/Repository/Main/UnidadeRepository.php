@@ -4,6 +4,7 @@ namespace App\Repository\Main;
 
 use App\Entity\Main\Unidade;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,11 +15,31 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UnidadeRepository extends ServiceEntityRepository
 {
+
+    /**
+     * @var ArrayCollection;
+     */
+    private $unidades;
+    
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Unidade::class);
+        $this->unidades = new ArrayCollection();
     }
 
+    /**
+     * @param $nome string
+     * @return Unidade
+     */
+    public function findOneByNomeCanonico($nome)
+    {
+        if (!$unidade = $this->unidades->get($nome) ) {
+            $unidade = $this->findOneBy(array('nome_canonico' => $nome));
+            $this->unidades->set($nome, $unidade);
+        }
+
+        return $unidade;
+    }    
 //    /**
 //     * @return Unidade[] Returns an array of Unidade objects
 //     */

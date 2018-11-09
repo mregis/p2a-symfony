@@ -31,12 +31,17 @@ class Unidade implements \Serializable
     private $nome;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $nome_canonico;
+
+    /**
      * @ORM\Column(type="string", length=15, nullable=true)
      */
     private $cnpj;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $endereco;
 
@@ -46,7 +51,7 @@ class Unidade implements \Serializable
     private $bairro;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $cidade;
 
@@ -95,7 +100,7 @@ class Unidade implements \Serializable
     public function setNome(string $nome): self
     {
         $this->nome = $nome;
-
+        $this->nome_canonico = StringUtils::slugify($nome);
         return $this;
     }
 
@@ -190,6 +195,7 @@ class Unidade implements \Serializable
             'id' => $this->id,
             'codigo' => $this->codigo,
             'nome' => $this->nome,
+            'nome_canonico' => $this->nome_canonico,
             'razao_social' => $this->razao_social,
             'cnpj' => $this->cnpj,
             'endereco' => $this->endereco,
@@ -207,6 +213,7 @@ class Unidade implements \Serializable
             $this->id,
             $this->codigo,
             $this->nome,
+            $this->nome_canonico,
             $this->razao_social,
             $this->cnpj,
             $this->endereco,
@@ -220,5 +227,17 @@ class Unidade implements \Serializable
     public function __toString(): string
     {
         return $this->nome;
+    }
+
+    public function getNomeCanonico(): ?string
+    {
+        return $this->nome_canonico;
+    }
+
+    public function setNomeCanonico(string $nome_canonico): self
+    {
+        $this->nome_canonico = $nome_canonico;
+
+        return $this;
     }
 }

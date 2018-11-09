@@ -11,6 +11,7 @@ use App\Repository\Agencia\AgenciaRepository;
 use App\Util\CalculationsBancoBradesco;
 use App\Util\CalculationsBancoFactory;
 use App\Util\CalculationsBancoInterface;
+use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -320,24 +321,25 @@ class AgenciaController extends Controller
         $orderColumn = array('a.banco','a.nome', 'a.codigo', 'a.cep', 'a.logradouro',
             'a.bairro', 'a.cidade', 'a.uf')[$orderNumColumn];
         $sortType = $request->get('order',[0=>['dir' => 'ASC']])[0]['dir'];
-        $cidade_repo = $this->getDoctrine()
+        /* @var $agencia_repo AgenciaRepository */
+        $agencia_repo = $this->getDoctrine()
             ->getManager('agencia')
             ->getRepository(Agencia::class);
-        $qb = $cidade_repo->createQueryBuilder('a')
+        $qb = $agencia_repo->createQueryBuilder('a')
             ->setFirstResult($start)
             ->setMaxResults($length)
             ->orderBy($orderColumn, $sortType);
 
 
         if ($search_value != null) {
-            $search_value = preg_replace("#[\W]+#", "_", $search_value);
+            $search_value = preg_replace('#\D#', '', $search_value);
             $qb->orWhere(
                 $qb->expr()->eq('a.codigo', '?1'),
                 $qb->expr()->like('LOWER(a.nome)', '?2'),
                 $qb->expr()->like('LOWER(a.cidade)', '?2'),
                 $qb->expr()->like('LOWER(a.logradouro)', '?2'),
                 $qb->expr()->like('LOWER(a.bairro)', '?2')
-            )->setParameters([1=> (int)$search_value, 2 => '%' . strtolower($search_value) . '%']);
+            )->setParameters([1=> (int)$search_value, 2 => '%' . StringUtils::slugify($search_value) . '%']);
         }
         $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
 
