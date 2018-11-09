@@ -139,6 +139,7 @@ class Roteiro implements \Serializable
             'frequencia' => $this->frequencia,
             'malha' => unserialize($this->getMalha()->serialize()),
             'lote' => $this->lote,
+            'cd' => $this->cd,
             'criado_em' => $this->criado_em,
             'ativo' => $this->ativo,
         ));
@@ -156,6 +157,7 @@ class Roteiro implements \Serializable
             $this->frequencia,
             $this->malha,
             $this->lote,
+            $this->cd,
             $this->criado_em,
             $this->ativo,
             ) = unserialize($serialized);
