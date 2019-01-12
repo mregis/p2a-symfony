@@ -9,6 +9,7 @@
 namespace App\Controller\Main;
 
 use App\Entity\Main\Application;
+use App\Entity\Main\UserApplication;
 use App\Form\Main\ApplicationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
@@ -74,6 +75,10 @@ class ApplicationController extends Controller
             if ($form->isValid()) {
                 $objManager = $this->getDoctrine()->getManager();
                 $objManager->persist($e_app);
+                $user = $this->getUser();
+                $userApplication = new UserApplication();
+                $userApplication->setUser($user)->setApplication($e_app);
+                $objManager->persist($userApplication);
                 $objManager->flush();
                 $this->addFlash('success', 'application.new-flash.success');
                 return $this->redirect($this->generateUrl('main_application_index'), 301);

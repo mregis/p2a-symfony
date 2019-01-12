@@ -63,7 +63,7 @@ class UserApplicationController extends Controller
         }
 
         $app_list = $e_user->getUserApplication();
-        return $this->render('users/main_userapplication_index.html.twig', array('app_list' => $app_list, 'e_user' => $e_user));
+        return $this->render('users/list-user-apps.html.twig', array('app_list' => $app_list, 'e_user' => $e_user));
     }
 
 
@@ -94,7 +94,7 @@ class UserApplicationController extends Controller
             }
         }
 
-        return $this->render('users/main_user_new-application.html.twig',
+        return $this->render('users/new-user-application.html.twig',
             array('form' => $form->createView(), 'e_user' => $e_user));
     }
 

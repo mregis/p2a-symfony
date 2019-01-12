@@ -297,7 +297,7 @@ class SecurityController extends Controller
                 $error = new FormError('general_form_error');
             }
         }
-        return $this->render('security/security_complete_register.html.twig', array(
+        return $this->render('security/complete-register.html.twig', array(
             'form' => $form->createView(),
             'error' => $error,
         ));
