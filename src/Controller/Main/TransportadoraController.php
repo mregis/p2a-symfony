@@ -26,7 +26,7 @@ class TransportadoraController extends AbstractController
     /**
      * @Route("/novo", name="main_transportadora_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function newTransportadora(Request $request): Response
     {
         $transportadora = new Transportadora();
         $form = $this->createForm(TransportadoraType::class, $transportadora);

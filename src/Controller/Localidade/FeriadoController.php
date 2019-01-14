@@ -7,7 +7,7 @@ use App\Entity\Localidade\TipoFeriado;
 use App\Form\Localidade\FeriadoType;
 use App\Form\Localidade\TipoFeriadoType;
 use App\Repository\Localidade\FeriadoRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/localidade/feriado")
  */
-class FeriadoController extends Controller
+class FeriadoController extends AbstractController
 {
     /**
      * @Route("/", name="localidade_feriado_index", methods="GET")

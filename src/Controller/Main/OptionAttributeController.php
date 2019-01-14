@@ -11,7 +11,7 @@ namespace App\Controller\Main;
 
 use App\Entity\Main\OptionAttribute;
 use App\Form\Main\OptionAttributeType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Main
  * @Route("/opcoes-aplicativo")
  */
-class OptionAttributeController extends Controller
+class OptionAttributeController extends AbstractController
 {
 
 

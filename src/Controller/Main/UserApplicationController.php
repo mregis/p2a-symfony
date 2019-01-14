@@ -15,7 +15,7 @@ use App\Entity\Main\User;
 use App\Entity\Main\UserApplication;
 use App\Form\Main\OptionAttributeType;
 use App\Form\Main\UserApplicationType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller
  * @Route("/utilizador-app")
  */
-class UserApplicationController extends Controller
+class UserApplicationController extends AbstractController
 {
 
 

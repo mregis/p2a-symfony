@@ -5,7 +5,7 @@ namespace App\Controller\Agencia;
 use App\Entity\Agencia\Banco;
 use App\Form\Agencia\BancoType;
 use App\Repository\Agencia\BancoRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 /**
  * @Route("/agencias/banco")
  */
-class BancoController extends Controller
+class BancoController extends AbstractController
 {
     /**
      * @Route("/", name="agencias_banco_index", methods="GET")

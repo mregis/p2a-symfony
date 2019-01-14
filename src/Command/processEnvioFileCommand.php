@@ -19,13 +19,13 @@ use App\Entity\Localidade\Feriado;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Console\Command\LockableTrait;
 
-class processEnvioFileCommand extends ContainerAwareCommand
+class processEnvioFileCommand extends Command
 {
     use LockableTrait;
 
@@ -44,10 +44,18 @@ class processEnvioFileCommand extends ContainerAwareCommand
      */
     protected $output;
 
-    public function __construct(EntityManagerInterface $gefraManager, EntityManagerInterface $localidadeManager)
+    /**
+     * @var ParameterBagInterface
+     */
+    protected $params;
+
+    public function __construct(EntityManagerInterface $gefraManager,
+                                EntityManagerInterface $localidadeManager,
+                                ParameterBagInterface $params)
     {
         $this->envioFileManager = $gefraManager;
         $this->feriadoManager = $localidadeManager;
+        $this->params = $params;
         parent::__construct();
     }
 
@@ -110,7 +118,7 @@ class processEnvioFileCommand extends ContainerAwareCommand
      */
     protected function processEnvioFile($files)
     {
-        $dest_dir = $this->getContainer()->getParameter('enviofiles.directory');
+        $dest_dir = $this->params->get('enviofiles.directory');
         foreach ($files as $k => $enviofile) {
             /* @var $enviofile EnvioFile */
             $filename = $dest_dir . DIRECTORY_SEPARATOR . basename($enviofile->getPath());

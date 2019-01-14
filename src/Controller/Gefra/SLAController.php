@@ -9,7 +9,7 @@ use App\Form\Gefra\SLAType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\SLARepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/gefra/sla")
  */
-class SLAController extends Controller
+class SLAController extends AbstractController
 {
     /**
      * @Route("/", name="gefra_sla_index", methods="GET")

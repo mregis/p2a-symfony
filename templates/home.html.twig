@@ -58,7 +58,7 @@
                                 {% else %}
                                 bg-apps-{{ (loop.index % 5) }}
                                 {% endif %} o-hidden h-100">
-                                    <a href="{{ path(ua.application.uri) }}">
+                                    <a href="{{ checkroute(ua.application.uri) }}">
                                         <div class="card-body text-white">
                                             <div class="card-body-icon">
                                                 {% if ua.application.getOption('icone') %}

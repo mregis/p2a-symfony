@@ -5,7 +5,7 @@ namespace App\Controller\Gefra;
 use App\Entity\Gefra\TipoEnvioStatus;
 use App\Form\Gefra\TipoEnvioStatusType;
 use App\Repository\Gefra\TipoEnvioStatusRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/gefra/tipo-envio-status")
  */
-class TipoEnvioStatusController extends Controller
+class TipoEnvioStatusController extends AbstractController
 {
 
     /**

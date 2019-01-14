@@ -61,7 +61,12 @@ services:
             - {name: 'doctrine.event_listener', event: postFlush, entity: App\Entity\Gefra\Envio }
 
     App\Command\processEnvioFileCommand:
-        arguments: ['@doctrine.orm.gefra_entity_manager', '@doctrine.orm.locais_entity_manager']
+        arguments: ['@doctrine.orm.gefra_entity_manager', '@doctrine.orm.locais_entity_manager', '@parameter_bag']
         tags: ['command.enviofile']
+
+    App\Twig\AppTwigExtension:
+        tags: ['twig.extension']
+        arguments: [ '@router' ]
+
 imports:
     - { resource: 'parameters.yaml' }

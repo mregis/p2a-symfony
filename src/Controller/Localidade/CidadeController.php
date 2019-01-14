@@ -17,7 +17,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\RememberMe\TokenProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -25,7 +25,7 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 /**
  * @Route("/localidade/cidade")
  */
-class CidadeController extends Controller
+class CidadeController extends AbstractController
 {
     /**
      * @Route("/", name="localidade_cidade_index", methods="GET")

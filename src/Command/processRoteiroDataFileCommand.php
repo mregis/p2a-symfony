@@ -21,13 +21,13 @@ use App\Util\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Console\Command\LockableTrait;
 
-class processRoteiroDataFileCommand extends ContainerAwareCommand
+class processRoteiroDataFileCommand extends Command
 {
     use LockableTrait;
 

@@ -10,7 +10,7 @@ namespace App\Controller\Main;
 
 use App\Entity\Main\Application;
 use App\Form\Main\ApplicationType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/aplicativos")
  */
-class ApplicationController extends Controller
+class ApplicationController extends AbstractController
 {
 
     /**

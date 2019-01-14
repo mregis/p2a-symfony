@@ -8,7 +8,7 @@ use App\Form\Gefra\TransportadoraType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\TransportadoraRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/gefra/transportadora")
  */
-class TransportadoraController extends Controller
+class TransportadoraController extends AbstractController
 {
     /**
      * @Route("/", name="gefra_transportadora_index", methods="GET")

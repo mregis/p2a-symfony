@@ -10,7 +10,7 @@ use App\Form\Type\BulkRegistryType;
 use App\Repository\Malote\RoteiroRepository;
 use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/malote/roteiro")
  */
-class RoteiroController extends Controller
+class RoteiroController extends AbstractController
 {
     /**
      * @Route("/", name="malote_roteiro_index", methods="GET")
@@ -33,7 +33,7 @@ class RoteiroController extends Controller
     /**
      * @Route("/novo", name="malote_roteiro_new", methods="GET|POST")
      */
-    public function new(Request $request): Response
+    public function newRoteiro(Request $request): Response
     {
         $roteiro = new Roteiro();
         $form = $this->createForm(RoteiroType::class, $roteiro);
@@ -129,7 +129,7 @@ class RoteiroController extends Controller
         $draw =  $request->get('draw', 0);
         $search_value = $request->get('search', ['value' => null])['value'];
         $orderNumColumn = $request->get('order', [0=>['column' => 0]])[0]['column'];
-        // somente uma coluna para ordenação aqui
+        // somente uma coluna para ordenaï¿½ï¿½o aqui
         $orderColumn = array('r.agencia','r.rota', 'r.transportadora', 't.unidade', 't.frequencia',
             'm.nome', 't.criado_em', 't.lote')[$orderNumColumn];
         $sortType = $request->get('order',[0=>['dir' => 'ASC']])[0]['dir'];
@@ -224,7 +224,7 @@ class RoteiroController extends Controller
                 $em->flush();
                 $this->addFlash('success', 'flash.success.uploaded');
             } else {
-                // Arquivo já foi enviado anteriormente exatamente como está. Não faz sentido continuar
+                // Arquivo jï¿½ foi enviado anteriormente exatamente como estï¿½. Nï¿½o faz sentido continuar
                 $error = new FormError('flash.error.already-uploaded');
                 $form->addError($error);
                 $form->get('registry')->addError(

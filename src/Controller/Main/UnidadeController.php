@@ -5,7 +5,7 @@ namespace App\Controller\Main;
 use App\Entity\Main\Unidade;
 use App\Form\Main\UnidadeType;
 use App\Repository\Main\UnidadeRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/geral/unidade")
  */
-class UnidadeController extends Controller
+class UnidadeController extends AbstractController
 {
     /**
      * @Route("/", name="main_unidade_index", methods="GET")

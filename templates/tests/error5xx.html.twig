@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block my_CSS %}
+    <link rel="stylesheet" href="{{ asset('resources/httperrors.css') }}">
+{% endblock my_CSS %}
+
+{% block title %}{{ 'internal-server-error'|trans }}{% endblock %}
+{% block menu %}{# NoMenu Block #}{% endblock menu %}
+
+{% block content %}
+    <div id="exception-error" class="container-fluid">
+        <h1>500</h1>
+        <h2>Erro inesperado <b>:(</b></h2>
+        <h5>Estamos constrangidos que isso tenha acontecido.</h5>
+        <div class="gears">
+            <div class="gear one">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="gear two">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="gear three">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block footer %}{# NoFooter Block #}{% endblock footer %}

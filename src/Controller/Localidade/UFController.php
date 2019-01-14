@@ -12,7 +12,7 @@ use App\Entity\Localidade\Regiao;
 use App\Entity\Localidade\UF;
 use App\Form\Localidade\UFType;
 use App\Form\Type\BulkRegistryType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  *  * @Route("/localidade/uf")
  */
-class UFController extends Controller
+class UFController extends AbstractController
 {
     /**
      * @Route("/", name="localidade_uf_index", methods="GET")

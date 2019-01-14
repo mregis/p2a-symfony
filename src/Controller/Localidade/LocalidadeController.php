@@ -2,7 +2,7 @@
 
 namespace App\Controller\Localidade;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/localidade")
  */
-class LocalidadeController extends Controller
+class LocalidadeController extends AbstractController
 {
     /**
      * @Route("/", name="localidade_home", methods="GET")

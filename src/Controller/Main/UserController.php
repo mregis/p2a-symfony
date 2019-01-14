@@ -12,7 +12,7 @@ namespace App\Controller\Main;
 use App\Entity\Main\User;
 use App\Form\Main\UserType;
 use App\Util\TokenGenerator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/utilizadores")
  */
-class UserController extends Controller
+class UserController extends AbstractController
 {
     /**
      * @Route("/", name="main_user_index")

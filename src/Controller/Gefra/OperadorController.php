@@ -8,7 +8,7 @@ use App\Form\Gefra\OperadorType;
 use App\Form\Type\BulkRegistryType;
 use App\Repository\Gefra\OperadorRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/gefra/operador")
  */
-class OperadorController extends Controller
+class OperadorController extends AbstractController
 {
     /**
      * @Route("/", name="gefra_operador_index", methods="GET")

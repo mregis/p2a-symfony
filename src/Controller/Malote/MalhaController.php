@@ -5,7 +5,7 @@ namespace App\Controller\Malote;
 use App\Entity\Malote\Malha;
 use App\Form\Malote\MalhaType;
 use App\Repository\Malote\MalhaRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/malote/malha")
  */
-class MalhaController extends Controller
+class MalhaController extends AbstractController
 {
     /**
      * @Route("/", name="malote_malha_index", methods="GET")

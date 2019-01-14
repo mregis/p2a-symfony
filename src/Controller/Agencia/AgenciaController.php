@@ -13,18 +13,19 @@ use App\Util\CalculationsBancoFactory;
 use App\Util\CalculationsBancoInterface;
 use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/agencias")
  */
-class AgenciaController extends Controller
+class AgenciaController extends AbstractController
 {
     /**
      * @Route("/", name="agencias_home", methods="GET")
@@ -45,7 +46,7 @@ class AgenciaController extends Controller
     /**
      * @Route("/agencia/nova", name="agencias_agencia_new", methods="GET|POST")
      */
-    public function newAgencia(Request $request): Response
+    public function newAgencia(Request $request, TranslatorInterface $trans): Response
     {
         $agencium = new Agencia();
         $form = $this->createForm(AgenciaType::class, $agencium);
@@ -67,7 +68,7 @@ class AgenciaController extends Controller
                 return $this->redirectToRoute('agencias_agencia_index');
             } else {
                 $form['dv']->addError(new FormError(
-                    $this->get('translator')->trans('agencia.invalid-dv')
+                    $trans->trans('agencia.invalid-dv')
                 ));
             }
         }
@@ -260,17 +261,17 @@ class AgenciaController extends Controller
     /**
      * @Route("/agencia/{id}", name="agencias_agencia_changestatus", methods="PUT")
      */
-    public function changeStatus(Request $request, Agencia $agencia): Response
+    public function changeStatus(Request $request, Agencia $agencia, TranslatorInterface $trans): Response
     {
         $message = 'basic-error';
         $statusMode = 'danger';
-        $title = $this->get('translator')->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
+        $title = $trans->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
         if ($this->isCsrfTokenValid('put'.$agencia->getId(), $request->request->get('_token'))) {
             $em = $this->getDoctrine()->getManager('agencia');
             $agencia->setIsActive(!$agencia->getIsActive());
             $em->persist($agencia);
             $em->flush();
-            $message = $this->get('translator')->trans('agencia.change-status.success', ['%name%'=> $agencia->getNome()]);
+            $message = $trans->trans('agencia.change-status.success', ['%name%'=> $agencia->getNome()]);
             $statusMode = 'success';
         }
 
@@ -281,13 +282,13 @@ class AgenciaController extends Controller
      * @return Response
      * @Route("/arquivo-modelo/{source}", name="agencias_agencia_samplefile")
      */
-    public function downloadSampleCVS(Request $request, $source): Response
+    public function downloadSampleCVS(Request $request, $source, TranslatorInterface $trans): Response
     {
         $filename = $this->getParameter('app.samples.dir');
         switch ($source) {
             case 'agencia':
                 $filename .= 'agencia.sample.csv';
-                $outputname = $this->get('translator')->trans('agencia.sample-filename');
+                $outputname = $trans->trans('agencia.sample-filename');
                 break;
 
             default:
@@ -309,7 +310,7 @@ class AgenciaController extends Controller
      * @return JsonResponse
      * @Route("/agencia/json", name="agencias_agencia_json", methods="GET|POST")
      */
-    public function getAgencias(Request $request): JsonResponse
+    public function getAgencias(Request $request, TranslatorInterface $trans): JsonResponse
     {
         // Query Parameters
         $length = $request->get('length', 10);
@@ -354,10 +355,9 @@ class AgenciaController extends Controller
             $d['buttons'] = 'BUTTONS';
             $d['deleteToken'] = $tokenProvider->getToken('delete' . $agencia->getId())->getValue();
             $d['editToken'] = $tokenProvider->getToken('put' . $agencia->getId())->getValue();
-            $d['changetitle'] = $this->get('translator')
-                ->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
-            $d['deltitle'] = $this->get('translator')
-                ->trans('agencia.delete.title', ['%name%' => $agencia->getNome()]);
+
+            $d['changetitle'] = $trans->trans('agencia.change-status.title', ['%name%' => $agencia->getNome()]);
+            $d['deltitle'] = $trans->trans('agencia.delete.title', ['%name%' => $agencia->getNome()]);
             $d['editUrl'] = $this->generateUrl('agencias_agencia_edit', ['id' => $agencia->getId()]);
             $data[] = $d;
         }

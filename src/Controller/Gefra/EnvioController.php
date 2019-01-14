@@ -24,7 +24,7 @@ use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @package App\Controller\Gefra
  * @Route("/gefra/envio")
  */
-class EnvioController extends Controller
+class EnvioController extends AbstractController
 {
     /**
      * @Route("/", name="gefra_envio_index", methods="GET")

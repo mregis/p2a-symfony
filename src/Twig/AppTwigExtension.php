@@ -8,11 +8,31 @@
 
 namespace App\Twig;
 
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class AppTwigExtension extends AbstractExtension
 {
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @param RouterInterface $router
+     */
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @return array
+     */
     public function getFilters()
     {
         return array(
@@ -23,6 +43,10 @@ class AppTwigExtension extends AbstractExtension
         );
     }
 
+    /**
+     * @param $cnpj
+     * @return mixed|string
+     */
     public function cnpjFilter($cnpj)
     {
         $cnpj = preg_replace("#\D#", "", $cnpj);
@@ -32,6 +56,10 @@ class AppTwigExtension extends AbstractExtension
         return $cnpj;
     }
 
+    /**
+     * @param $cpf
+     * @return mixed|string
+     */
     public function cpfFilter($cpf)
     {
         $cpf = preg_replace("#\D#", "", $cpf);
@@ -87,5 +115,32 @@ class AppTwigExtension extends AbstractExtension
         $formatted_date = strftime($format, $date);
         setlocale(LC_TIME, $lctime_locale);
         return $formatted_date;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return array(
+            new TwigFunction('checkroute', array($this, 'checkRoute')),
+        );
+    }
+
+    /**
+     * @param $value
+     * @param $args
+     */
+    public function checkRoute($value)
+    {
+        try {
+            $url =  $this->router->generate($value);
+            if (null === $url) {
+                return $value;
+            }
+        } catch (RouteNotFoundException $e) {
+            return $value;
+        }
+        return $url;
     }
 }

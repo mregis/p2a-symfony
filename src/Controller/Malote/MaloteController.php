@@ -5,7 +5,7 @@ namespace App\Controller\Malote;
 use App\Entity\Malote\Malote;
 use App\Form\Malote\MaloteType;
 use App\Repository\Malote\MaloteRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/malote/malote")
  */
-class MaloteController extends Controller
+class MaloteController extends AbstractController
 {
     /**
      * @Route("/", name="malote_malote_index", methods="GET")

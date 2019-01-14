@@ -15,7 +15,7 @@ use App\Form\Gefra\JuncaoType;
 use App\Form\Type\BulkRegistryType;
 use App\Util\StringUtils;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Util\StringUtil;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Gefra
  * @Route("/gefra/juncao")
  */
-class JuncaoController extends Controller
+class JuncaoController extends AbstractController
 {
     /**
      * @Route("/", name="gefra_juncao_index", methods="GET")

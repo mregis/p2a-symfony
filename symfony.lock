@@ -119,6 +119,9 @@
     "markbaker/complex": {
         "version": "1.4.6"
     },
+    "markbaker/matrix": {
+        "version": "1.1.4"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },
@@ -214,6 +217,9 @@
             "version": "3.3",
             "ref": "9f94d3ea453cd8a3b95db7f82592d7344fe3a76a"
         }
+    },
+    "symfony/contracts": {
+        "version": "v1.0.2"
     },
     "symfony/css-selector": {
         "version": "v3.4.4"
@@ -368,9 +374,6 @@
             "ref": "a249484db698d1a847a30291c8f732414ac47e25"
         }
     },
-    "symfony/security": {
-        "version": "v3.4.4"
-    },
     "symfony/security-bundle": {
         "version": "3.3",
         "recipe": {
@@ -379,6 +382,18 @@
             "version": "3.3",
             "ref": "34eb245ce4194e7ae713558084180e2c532e7afd"
         }
+    },
+    "symfony/security-core": {
+        "version": "v4.2.2"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.2.2"
+    },
+    "symfony/security-guard": {
+        "version": "v4.2.2"
+    },
+    "symfony/security-http": {
+        "version": "v4.2.2"
     },
     "symfony/serializer": {
         "version": "v3.4.4"
@@ -424,6 +439,9 @@
     },
     "symfony/var-dumper": {
         "version": "v3.4.4"
+    },
+    "symfony/var-exporter": {
+        "version": "v4.2.2"
     },
     "symfony/web-link": {
         "version": "v3.4.4"

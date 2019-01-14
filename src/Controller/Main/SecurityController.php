@@ -11,7 +11,7 @@ namespace App\Controller\Main;
 use App\Entity\Main\User;
 use App\Repository\Main\UserRepository;
 use App\Util\TokenGenerator;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Controller\Main
  * @Route("/autenticacao")
  */
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     /**
      * @Route("/", name="login")
