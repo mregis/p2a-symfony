@@ -49,3 +49,205 @@ div.notfound body {
   text-decoration: none;
   font-weight: 700;
 }
+
+:root {
+  --main-color: #2a2a2a;
+  --stroke-color: white;
+}
+
+#exception-error {
+  padding-top: 50px;
+  background: var(--main-color);
+  color: var(--stroke-color);
+}
+#exception-error h1 {
+  margin: 0 auto 0 auto;
+  color: var(--stroke-color);
+  font-family: "Encode Sans Semi Condensed", Verdana, sans-serif;
+  font-size: 8rem;
+  line-height: 8rem;
+  font-weight: 200;
+  text-align: center;
+}
+#exception-error h2 {
+  color: var(--stroke-color);
+  margin: 20px auto 30px auto;
+  font-family: "Encode Sans Semi Condensed", Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-align: center;
+}
+#exception-error h5 {
+  color: var(--stroke-color);
+  margin: 10px auto 15px auto;
+  text-align: center;
+}
+#exception-error h1,
+#exception-error h2 {
+  -webkit-transition: opacity 0.5s linear, margin-top 0.5s linear; /* Safari */
+  transition: opacity 0.5s linear, margin-top 0.5s linear;
+}
+#exception-error .loading h1,
+#exception-error .loading h2 {
+  margin-top: 0px;
+  opacity: 0;
+}
+#exception-error .gears {
+  position: relative;
+  margin: 0 auto;
+  width: auto;
+  height: 0;
+}
+#exception-error .gear {
+  position: relative;
+  z-index: 0;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--stroke-color);
+}
+#exception-error .gear:before {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  z-index: 2;
+  content: "";
+  border-radius: 50%;
+  background: var(--main-color);
+}
+#exception-error .gear:after {
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  z-index: 3;
+  content: "";
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 5px solid var(--stroke-color);
+  box-sizing: border-box;
+  background: var(--main-color);
+}
+#exception-error .gear.one {
+  left: -130px;
+}
+#exception-error .gear.two {
+  top: -75px;
+}
+#exception-error .gear.three {
+  top: -235px;
+  left: 130px;
+}
+#exception-error .gear .bar {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  z-index: 0;
+  width: 150px;
+  height: 30px;
+  margin-top: -15px;
+  border-radius: 5px;
+  background: var(--stroke-color);
+}
+#exception-error .gear .bar:before {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1;
+  content: "";
+  border-radius: 2px;
+  background: var(--main-color);
+}
+#exception-error .gear .bar:nth-child(2) {
+  transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+}
+#exception-error .gear .bar:nth-child(3) {
+  transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+}
+@-webkit-keyframes clockwise {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes anticlockwise {
+  0% {
+    -webkit-transform: rotate(360deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes clockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(30deg);
+  }
+  40% {
+    -webkit-transform: rotate(25deg);
+  }
+  60% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes anticlockwiseErrorStop {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+@-webkit-keyframes anticlockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  40% {
+    -webkit-transform: rotate(-25deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+#exception-error .gear.one {
+  -webkit-animation: anticlockwiseErrorStop 2s linear infinite;
+}
+#exception-error .gear.two {
+  -webkit-animation: anticlockwiseError 2s linear infinite;
+}
+#exception-error .gear.three {
+  -webkit-animation: clockwiseError 2s linear infinite;
+}
+#exception-error .loading .gear.one,
+#exception-error .loading .gear.three {
+  -webkit-animation: clockwise 3s linear infinite;
+}
+#exception-error .loading .gear.two {
+  -webkit-animation: anticlockwise 3s linear infinite;
+}
